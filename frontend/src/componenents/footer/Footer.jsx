@@ -5,8 +5,7 @@ function Footer() {
   return (
     <footer className="footer-container">
       <p>
-        &copy; {new Date().getFullYear()} <strong>Bookly</strong> — Made
-        with ❤️ by{" "}
+        &copy; {new Date().getFullYear()} <strong>Bookly</strong> — Made by{" "}
         <a
           href="https://personal-portfolio-six-pearl-25.vercel.app/en"
           target="_blank"
