@@ -12,12 +12,14 @@ import moment from "moment";
 import Modal from "../../componenents/book-details/Modal";
 import Reviews from "../../componenents/book-details/Reviews";
 import { postToFavorites } from "../../redux/apiCalls/favoritesApiCall";
+import LoanButton from "../../componenents/loan/LoanButton";
 
 function BookDetails() {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const { book } = useParams();
   const { books, loading } = useSelector((state) => state.book);
+  const { user } = useSelector((state) => state.auth);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -97,6 +99,10 @@ function BookDetails() {
             Add Review
           </button>
         </div>
+      </div>
+
+      <div className="loan-section">
+        <LoanButton bookId={books?._id} isAuthenticated={!!user} />
       </div>
 
       <div className="book-details-reviews">

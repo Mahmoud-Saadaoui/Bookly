@@ -31,6 +31,7 @@ app.use("*", cors({
 app.use('/api/users', require('./routes/userRoute'))
 app.use('/api/books', require('./routes/bookRoute'))
 app.use('/api/favoriteList', require('./routes/favoritesRoute'))
+app.use('/api/loans', require('./routes/loanRoute'))
 
 // running the server
 const PORT = process.env.PORT || 8000;

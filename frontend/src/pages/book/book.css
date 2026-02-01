@@ -90,6 +90,14 @@
     background-color: var(--info-color);
 }
 
+.loan-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
 @media (min-width: 600px) and (max-width: 768px) {
     .btns {
         flex-direction: row;
