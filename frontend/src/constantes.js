@@ -1,4 +1,4 @@
-const env = 'development' //process.env.NODE_ENV
+const env = 'production' 
 const PRODUCTION_URL = 'https://bookly-1rvp.onrender.com/api'
 const DEVELOPMENT_URL = 'http://localhost:5001/api'
 
