@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./admin-dashboard.css";
-import SideBar from "../../componenents/dashboard/SideBar";
-import BooksDashboard from "../../componenents/dashboard/BooksDashboard";
-import CreateNewBook from "../../componenents/dashboard/CreateNewBook";
+import SideBar from "../../components/dashboard/SideBar";
+import BooksDashboard from "../../components/dashboard/BooksDashboard";
+import CreateNewBook from "../../components/dashboard/CreateNewBook";
 import NotFound from "../not-found/NotFound";
 import { useDispatch, useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
@@ -14,7 +14,7 @@ import {
 import { toast } from "react-toastify";
 import swal from "sweetalert";
 
-function AdminDashboard() {
+function AdminDashboardPage() {
   const [currentTab, setCurrentTab] = useState(1);
 
   const dispatch = useDispatch();
@@ -187,4 +187,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminDashboardPage;

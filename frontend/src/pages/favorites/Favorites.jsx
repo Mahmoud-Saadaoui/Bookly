@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./favorites.css";
-import Rating from "../../componenents/rating/Rating";
+import Rating from "../../components/rating/Rating";
 import { MdFavorite } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,10 +25,10 @@ function Favorites() {
       dangerMode: true,
     }).then((isOk) => {
       if (isOk) {
-        dispatch(removeFromFavorites(id));
-        navigate("/");
-      } else {
-        swal("something went wrong");
+        dispatch(removeFromFavorites(id)).then(() => {
+          // Don't navigate away - just refresh favorites
+          dispatch(getFavorites());
+        });
       }
     });
   };
@@ -58,13 +58,16 @@ function Favorites() {
       />
     );
   }
+
+  // Handle both array and object structures
+  const favoritesArray = Array.isArray(favoriteList) ? favoriteList : [];
+
   return (
     <div className="favorites">
-      {favoriteList.length === 0 ? (
+      {favoritesArray.length === 0 ? (
         <h1 className="empty">Your list of favorites is empty!!</h1>
       ) : (
-        Array.isArray(favoriteList) &&
-        favoriteList?.map((el, key) => (
+        favoritesArray.map((el, key) => (
           <div className="book-item" key={key}>
             <img
               src={el?.book?.image?.url}

@@ -1,83 +1,100 @@
-const User = require('../models/user')
-const bcrypt = require('bcryptjs')
-const jwtHelpers = require('../utils/jwtHelpers')
-const { asyncHandler } = require('../middlewares/asyncHandler')
+const User = require('../models/user');
+const bcrypt = require('bcryptjs');
+const jwtHelpers = require('../utils/jwtHelpers');
+const { asyncHandler } = require('../middlewares/asyncHandler');
+const {
+  createdResponse,
+  successResponse,
+  badRequestResponse,
+  conflictResponse,
+  internalErrorResponse,
+  unauthorizedResponse
+} = require('../utils/apiResponse');
 
-
-// method   POST 
+// method   POST
 // route    api/users/register
 // desc     Register new user
 // access   Public
 const registerUser = asyncHandler(async(req, res) => {
-    const { name, email, password } = req.body
+    const { name, email, password } = req.body;
+
     try {
-        let user = await User.findOne({ email })
-        // Check if user exist
+        let user = await User.findOne({ email });
+
+        // Check if user exists
         if (user) {
-            return res.status(400).json({msg: 'User already exists'})
+            return conflictResponse(res, 'User already exists');
         }
+
         user = new User({
             name,
             email,
             password
-        })
-        // Encrypt Password
-        const salt = await bcrypt.genSalt(10)
-        user.password = await bcrypt.hash(password, salt)
-        await user.save()
-        res.send({
+        });
+
+        // Encrypt Password with increased cost factor
+        const saltRounds = parseInt(process.env.BCRYPT_ROUNDS) || 12;
+        user.password = await bcrypt.hash(password, saltRounds);
+        await user.save();
+
+        return createdResponse(res, {
             name: user.name,
             isAdmin: user.isAdmin,
             accessToken: jwtHelpers.sign({ sub: user.id })
-        })
+        }, 'User registered successfully');
     } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
+        console.error('Error registering user:', err.message);
+        return internalErrorResponse(res, 'Failed to register user');
     }
-})
+});
 
-// method   POST 
+// method   POST
 // route    api/users/login
 // desc     Login user
 // access   Public
 const loginUser = asyncHandler(async(req, res) => {
-    const { email, password } = req.body
+    const { email, password } = req.body;
+
     try {
-        let user = await User.findOne({ email })
+        let user = await User.findOne({ email });
+
         if (user && bcrypt.compareSync(password, user.password)) {
-            res.json({
+            return successResponse(res, {
                 name: user.name,
                 isAdmin: user.isAdmin,
                 accessToken: jwtHelpers.sign({ sub: user.id })
-            })
+            }, 'Login successful');
         } else {
-            return res.status(400).json({ msg: 'Invalid email or password' })
+            return unauthorizedResponse(res, 'Invalid email or password');
         }
-        
     } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
+        console.error('Error logging in user:', err.message);
+        return internalErrorResponse(res, 'Failed to login');
     }
-})
+});
 
-// method   GET 
+// method   GET
 // route    api/users/me
 // desc     User Authentication
 // access   Private
 const getMe = asyncHandler(async(req, res) => {
-    const user = await User.findById(req.userId)
-    res.json({
-        success: true,
-        data: {
+    try {
+        const user = await User.findById(req.userId).select('-password');
+
+        return successResponse(res, {
             id: user.id,
             name: user.name,
-            email: user.email
-        }
-    })
-})
+            email: user.email,
+            isAdmin: user.isAdmin
+        }, 'User retrieved successfully');
+    } catch (err) {
+        console.error('Error getting user:', err.message);
+        return internalErrorResponse(res, 'Failed to retrieve user');
+    }
+});
 
 module.exports = {
     registerUser,
     loginUser,
     getMe
-}
+};

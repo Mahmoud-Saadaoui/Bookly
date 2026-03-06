@@ -1,28 +1,36 @@
 const Book = require('../models/book');
 const User = require('../models/user');
-const { cloudinaryRemoveImage, cloudinary } = require("../utils/cloudinary");
+const { cloudinaryRemoveImage } = require("../utils/cloudinary");
 const { asyncHandler } = require('../middlewares/asyncHandler');
+const {
+  createdResponse,
+  successResponse,
+  notFoundResponse,
+  badRequestResponse,
+  internalErrorResponse,
+  paginatedResponse
+} = require('../utils/apiResponse');
 
-// method   POST 
+// method   POST
 // route    api/books
 // desc     Create new book
 // access   Private | admin
 const createBook = asyncHandler(async(req, res) => {
-    try{
+    try {
         // Image Validation
-        const image = req.file
+        const image = req.file;
         if (!image) {
-            return res.status(400).json({ message: "no image provided" });
+            return badRequestResponse(res, 'No image provided');
         }
 
-        // Upload Photo
-        const base64 = image.buffer.toString("base64")
+        // Upload Photo to Cloudinary
+        const base64 = image.buffer.toString("base64");
         const mimeType = image.mimetype;
         const uploadResponse = await cloudinary.uploader.upload(
             `data:${mimeType};base64,${base64}`,
         );
 
-        // Save new post in database
+        // Save new book in database
         const book = await Book.create({
             title: req.body.title,
             description: req.body.description,
@@ -37,155 +45,180 @@ const createBook = asyncHandler(async(req, res) => {
             PublicationDate: req.body.PublicationDate,
         });
 
-        // Send response to the client
-        res.status(201).json(book);
+        return createdResponse(res, book, 'Book created successfully');
     } catch (err) {
-        console.log(err.message)
-        res.status(500).send('Server error')
+        console.error('Error creating book:', err.message);
+        return internalErrorResponse(res, 'Failed to create book');
     }
 });
 
-// method   GET 
+// method   GET
 // route    api/books
 // desc     Get all books
 // access   Public
 const getBooks = asyncHandler(async(req, res) => {
-    const page = req.query?.page || 1
-    const limit = 3
-    const skip = (page - 1) * limit
-    const movies = await Book.find().select('-reviews').skip(skip).limit(limit)
-    const total = await Book.countDocuments()
-    const pages = Math.ceil(total/limit)
-    res.json({
-        success: true,
-        pages,
-        data: movies
-    })
-})
+    const page = parseInt(req.query?.page) || 1;
+    const limit = parseInt(req.query?.limit) || 10;
+    const skip = (page - 1) * limit;
 
-// method   GET 
+    // Optimized query with aggregation for pagination
+    const result = await Book.aggregate([
+        {
+            $facet: {
+                data: [
+                    { $skip: skip },
+                    { $limit: limit },
+                    { $addFields: { id: '$_id' } },
+                    { $project: { reviews: 0, _id: 0 } }
+                ],
+                totalCount: [
+                    { $count: "count" }
+                ]
+            }
+        }
+    ]);
+
+    const books = result[0].data;
+    const total = result[0].totalCount[0]?.count || 0;
+    const pages = Math.ceil(total / limit);
+
+    return paginatedResponse(res, books, { page, limit, total, pages });
+});
+
+// method   GET
 // route    api/books/:id
 // desc     Find a book
 // access   Private | auth
 const findBook = asyncHandler(async(req, res) => {
-    const book = await Book.findById(req.params.id)
-    // Book Check
+    const book = await Book.findById(req.params.id);
+
     if (!book) {
-        return res.status(404).json({ message: "Book Not Found" })
+        return notFoundResponse(res, 'Book');
     }
 
-    res.status(200).json(book)
-})
+    return successResponse(res, book, 'Book retrieved successfully');
+});
 
-// method   DELETE 
+// method   DELETE
 // route    api/books/:id
 // desc     Delete a book
 // access   Private | admin
 const deleteBook = asyncHandler(async(req, res) => {
-    const book = await Book.findById(req.params.id)
-    // Book Check
+    const book = await Book.findById(req.params.id);
+
     if (!book) {
-        return res.status(404).json({ message: "Book Not Found" })
+        return notFoundResponse(res, 'Book');
     }
+
     // Delete Book from DB
     await Book.findByIdAndDelete(req.params.id);
-    // Delete Book from Cloudinary
-    await cloudinaryRemoveImage(book.image.publicId);
-    
-    res.status(200).json({ message: "Book deleted successfully", bookId: req.params.id })
-})
 
-// method   PUT 
+    // Delete Book from Cloudinary
+    if (book.image?.publicId) {
+        await cloudinaryRemoveImage(book.image.publicId);
+    }
+
+    return successResponse(res, { bookId: req.params.id }, 'Book deleted successfully');
+});
+
+// method   PUT
 // route    api/books/:id
 // desc     Update a book
 // access   Private | admin
 const updateBook = asyncHandler(async(req, res) => {
-    const book = await Book.findById(req.params.id)
-    // Book Check
-    if (!book) {
-        return res.status(404).json({ message: "Book Not Found" })
-    }
-    // Update Book
-    const updateBook = await Book.findByIdAndUpdate(req.params.id, {
-        $set: {
-            title: req.body.title,
-            description: req.body.description,
-            category: req.body.category,
-            author: req.body.author,
-            language: req.body.language,
-            PublicationDate: req.body.PublicationDate,
-        }
-    }, { new: true })
-    res.status(200).json({ 
-        data: updateBook, 
-        message: "Book updated successfully" 
-    });
-})
+    const book = await Book.findById(req.params.id);
 
-// method   PUT 
+    if (!book) {
+        return notFoundResponse(res, 'Book');
+    }
+
+    // Update Book
+    const updatedBook = await Book.findByIdAndUpdate(
+        req.params.id,
+        {
+            $set: {
+                title: req.body.title,
+                description: req.body.description,
+                category: req.body.category,
+                author: req.body.author,
+                language: req.body.language,
+                PublicationDate: req.body.PublicationDate,
+            }
+        },
+        { new: true, runValidators: true }
+    );
+
+    return successResponse(res, updatedBook, 'Book updated successfully');
+});
+
+// method   PUT
 // route    api/books/update-image/:id
 // desc     Update book Image
 // access   Private | admin
 const updateBookImage = asyncHandler(async(req, res) => {
-    // Book Image Check
-    const image = req.file
+    const image = req.file;
     if (!image) {
-        return res.status(404).json({ message: "No image provided" })
-    } 
+        return badRequestResponse(res, 'No image provided');
+    }
 
-    const book = await Book.findById(req.params.id)
+    const book = await Book.findById(req.params.id);
     if (!book) {
-        return res.status(404).json({ message: "Book Not Found" })
+        return notFoundResponse(res, 'Book');
     }
 
     // Delete Old Image from Cloudinary
-    await cloudinaryRemoveImage(book.image.publicId)
+    if (book.image?.publicId) {
+        await cloudinaryRemoveImage(book.image.publicId);
+    }
 
     // Upload new Image
-    const base64 = image.buffer.toString('base64')
-    const mimeType = image.mimetype
+    const base64 = image.buffer.toString('base64');
+    const mimeType = image.mimetype;
     const uploadResponse = await cloudinary.uploader.upload(
         `data:${mimeType};base64,${base64}`,
     );
 
-    // Update Image Field in DB 
-    const updateBook = await Book.findByIdAndUpdate(req.params.id, {
-        $set: {
-            image: {
-                url: uploadResponse.secure_url,
-                publicId: uploadResponse.public_id
+    // Update Image Field in DB
+    const updatedBook = await Book.findByIdAndUpdate(
+        req.params.id,
+        {
+            $set: {
+                image: {
+                    url: uploadResponse.secure_url,
+                    publicId: uploadResponse.public_id
+                }
             }
-        }
-    }, { new: true })
+        },
+        { new: true }
+    );
 
-    res.status(200).json({ 
-        data: updateBook, 
-        message: "Image updated successfully" 
-    });
-})
+    return successResponse(res, updatedBook, 'Image updated successfully');
+});
 
-// method   POST 
+// method   POST
 // route    api/books/:id/reviews
 // desc     Add a book review
 // access   Private | auth
 const addReview = asyncHandler(async(req, res) => {
-    const { id } = req.params
-    const { comment, rate } = req.body
-    const book = await Book.findById(id)
-    const user = await User.findById(req.userId)
+    const { id } = req.params;
+    const { comment, rate } = req.body;
+    const book = await Book.findById(id);
+    const user = await User.findById(req.userId);
 
     if (!book) {
-        return res.status(404).json({ message: "Book Not Found" })
+        return notFoundResponse(res, 'Book');
     }
-    const isRated = book.reviews.findIndex(m => m.user == req.userId)
-    if (isRated > -1){
-        return res.status(403).send({ message: "Review Is Already Added" });
+
+    const isRated = book.reviews.findIndex(m => m.user.toString() === req.userId.toString());
+    if (isRated > -1) {
+        return badRequestResponse(res, 'You have already reviewed this book');
     }
-    const totalRate = book.reviews.reduce((sum, review) => sum + review.rate ,0)  
-    const finalRate = (totalRate + rate) / (book.reviews.length + 1)
+
+    const totalRate = book.reviews.reduce((sum, review) => sum + review.rate, 0);
+    const finalRate = (totalRate + rate) / (book.reviews.length + 1);
 
     await Book.updateOne(
-        { _id: id } ,
+        { _id: id },
         {
             $push: {
                 reviews: {
@@ -199,12 +232,12 @@ const addReview = asyncHandler(async(req, res) => {
                 rate: finalRate
             }
         }
-    )
+    );
 
-    res.status(201).json({ message: "Review added successfully" })    
-})
+    return successResponse(res, { message: 'Review added successfully' }, 'Review added successfully');
+});
 
-// method   GET 
+// method   GET
 // route    api/books/:id/reviews
 // desc     Get a book review
 // access   Public
@@ -213,20 +246,19 @@ const getReviews = asyncHandler(async(req, res) => {
     const book = await Book.findById(id);
 
     if (!book) {
-        return res.status(404).json({ message: "Book Not Found" })
+        return notFoundResponse(res, 'Book');
     }
 
-    res.status(200).json(book.reviews)
-})
+    return successResponse(res, book.reviews, 'Reviews retrieved successfully');
+});
 
 module.exports = {
     createBook,
     getBooks,
-    findBook, 
+    findBook,
     deleteBook,
     updateBook,
     updateBookImage,
     addReview,
     getReviews
-}
-
+};

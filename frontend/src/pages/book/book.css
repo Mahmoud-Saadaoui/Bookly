@@ -92,10 +92,6 @@
 
 .loan-section {
     margin-top: 30px;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border-left: 4px solid var(--primary-color);
 }
 
 @media (min-width: 600px) and (max-width: 768px) {
@@ -132,4 +128,45 @@
         justify-content: flex-start;
         gap: 30px;
     }
+}
+
+/* Show More Reviews Button */
+.show-more-reviews-btn {
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: center;
+}
+
+.show-more-reviews-btn:hover {
+    background-color: var(--info-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.show-more-reviews-btn:active {
+    transform: translateY(0);
+}
+
+/* No Reviews Message */
+.no-reviews {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+}
+
+.no-reviews p {
+    margin: 0;
+    font-size: 18px;
+    color: #6c757d;
+    font-style: italic;
 }

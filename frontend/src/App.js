@@ -1,58 +1,85 @@
 import React from "react";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Header from "./componenents/header/Header";
-import Home from "./pages/home/Home";
-import Login from "./pages/form/Login";
-import Footer from "./componenents/footer/Footer";
-import Register from "./pages/form/Register";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
-import BookDetails from "./pages/book/BookDetails";
-import Favorites from "./pages/favorites/Favorites";
-import NotFound from "./pages/not-found/NotFound";
-import AdminDashboard from "./pages/dashboard/AdminDashboard";
+
+// Pages
+import HomePage from "./pages/home/HomePage";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import NotFoundPage from "./pages/not-found/NotFound";
+import FavoritesPage from "./pages/favorites/Favorites";
+import AdminDashboardPage from "./pages/dashboard/AdminDashboard";
+import BookDetailsPage from "./pages/book/BookDetails";
+import BooksPage from "./pages/books/BooksPage";
+
+// Layout
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+
+// Styles
+import "./styles/global.css";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
 
   return (
     <BrowserRouter>
-      <div className="app-container">
+      <div className="app">
         <Header />
-        <main className="main-content">
+        <main className="main">
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/books" element={<BooksPage />} />
+
+            {/* Auth Routes - Redirect if logged in */}
             <Route
               path="/login"
-              element={!user ? <Login /> : <Navigate to="/" />}
+              element={!user ? <LoginPage /> : <Navigate to="/" replace />}
             />
             <Route
               path="/register"
-              element={!user ? <Register /> : <Navigate to="/" />}
+              element={!user ? <RegisterPage /> : <Navigate to="/" replace />}
             />
+
+            {/* Protected Routes - Redirect if not logged in */}
             <Route
-              path="/:book"
-              element={user ? <BookDetails /> : <Navigate to="/" />}
+              path="/books/:bookId"
+              element={user ? <BookDetailsPage /> : <Navigate to="/login" replace />}
             />
             <Route
               path="/favorites"
-              element={user ? <Favorites /> : <Navigate to="/" />}
+              element={user ? <FavoritesPage /> : <Navigate to="/login" replace />}
             />
-            <Route path="admin">
-              <Route
-                index
-                element={
-                  user?.isAdmin ? <AdminDashboard /> : <Navigate to="/" />
-                }
-              />
-            </Route>
-            <Route path="/*" element={<NotFound />} />
+
+            {/* Admin Route - Redirect if not admin */}
+            <Route
+              path="/admin"
+              element={user?.isAdmin ? <AdminDashboardPage /> : <Navigate to="/" replace />}
+            />
+
+            {/* 404 Catch-all */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />
-        <ToastContainer theme="light" />
       </div>
+
+      {/* Toast Notifications */}
+      <ToastContainer
+        theme="light"
+        position="top-right"
+        autoClose={3500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </BrowserRouter>
   );
 }

@@ -1,0 +1,118 @@
+/* ========================================
+   FOOTER - Modern 2025 Design
+   ======================================== */
+
+.footer-container {
+  background: linear-gradient(135deg, var(--color-primary-900) 0%, #1a2332 100%);
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background pattern */
+.footer-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(249, 115, 22, 0.3) 50%,
+    transparent 100%);
+}
+
+.footer-container p {
+  color: var(--color-primary-300);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  font-family: var(--font-body);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.footer-container strong {
+  color: var(--color-accent-500);
+  font-weight: var(--font-extrabold);
+  letter-spacing: 0.02em;
+}
+
+.footer-container a {
+  color: var(--color-accent-500);
+  text-decoration: none;
+  font-weight: var(--font-semibold);
+  transition: all var(--transition-base);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.footer-container a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-accent-400);
+  transition: width var(--transition-base);
+}
+
+.footer-container a:hover {
+  color: var(--color-accent-400);
+}
+
+.footer-container a:hover::after {
+  width: 100%;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 640px) {
+  .footer-container {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .footer-container p {
+    font-size: var(--text-xs);
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark .footer-container {
+  background: linear-gradient(135deg, #0a0f1c 0%, #0f172a 100%);
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .footer-container p {
+  color: var(--color-text-muted);
+}
+
+.dark .footer-container strong {
+  color: var(--color-accent-400);
+}
+
+.dark .footer-container a {
+  color: var(--color-accent-400);
+}
+
+.dark .footer-container a:hover {
+  color: var(--color-accent-300);
+}

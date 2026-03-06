@@ -1,17 +1,22 @@
 const mongoose = require('mongoose')
 
-const ModelSchema = new mongoose.Schema({
+const BookSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: [true, 'Title is required'],
+        index: true,
+        trim: true
     },
     category: {
         type: String,
-        required: true
+        required: [true, 'Category is required'],
+        index: true,
+        trim: true
     },
     description: {
         type: String,
-        required: true
+        required: [true, 'Description is required'],
+        trim: true
     },
     image: {
         type: Object,
@@ -22,17 +27,21 @@ const ModelSchema = new mongoose.Schema({
     },
     author: {
         type: String,
-        required: true
+        required: [true, 'Author is required'],
+        trim: true
     },
     language: {
         type: String,
+        trim: true
     },
     PublicationDate: {
         type: Date,
     },
     rate: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0,
+        max: 5
     },
     reviews: {
         type: [
@@ -44,9 +53,17 @@ const ModelSchema = new mongoose.Schema({
                 username: {
                     type: String,
                     required: true,
+                    trim: true
                 },
-                comment: String,
-                rate: Number
+                comment: {
+                    type: String,
+                    trim: true
+                },
+                rate: {
+                    type: Number,
+                    min: 0,
+                    max: 5
+                }
             }
         ],
         default: []
@@ -55,14 +72,18 @@ const ModelSchema = new mongoose.Schema({
     timestamps: true
 })
 
-ModelSchema.set('toJSON', {
+// Configure JSON serialization
+BookSchema.set('toJSON', {
     virtuals: true,
-    versionKey: false, 
+    versionKey: false,
     transform: (doc, ret) => {
-        delete ret._id 
+        delete ret._id
     }
 })
 
-const Model = mongoose.model('Book', ModelSchema);
+// Add text index for search functionality
+BookSchema.index({ title: 'text', description: 'text', author: 'text' });
 
-module.exports = Model
+const BookModel = mongoose.model('Book', BookSchema);
+
+module.exports = BookModel

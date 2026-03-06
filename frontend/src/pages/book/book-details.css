@@ -1,0 +1,519 @@
+/* ========================================
+   BOOK DETAILS PAGE - Modern 2025 Design
+   ======================================== */
+
+.book-details {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  animation: fadeIn 0.6s ease;
+}
+
+/* ========================================
+   BREADCRUMB
+   ======================================== */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--text-sm);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-primary-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb-item:hover {
+  color: var(--color-accent-500);
+}
+
+.breadcrumb-item.active {
+  color: var(--color-primary-600);
+  font-weight: var(--font-medium);
+}
+
+.breadcrumb-separator {
+  color: var(--color-primary-300);
+}
+
+/* ========================================
+   BOOK DETAILS TOP
+   ======================================== */
+
+.book-details-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-3xl);
+  margin-bottom: var(--spacing-3xl);
+}
+
+@media (min-width: 768px) {
+  .book-details-top {
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-3xl);
+  }
+}
+
+.book-details-top-img {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.book-details-top-img img {
+  width: 100%;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
+  transition: transform var(--transition-base);
+}
+
+.book-details-top-img:hover img {
+  transform: scale(1.02);
+}
+
+/* Rating Stars */
+.rating-stars-large {
+  display: flex;
+  gap: 4px;
+  font-size: 24px;
+  margin: var(--spacing-md) 0;
+}
+
+.rating-stars-large .star {
+  color: #FBBF24;
+}
+
+.rating-stars-large .star.empty {
+  color: var(--color-primary-200);
+}
+
+.book-details-top-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.book-details-top-info h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-display-lg);
+  font-weight: var(--font-extrabold);
+  color: var(--color-primary-900);
+  line-height: var(--leading-tight);
+}
+
+.book-details-top-info h3 {
+  font-size: var(--text-lg);
+  color: var(--color-primary-700);
+  font-weight: var(--font-semibold);
+}
+
+.book-details-top-info p {
+  font-size: var(--text-base);
+  color: var(--color-primary-500);
+  line-height: var(--leading-relaxed);
+}
+
+.book-details-top-info .description {
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--color-accent-500);
+}
+
+.book-details-top-info span {
+  font-weight: var(--font-semibold);
+  color: var(--color-primary-900);
+}
+
+/* ========================================
+   ACTION BUTTONS
+   ======================================== */
+
+.btns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+@media (min-width: 600px) {
+  .btns {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}
+
+.favorite-btn button,
+.review-btn button {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border: none;
+  border-radius: var(--radius-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.favorite-btn button {
+  background: white;
+  color: var(--color-primary-700);
+  border: 2px solid var(--color-primary-200);
+}
+
+.favorite-btn button:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-300);
+}
+
+.review-btn button {
+  background: var(--color-accent-500);
+  color: white;
+  box-shadow: var(--shadow-orange);
+}
+
+.review-btn button:hover {
+  background: var(--color-accent-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-orange-lg);
+}
+
+.review-btn button:disabled {
+  background: var(--color-primary-200);
+  color: var(--color-primary-400);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ========================================
+   LOAN SECTION
+   ======================================== */
+
+.loan-section {
+  margin: var(--spacing-3xl) 0;
+  padding: var(--spacing-2xl);
+  background: linear-gradient(135deg, #F8FAFC 0%, #E0E7FF 100%);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-primary-100);
+}
+
+/* ========================================
+   REVIEWS SECTION
+   ======================================== */
+
+.book-details-reviews {
+  margin-top: var(--spacing-3xl);
+}
+
+.get-reviews {
+  margin-top: var(--spacing-xl);
+}
+
+.get-reviews-title {
+  font-family: var(--font-display);
+  font-size: var(--text-display-md);
+  font-weight: var(--font-extrabold);
+  color: var(--color-primary-900);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: white;
+  border-radius: var(--radius-xl);
+  display: inline-block;
+  box-shadow: var(--shadow-sm);
+}
+
+.reviews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.user-review {
+  background: white;
+  border: 1px solid var(--color-primary-100);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.user-review:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.user-review p {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-primary-600);
+}
+
+.user-review p span {
+  font-weight: var(--font-semibold);
+  color: var(--color-primary-900);
+  font-size: var(--text-base);
+}
+
+/* Show More Reviews Button */
+.show-more-reviews-btn {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: var(--spacing-xl) auto 0;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: white;
+  color: var(--color-primary-700);
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.show-more-reviews-btn:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-300);
+  transform: translateY(-1px);
+}
+
+/* No Reviews Message */
+.no-reviews {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  background: var(--color-primary-50);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--color-primary-200);
+}
+
+.no-reviews p {
+  margin: 0;
+  color: var(--color-primary-500);
+  font-size: var(--text-lg);
+}
+
+/* ========================================
+   MODAL
+   ======================================== */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+  padding: var(--spacing-md);
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl);
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-2xl);
+  animation: scaleIn 0.3s ease;
+  z-index: 1;
+}
+
+.close {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  font-size: 28px;
+  color: var(--color-primary-400);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  line-height: 1;
+}
+
+.close:hover {
+  color: var(--color-primary-900);
+}
+
+.modal-content h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-primary-900);
+  margin-bottom: var(--spacing-xl);
+  padding-right: var(--spacing-3xl);
+}
+
+.modal-btn {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--color-accent-500);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-orange);
+}
+
+.modal-btn:hover {
+  background: var(--color-accent-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-orange-lg);
+}
+
+/* Rating Input */
+.rating-input {
+  margin-bottom: var(--spacing-md);
+}
+
+.rating-input label {
+  display: block;
+  font-weight: var(--font-semibold);
+  color: var(--color-primary-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.rating-input select {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  color: var(--color-primary-900);
+  background: white;
+}
+
+.rating-input select:focus {
+  outline: none;
+  border-color: var(--color-accent-500);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+}
+
+/* Comment Input */
+.comment {
+  margin-bottom: var(--spacing-xl);
+}
+
+.comment label {
+  display: block;
+  font-weight: var(--font-semibold);
+  color: var(--color-primary-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.comment textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-family: var(--font-body);
+  color: var(--color-primary-900);
+  min-height: 120px;
+  resize: vertical;
+}
+
+.comment textarea:focus {
+  outline: none;
+  border-color: var(--color-accent-500);
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+}
+
+.comment textarea::placeholder {
+  color: var(--color-primary-400);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .book-details {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .book-details-top-info h1 {
+    font-size: var(--text-display-md);
+  }
+
+  .get-reviews-title {
+    font-size: var(--text-display-sm);
+  }
+
+  .reviews {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    margin: var(--spacing-md);
+    padding: var(--spacing-xl);
+  }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark .book-details-top-info h1 {
+  color: var(--color-text-primary);
+}
+
+.dark .book-details-top-info h3 {
+  color: var(--color-text-secondary);
+}
+
+.dark .book-details-top-info p {
+  color: var(--color-text-secondary);
+}
+
+.dark .book-details-top-info .description {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--color-accent-500);
+  color: var(--color-text-secondary);
+}
+
+.dark .user-review {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.dark .modal-content {
+  background: var(--color-bg-secondary);
+}
+
+.dark .show-more-reviews-btn {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.dark .no-reviews {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--color-border);
+}

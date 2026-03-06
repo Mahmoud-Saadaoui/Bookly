@@ -1,6 +1,6 @@
-const env = 'production' 
+const env = process.env.NODE_ENV || 'development' 
 const PRODUCTION_URL = 'https://bookly-1rvp.onrender.com/api'
-const DEVELOPMENT_URL = 'http://localhost:5001/api'
+const DEVELOPMENT_URL = 'http://localhost:5000/api'
 
 function sanitizeDomain(domain) {
   if (!domain) return "";

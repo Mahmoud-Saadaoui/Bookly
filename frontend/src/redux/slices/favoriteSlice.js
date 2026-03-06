@@ -14,7 +14,7 @@ const favoritesSlice = createSlice({
             state.favoriteList.push(action.payload)
         },
         removeFromFavorites(state, action) {
-            state.favoriteList = state.favoriteList.filter(el => el._id !== action.payload.book)
+            state.favoriteList = state.favoriteList.filter(el => el.book?.id !== action.payload)
         },
         setLoading(state) {
             state.loading = true;

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import "./book.css";
-import Rating from "../../componenents/rating/Rating";
+import React, { useEffect, useState, useMemo } from "react";
+import "./book-details.css";
+import Rating from "../../components/rating/Rating";
 import { useParams } from "react-router-dom";
 import {
   fetchSingleBook,
@@ -9,17 +9,25 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 import moment from "moment";
-import Modal from "../../componenents/book-details/Modal";
-import Reviews from "../../componenents/book-details/Reviews";
+import Modal from "../../components/book-details/Modal";
+import Reviews from "../../components/book-details/Reviews";
 import { postToFavorites } from "../../redux/apiCalls/favoritesApiCall";
-import LoanButton from "../../componenents/loan/LoanButton";
+import LoanButton from "../../components/loan/LoanButton";
 
 function BookDetails() {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-  const { book } = useParams();
-  const { books, loading } = useSelector((state) => state.book);
+  const { bookId } = useParams();
+  const { books, loading, reviews } = useSelector((state) => state.book);
   const { user } = useSelector((state) => state.auth);
+
+  // Check if user has already reviewed this book
+  const hasUserReviewed = useMemo(() => {
+    if (!user || !reviews) return false;
+    // Handle both array and object with data property
+    const reviewsArray = Array.isArray(reviews) ? reviews : (reviews?.data || []);
+    return reviewsArray.some(review => review.user === user.id || review.user === user._id);
+  }, [user, reviews]);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -30,20 +38,20 @@ function BookDetails() {
   };
 
   const addToFavorites = (id) => {
-    dispatch(postToFavorites(id))
+    dispatch(postToFavorites(id));
   }
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(fetchSingleBook(book));
-  }, [dispatch, book]);
+    dispatch(fetchSingleBook(bookId));
+  }, [dispatch, bookId]);
 
-  
+
   useEffect(() => {
-    if (book) {
-      dispatch(getBookReviews(book));
+    if (bookId) {
+      dispatch(getBookReviews(bookId));
     }
-  }, [dispatch, book]);
+  }, [dispatch, bookId]);
 
   if (loading) {
     return (
@@ -71,7 +79,7 @@ function BookDetails() {
     <div className="book-details">
       <div className="book-details-top">
         <div className="book-details-top-img">
-          <img src={books?.image?.url} alt={books?.image?.publicId} />
+          <img src={books?.image?.url} alt={books?.image?.publicId || books?.title} />
         </div>
         <div className="book-details-top-info">
           <h1>{books?.title}</h1>
@@ -95,23 +103,32 @@ function BookDetails() {
           <button type="button" onClick={() => addToFavorites(books?.id)}>Add To Favorites</button>
         </div>
         <div className="review-btn">
-          <button type="button" onClick={handleOpenModal}>
-            Add Review
+          <button
+            type="button"
+            onClick={() => handleOpenModal()}
+            disabled={hasUserReviewed}
+            title={hasUserReviewed ? "You have already reviewed this book" : "Add a review"}
+            style={{
+              opacity: hasUserReviewed ? 0.5 : 1,
+              cursor: hasUserReviewed ? "not-allowed" : "pointer"
+            }}
+          >
+            {hasUserReviewed ? "Reviewed" : "Add Review"}
           </button>
         </div>
       </div>
 
       <div className="loan-section">
-        <LoanButton bookId={books?._id} isAuthenticated={!!user} />
+        <LoanButton bookId={books?.id} isAuthenticated={!!user} />
       </div>
 
       <div className="book-details-reviews">
-        <Reviews book={book}/>
+        <Reviews book={bookId}/>
       </div>
       <Modal
         showModal={showModal}
         handleClose={handleCloseModal}
-        book={book}
+        book={bookId}
       />
     </div>
   );

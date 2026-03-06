@@ -2,6 +2,20 @@ import { BASE_URL } from '../../constantes';
 
 export const LOANS_URL = `${BASE_URL}/loans`;
 
+// Helper function to get auth token from localStorage
+const getAuthToken = () => {
+    try {
+        const userInfo = localStorage.getItem('userInfo');
+        if (userInfo) {
+            const user = JSON.parse(userInfo);
+            return user.accessToken;
+        }
+    } catch (error) {
+        console.error('Error parsing userInfo from localStorage:', error);
+    }
+    return null;
+};
+
 // Get book loan dates (unavailable dates)
 export const getBookLoanDates = async (bookId) => {
     try {
@@ -34,7 +48,10 @@ export const checkBookAvailability = async (bookId, startDate, endDate) => {
 // Create a new loan
 export const createLoan = async (bookId, loanDate, returnDate, notes = '') => {
     try {
-        const token = localStorage.getItem('authToken');
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
         const response = await fetch(`${LOANS_URL}`, {
             method: 'POST',
             headers: {
@@ -63,7 +80,10 @@ export const createLoan = async (bookId, loanDate, returnDate, notes = '') => {
 // Get user's loans
 export const getUserLoans = async () => {
     try {
-        const token = localStorage.getItem('authToken');
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
         const response = await fetch(`${LOANS_URL}/user/all`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -84,7 +104,10 @@ export const getUserLoans = async () => {
 // Return a book
 export const returnBook = async (loanId) => {
     try {
-        const token = localStorage.getItem('authToken');
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
         const response = await fetch(`${LOANS_URL}/return/${loanId}`, {
             method: 'PUT',
             headers: {
@@ -107,7 +130,10 @@ export const returnBook = async (loanId) => {
 // Get loan details
 export const getLoanDetail = async (loanId) => {
     try {
-        const token = localStorage.getItem('authToken');
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
         const response = await fetch(`${LOANS_URL}/${loanId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`

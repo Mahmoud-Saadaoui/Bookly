@@ -1,0 +1,233 @@
+/* ===================================
+   PAGINATION - Modern 2025 Design
+   =================================== */
+
+/* Pagination Navigation Container */
+.pagination-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: var(--spacing-3xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-md);
+}
+
+/* Pagination List */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Page Item */
+.page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Page Link - Modern Professional Style */
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 var(--spacing-md);
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  background: white;
+  color: var(--color-primary-700);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-body);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover Effect - Professional Lift */
+.page-link:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-accent-500);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  color: var(--color-accent-500);
+}
+
+/* Active Page - Standout Design */
+.page-item.active .page-link {
+  background: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+  color: white;
+  box-shadow: var(--shadow-orange);
+  transform: scale(1.05);
+}
+
+/* Disabled State */
+.page-item.disabled .page-link {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-200);
+  transform: none;
+  box-shadow: none;
+}
+
+.page-item.disabled .page-link:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-200);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Break/Dots Styling */
+.page-item.break .page-link {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-primary-400);
+  font-weight: var(--font-extrabold);
+  letter-spacing: 0.05em;
+  cursor: default;
+  min-width: 32px;
+}
+
+.page-item.break .page-link:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Previous/Next Buttons - Enhanced */
+.page-item.previous .page-link,
+.page-item.next .page-link {
+  padding: 0 var(--spacing-lg);
+  font-weight: var(--font-semibold);
+  border-color: var(--color-primary-300);
+}
+
+.page-item.previous .page-link:hover,
+.page-item.next .page-link:hover {
+  border-color: var(--color-accent-500);
+  color: var(--color-accent-500);
+}
+
+/* Ripple Effect on Click */
+.page-link:active {
+  transform: scale(0.97);
+}
+
+/* Focus State for Accessibility */
+.page-link:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .pagination-nav {
+    margin: var(--spacing-2xl) 0 var(--spacing-xl);
+  }
+
+  .pagination {
+    gap: 2px;
+  }
+
+  .page-link {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 var(--spacing-sm);
+    font-size: var(--text-xs);
+  }
+
+  .page-item.previous .page-link,
+  .page-item.next .page-link {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+/* Mobile - Hide text, show icons only */
+@media (max-width: 480px) {
+  .pagination-nav {
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-xs);
+  }
+
+  .pagination {
+    gap: 1px;
+  }
+
+  .page-link {
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    font-size: var(--text-xs);
+  }
+
+  .page-item.previous .page-link,
+  .page-item.next .page-link {
+    min-width: 36px;
+    padding: 0;
+  }
+
+  .page-item.previous .page-link span,
+  .page-item.next .page-link span {
+    display: none;
+  }
+
+  /* Show arrow icons */
+  .page-item.previous .page-link::after,
+  .page-item.next .page-link::after {
+    display: inline;
+  }
+
+  .page-item.previous .page-link::after {
+    content: '←';
+  }
+
+  .page-item.next .page-link::after {
+    content: '→';
+  }
+}
+
+/* ===================================
+   DARK MODE
+   =================================== */
+
+.dark .page-link {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.dark .page-link:hover {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-accent-500);
+  color: var(--color-accent-500);
+}
+
+.dark .page-item.break .page-link {
+  color: var(--color-text-muted);
+}
+
+.dark .page-item.disabled .page-link {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.dark .page-item.active .page-link {
+  background: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+  color: white;
+}

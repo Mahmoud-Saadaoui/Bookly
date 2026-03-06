@@ -1,0 +1,114 @@
+/* ===================================
+   MODERN RATING COMPONENT
+   Beautiful star rating display
+   =================================== */
+
+.rating {
+  display: inline-flex;
+  gap: 4px;
+  color: #f7600e;
+  margin: 12px 0;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #fff8f0 0%, #fff5eb 100%);
+  border-radius: 12px;
+  border: 1px solid #ffe8cc;
+}
+
+.rating svg {
+  font-size: 20px;
+  filter: drop-shadow(0 1px 2px rgba(247, 96, 14, 0.2));
+  transition: transform 0.2s ease;
+}
+
+.rating svg:hover {
+  transform: scale(1.15);
+}
+
+/* Rating with number display */
+.rating-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #f7600e;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 2px solid #ffe8cc;
+}
+
+/* Large rating variant */
+.rating.large {
+  gap: 6px;
+  padding: 10px 16px;
+}
+
+.rating.large svg {
+  font-size: 26px;
+}
+
+/* Small rating variant */
+.rating.small {
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.rating.small svg {
+  font-size: 16px;
+}
+
+/* Compact rating without background */
+.rating.compact {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.rating.compact svg {
+  filter: none;
+}
+
+/* Interactive rating (for reviews) */
+.rating.interactive {
+  cursor: pointer;
+}
+
+.rating.interactive svg {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rating.interactive svg:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 4px rgba(247, 96, 14, 0.4));
+}
+
+/* Empty state for no rating */
+.rating.empty {
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .rating {
+    padding: 6px 10px;
+    gap: 3px;
+  }
+
+  .rating svg {
+    font-size: 18px;
+  }
+
+  .rating.large svg {
+    font-size: 22px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .rating {
+    background: linear-gradient(135deg, #2a1f14 0%, #3d2e1f 100%);
+    border-color: #4a3828;
+  }
+}

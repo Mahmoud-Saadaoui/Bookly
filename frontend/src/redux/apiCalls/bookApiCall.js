@@ -28,7 +28,8 @@ export function fetchSingleBook(bookId) {
           "authorization": getState().auth.user.accessToken
         }
       });
-      dispatch(bookActions.findBook(data));
+      // Store the book data from response
+      dispatch(bookActions.findBook(data.success ? data.data : data));
       dispatch(bookActions.clearLoading());
     } catch (error) {
       toast.error(error.response?.data.message);
@@ -66,12 +67,15 @@ export function postReview(bookId, review) {
           "authorization": getState().auth.user.accessToken
         }
       });
-      toast.success(data?.message)
+      toast.success(data?.message || "Review added successfully")
       dispatch(getBookReviews(bookId));
       dispatch(bookActions.clearLoading());
+      return data;
     } catch (error) {
-      toast.error(error?.response?.data.message);
+      const errorMessage = error?.response?.data?.message || "Failed to add review";
+      toast.error(errorMessage);
       dispatch(bookActions.clearLoading());
+      throw error;
     }
   };
 }

@@ -1,20 +1,24 @@
 const mongoose = require('mongoose')
 
-const ModelSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
 	name: {
 		type: String,
-		required: true,
-		maxlength: 50 
+		required: [true, 'Name is required'],
+		maxlength: [50, 'Name cannot exceed 50 characters'],
+		trim: true
 	},
 	email: {
 		type: String,
-		required: true,
-		unique: true
+		required: [true, 'Email is required'],
+		unique: true,
+		trim: true,
+		lowercase: true,
+		index: true
 	},
 	password: {
 		type: String,
-		required: true,
-		minlength: 6 
+		required: [true, 'Password is required'],
+		minlength: [6, 'Password must be at least 6 characters']
 	},
 	favoriteList: [
 		{
@@ -22,10 +26,13 @@ const ModelSchema = new mongoose.Schema({
 				type: mongoose.Schema.Types.ObjectId,
 				ref: 'Book'
 			},
-			favorite: Boolean
+			favorite: {
+				type: Boolean,
+				default: true
+			}
 		}
 	],
-	isAdmin: {  
+	isAdmin: {
 		type: Boolean,
 		default: false
 	}
@@ -33,6 +40,6 @@ const ModelSchema = new mongoose.Schema({
 	timestamps: true
 })
 
-const Model = mongoose.model('User', ModelSchema);
+const UserModel = mongoose.model('User', UserSchema);
 
-module.exports = Model
+module.exports = UserModel

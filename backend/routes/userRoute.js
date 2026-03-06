@@ -6,12 +6,14 @@ const {
 } = require("../controllers/userController");
 const router = express.Router();
 const auth = require('../middlewares/auth');
+const { authLimiter } = require('../middlewares/rateLimiter');
+const { registerValidation, loginValidation } = require('../validators/authValidator');
 
 //  api/users/register
-router.post('/register', registerUser)
+router.post('/register', authLimiter, registerValidation, registerUser)
 
 //  api/users/login
-router.post('/login', loginUser)
+router.post('/login', authLimiter, loginValidation, loginUser)
 
 //  api/users/me
 router.get('/me', auth.check, getMe)

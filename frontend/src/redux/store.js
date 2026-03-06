@@ -5,12 +5,18 @@ import { favoritesReducer } from './slices/favoriteSlice';
 import loanReducer from './slices/loanSlice';
 
 const store = configureStore({
-    reducer: {
-       auth: authReducer, 
-       book: bookReducer,
-       favorites: favoritesReducer,
-       loan: loanReducer,
-    }
+  reducer: {
+    auth: authReducer,
+    book: bookReducer,
+    favorites: favoritesReducer,
+    loan: loanReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
 });
 
-export default store
+export default store;

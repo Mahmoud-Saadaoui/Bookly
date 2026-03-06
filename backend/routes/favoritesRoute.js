@@ -6,12 +6,13 @@ const {
   getFavorites,
 } = require("../controllers/favoritesController");
 const auth = require('../middlewares/auth');
+const { addToFavoritesValidation, favoriteIdValidation } = require('../validators/favoriteValidator');
 
 //  api/favoriteList
-router.post('/', auth.check, addToFavorites)
+router.post('/', auth.check, addToFavoritesValidation, addToFavorites)
 
 //  api/favoriteList/:id
-router.delete('/:id', auth.check, deleteFromFavorites)
+router.delete('/:id', auth.check, favoriteIdValidation, deleteFromFavorites)
 
 //  api/favoriteList
 router.get('/', auth.check, getFavorites)
