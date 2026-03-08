@@ -1,31 +1,38 @@
+/* ========================================
+   BOOK CARD - Cairo Font + Modern Design 2025
+   ======================================== */
+
 .book-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
+  background: white;
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+  transition: all var(--transition-base);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
 .book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.2);
 }
 
 .book-card:focus-visible {
-  outline: 3px solid var(--primary-color);
+  outline: 3px solid var(--color-primary-500);
   outline-offset: 2px;
+  border-radius: var(--radius-xl);
 }
 
 .book-image-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 140%; /* Aspect ratio for book covers */
+  padding-top: 140%;
   overflow: hidden;
-  background: var(--light-color);
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-primary-100));
 }
 
 .book-image {
@@ -35,37 +42,105 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-slow);
 }
 
 .book-card:hover .book-image {
   transform: scale(1.05);
 }
 
+/* Rating Badge */
 .book-rating-badge {
   position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-  background: rgba(0, 0, 0, 0.8);
-  color: var(--white);
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: var(--color-primary-900);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-full);
+  font-family: 'Cairo', sans-serif;
   font-size: 0.85rem;
-  font-weight: 600;
-  backdrop-filter: blur(4px);
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
+.book-rating-badge i {
+  color: #FBBF24;
+}
+
+/* Overlay on hover */
+.book-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    rgba(49, 46, 129, 0.95) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--spacing-lg);
+}
+
+.book-card:hover .book-card-overlay {
+  opacity: 1;
+}
+
+.quick-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.quick-action-btn {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-primary-900);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quick-action-btn:hover {
+  background: white;
+  transform: translateY(-2px);
+}
+
+.quick-action-btn.primary {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  color: white;
+}
+
+.quick-action-btn.primary:hover {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-600));
+}
+
+/* Book Info */
 .book-info {
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
 .book-title {
+  font-family: 'Cairo', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--black);
+  color: var(--color-primary-900);
   margin: 0 0 var(--spacing-sm);
   line-height: 1.3;
   display: -webkit-box;
@@ -75,9 +150,11 @@
 }
 
 .book-author {
-  color: var(--third-color);
+  font-family: 'Cairo', sans-serif;
+  color: var(--color-primary-500);
   font-size: 0.9rem;
   margin: 0 0 var(--spacing-md);
+  font-weight: 500;
 }
 
 .book-meta {
@@ -88,37 +165,137 @@
 }
 
 .book-category {
-  background: var(--primary-color);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-50));
+  color: var(--color-primary-700);
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius-full);
+  font-family: 'Cairo', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
+  border: 1px solid var(--color-primary-200);
 }
 
 .book-language {
-  color: var(--third-color);
+  font-family: 'Cairo', sans-serif;
+  color: var(--color-primary-500);
   font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.book-view-button {
+.book-language::before {
+  content: '🌐';
+  font-size: 12px;
+}
+
+/* Book Footer */
+.book-card-footer {
   margin-top: auto;
-  padding: 0.75rem 1rem;
-  background: transparent;
-  border: 2px solid var(--primary-color);
-  color: var(--primary-color);
-  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-primary-100);
+}
+
+/* Availability Status */
+.availability-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.available {
+  background: var(--color-secondary-500);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot.unavailable {
+  background: var(--color-primary-300);
+}
+
+.status-text {
+  color: var(--color-primary-600);
   font-weight: 600;
+}
+
+.status-text.available {
+  color: var(--color-secondary-600);
+}
+
+/* View Button */
+.book-view-button {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-primary-600);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  font-size: var(--text-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .book-view-button:hover {
-  background: var(--primary-color);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .book-view-button:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid var(--color-primary-500);
   outline-offset: 2px;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 640px) {
+  .book-card {
+    border-radius: var(--radius-lg);
+  }
+
+  .book-info {
+    padding: var(--spacing-md);
+  }
+
+  .book-title {
+    font-size: 1rem;
+  }
+
+  .book-author {
+    font-size: 0.85rem;
+  }
+
+  .book-view-button {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.8rem;
+  }
 }

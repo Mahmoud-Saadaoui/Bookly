@@ -1,103 +1,513 @@
+/* ========================================
+   FORM PAGES - Cairo Font + Modern Design 2025
+   ======================================== */
+
+/* ========================================
+   FORM WRAPPER - Modern Background
+   ======================================== */
+
 .form-wrapper {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 15px;
-  }
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #FFF7ED 100%);
+  background-attachment: fixed;
+}
 
 .form-wrapper::before {
-    content: "";
-    background: url("../../images/contact-bg.jpg") no-repeat;
-    background-attachment: fixed;
-    background-position: 50%;
-    background-size: cover;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    opacity: 0.5;
-    z-index: -1;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../../images/img.jpg") no-repeat center center;
+  background-size: cover;
+  opacity: 0.15;
+  z-index: 0;
+  filter: saturate(0.3);
 }
+
+.form-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(244, 63, 94, 0.05) 100%);
+  backdrop-filter: blur(1px);
+  z-index: 1;
+}
+
+/* ========================================
+   FORM TITLE
+   ======================================== */
 
 .form-title {
-    font-size: 27px;
-    margin: 30px;
-    color: #000;
+  font-family: 'Cairo', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-primary-900);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  letter-spacing: -0.5px;
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    width: 340px;
+.form-title span {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.form input {
-    border: 2px solid #000;
-    padding: 10px;
-    font-size: 21px;
-    margin-bottom: 15px;
-    color: #000;
-    background: transparent;
+/* ========================================
+   FORM CARD - Glassmorphism
+   ======================================== */
+
+.form-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl);
+  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  animation: fadeInUp 0.6s ease;
 }
 
-.form input:focus{
-    outline: none;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.form input::placeholder{
-    color: #000;
+/* ========================================
+   FORM HEADER
+   ======================================== */
+
+.form-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
 }
+
+.form-header h2 {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--color-primary-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-header p {
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  color: var(--color-primary-500);
+  font-weight: 500;
+}
+
+/* ========================================
+   FORM GROUPS
+   ======================================== */
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-primary-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-group .input-wrapper {
+  position: relative;
+}
+
+.form-group .input-wrapper i {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-primary-400);
+  font-size: 18px;
+  transition: color var(--transition-fast);
+}
+
+/* ========================================
+   FORM INPUTS - Modern Design
+   ======================================== */
+
+.form input,
+.form textarea,
+.form select {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-md);
+  background: white;
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-base);
+  color: var(--color-primary-900);
+  transition: all var(--transition-fast);
+  margin-bottom: var(--spacing-md);
+  font-weight: 500;
+}
+
+.form input::placeholder,
+.form textarea::placeholder {
+  color: var(--color-primary-400);
+  font-weight: 400;
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.form input:focus + i,
+.form textarea:focus + i {
+  color: var(--color-primary-600);
+}
+
+.form input.with-icon {
+  padding-left: 3rem;
+}
+
+.form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ========================================
+   FORM BUTTONS - Modern Gradient
+   ======================================== */
 
 .form-btn {
-    z-index: 1;
-    position: relative;
-    font-family: inherit;
-    color: #fff;
-    padding: 0.5em 1em;
-    outline: none;
-    border: none;
-    background-color: var(--danger-color);
-    overflow: hidden;
-    width: 60%;
-    margin: auto;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 10px;
+  width: 100%;
+  padding: var(--spacing-md);
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  margin-top: var(--spacing-md);
 }
+
+.form-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-600));
+}
+
+.form-btn:active {
+  transform: translateY(0);
+}
+
+.form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ========================================
+   FORM FOOTER
+   ======================================== */
 
 .form-footer {
-    margin-top: 20px;
-    font-size: 17px;
-    font-weight: 600;
-    color: #000;
-}
-a.forms-link {
-    color: var(--danger-color);
-    text-decoration: none;
+  text-align: center;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-primary-100);
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary-600);
+  position: relative;
+  z-index: 2;
 }
 
+.form-footer a {
+  color: var(--color-primary-600);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color var(--transition-fast);
+}
 
-/* Media Queries */
-@media (min-width: 330px) and (max-width: 575px) {
-    .form-title {
-        font-size: 20px;
-    }
-    .form {
-        width: 290px;
-    }
-    .form input {
-        font-size: 15px;
-        margin-bottom: 13px;
-    }
-    .form-btn {
-        font-size: 17px;
-    }
-    .form-footer {
-        font-size: 13px;
-    }
+.form-footer a:hover {
+  color: var(--color-rose-500);
+  text-decoration: underline;
+}
+
+/* ========================================
+   ERROR & SUCCESS STATES
+   ======================================== */
+
+.form-group.error input,
+.form-group.error textarea,
+.form-group.error select {
+  border-color: #EF4444;
+}
+
+.form-group.error .error-message {
+  display: block;
+  color: #EF4444;
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  margin-top: var(--spacing-xs);
+}
+
+.form-group.success input,
+.form-group.success textarea,
+.form-group.success select {
+  border-color: var(--color-secondary-500);
+}
+
+/* ========================================
+   PASSWORD TOGGLE
+   ======================================== */
+
+.password-toggle {
+  position: absolute;
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-primary-400);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  transition: color var(--transition-fast);
+}
+
+.password-toggle:hover {
+  color: var(--color-primary-600);
+}
+
+/* ========================================
+   SOCIAL LOGIN
+   ======================================== */
+
+.social-login {
+  margin-top: var(--spacing-xl);
+}
+
+.social-login-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.social-login-divider::before,
+.social-login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-primary-200);
+}
+
+.social-login-divider span {
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-primary-500);
+  text-transform: uppercase;
+}
+
+.social-login-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.social-login-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: white;
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary-700);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.social-login-btn:hover {
+  border-color: var(--color-primary-400);
+  background: var(--color-primary-50);
+  transform: translateY(-1px);
+}
+
+.social-login-btn i {
+  font-size: 20px;
+}
+
+/* ========================================
+   REMEMBER ME & FORGOT PASSWORD
+   ======================================== */
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.remember-me input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary-500);
+  cursor: pointer;
+}
+
+.remember-me label {
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-primary-600);
+  cursor: pointer;
+}
+
+.forgot-password {
+  font-family: 'Cairo', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary-600);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.forgot-password:hover {
+  color: var(--color-rose-500);
+  text-decoration: underline;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+
+.form-btn.loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.form-btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 480px) {
+  .form-wrapper {
+    padding: var(--spacing-md);
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+  }
+
+  .form-card {
+    padding: var(--spacing-lg);
+  }
+
+  .form-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .form input,
+  .form textarea,
+  .form select {
+    font-size: var(--text-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .social-login-buttons {
+    flex-direction: column;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus styles */
+.form input:focus-visible,
+.form textarea:focus-visible,
+.form select:focus-visible,
+.form-btn:focus-visible,
+.social-login-btn:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
 }

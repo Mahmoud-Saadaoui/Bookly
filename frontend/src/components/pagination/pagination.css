@@ -1,5 +1,5 @@
 /* ===================================
-   PAGINATION - Modern 2025 Design
+   PAGINATION - Cairo Font + Modern Design 2025
    =================================== */
 
 /* Pagination Navigation Container */
@@ -42,11 +42,11 @@
   color: var(--color-primary-700);
   text-decoration: none;
   font-size: var(--text-sm);
-  font-weight: var(--font-semibold);
-  font-family: var(--font-body);
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
   transition: all var(--transition-base);
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -54,18 +54,18 @@
 /* Hover Effect - Professional Lift */
 .page-link:hover {
   background: var(--color-primary-50);
-  border-color: var(--color-accent-500);
+  border-color: var(--color-primary-500);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  color: var(--color-accent-500);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  color: var(--color-primary-900);
 }
 
 /* Active Page - Standout Design */
 .page-item.active .page-link {
-  background: var(--color-accent-500);
-  border-color: var(--color-accent-500);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  border-color: transparent;
   color: white;
-  box-shadow: var(--shadow-orange);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
   transform: scale(1.05);
 }
 
@@ -93,7 +93,7 @@
   background: transparent;
   box-shadow: none;
   color: var(--color-primary-400);
-  font-weight: var(--font-extrabold);
+  font-weight: 900;
   letter-spacing: 0.05em;
   cursor: default;
   min-width: 32px;
@@ -109,14 +109,14 @@
 .page-item.previous .page-link,
 .page-item.next .page-link {
   padding: 0 var(--spacing-lg);
-  font-weight: var(--font-semibold);
+  font-weight: 700;
   border-color: var(--color-primary-300);
 }
 
 .page-item.previous .page-link:hover,
 .page-item.next .page-link:hover {
-  border-color: var(--color-accent-500);
-  color: var(--color-accent-500);
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-900);
 }
 
 /* Ripple Effect on Click */
@@ -126,7 +126,7 @@
 
 /* Focus State for Accessibility */
 .page-link:focus-visible {
-  outline: 2px solid var(--color-accent-500);
+  outline: 2px solid var(--color-primary-500);
   outline-offset: 2px;
 }
 
@@ -213,8 +213,8 @@
 
 .dark .page-link:hover {
   background: var(--color-bg-tertiary);
-  border-color: var(--color-accent-500);
-  color: var(--color-accent-500);
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-400);
 }
 
 .dark .page-item.break .page-link {
@@ -227,7 +227,7 @@
 }
 
 .dark .page-item.active .page-link {
-  background: var(--color-accent-500);
-  border-color: var(--color-accent-500);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  border-color: transparent;
   color: white;
 }
