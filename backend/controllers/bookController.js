@@ -1,6 +1,6 @@
 const Book = require('../models/book');
 const User = require('../models/user');
-const { cloudinaryRemoveImage } = require("../utils/cloudinary");
+const { cloudinary, cloudinaryRemoveImage } = require("../utils/cloudinary");
 const { asyncHandler } = require('../middlewares/asyncHandler');
 const {
   createdResponse,
