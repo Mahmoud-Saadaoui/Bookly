@@ -110,11 +110,7 @@ function Header() {
                   </li>
                 )}
                 <li className="nav-item">
-                  <div className="nav-dropdown">
-                    <span>{user.name}</span>
-                    <BsThreeDotsVertical />
-                    <Dropdown />
-                  </div>
+                  <Dropdown />
                 </li>
               </>
             ) : (
