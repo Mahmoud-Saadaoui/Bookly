@@ -12,7 +12,8 @@ export function fetchBooks(page) {
       dispatch(bookActions.getBooks(data));
       dispatch(bookActions.clearLoading())
     } catch (error) {
-      toast.error(error.response?.data.msg);
+      const errorMessage = error.response?.data?.message || error.response?.data?.msg || "Failed to fetch books";
+      toast.error(errorMessage);
       dispatch(bookActions.clearLoading());
     }
   };
@@ -91,11 +92,29 @@ export function addBook(newBook) {
           "Content-Type": "multipart/form-data",
         }
       });
-      dispatch(bookActions.setBooks(data));
+      toast.success(data?.message || "Book created successfully");
+      // Add the new book to the state
+      if (data?.data) {
+        dispatch(bookActions.addBook(data.data));
+      }
       dispatch(bookActions.clearLoading());
+      return data;
     } catch (error) {
-      toast.error(error?.response?.data.message);
+      let errorMessage = "Failed to create book";
+      const response = error?.response?.data;
+
+      if (response?.errors && Array.isArray(response.errors)) {
+        // Show first validation error
+        errorMessage = response.errors[0]?.message || errorMessage;
+      } else if (response?.message) {
+        errorMessage = response.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
       dispatch(bookActions.clearLoading());
+      throw error;
     }
   };
 }

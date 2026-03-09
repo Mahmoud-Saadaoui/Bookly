@@ -36,7 +36,7 @@ function CreateNewBook({
       <form className="create-book-form-full" onSubmit={formSubmitHandler} encType="multipart/form-data">
         <div className="form-grid">
           <div className="form-group">
-            <label htmlFor="file" className="image-upload-area">
+            <label htmlFor="image" className="image-upload-area">
               <div className="image-upload-content">
                 {fileName ? (
                   <>
@@ -65,8 +65,8 @@ function CreateNewBook({
             </label>
             <input
               type="file"
-              name="file"
-              id="file"
+              name="image"
+              id="image"
               style={{ display: "none" }}
               accept="image/*"
               onChange={(e) => setFileName(e.target.files[0])}

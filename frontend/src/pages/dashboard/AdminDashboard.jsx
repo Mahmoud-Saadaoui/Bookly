@@ -45,7 +45,7 @@ function AdminDashboardPage() {
     if (title.trim() === "") return toast.error("Book Title is required");
     if (category.trim() === "") return toast.error("Book Category is required");
     if (description.trim() === "")
-      return toast.error("Book Description is required");
+      return toast.error("Book Description is required (min. 10 characters)");
     if (author.trim() === "") return toast.error("Book Author is required");
     if (language.trim() === "") return toast.error("Book Language is required");
     if (PublicationDate.trim() === "")
@@ -61,17 +61,21 @@ function AdminDashboardPage() {
     formData.append("language", language);
     formData.append("PublicationDate", PublicationDate);
 
-    dispatch(addBook(formData)).then(() => {
-      dispatch(fetchBooks(currentPage));
-    });
-
-    setFileName(null);
-    setTitle("");
-    setDescription("");
-    setCategory("");
-    setAuthor("");
-    setPublicationDate("");
-    setLanguage("");
+    dispatch(addBook(formData))
+      .then(() => {
+        dispatch(fetchBooks(currentPage));
+        // Only reset form on success
+        setFileName(null);
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setAuthor("");
+        setPublicationDate("");
+        setLanguage("");
+      })
+      .catch(() => {
+        // Don't reset form on error
+      });
   };
 
   /**
