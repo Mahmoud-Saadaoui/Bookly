@@ -16,40 +16,70 @@ const {
 // desc     Create new book
 // access   Private | admin
 const createBook = asyncHandler(async(req, res) => {
-    try {
-        // Image Validation
-        const image = req.file;
-        if (!image) {
-            return badRequestResponse(res, 'No image provided');
-        }
+    // Log incoming request data for debugging
+    console.log('Creating book with data:', {
+        title: req.body?.title,
+        author: req.body?.author,
+        category: req.body?.category,
+        hasImage: !!req.file,
+        userId: req.userId
+    });
 
-        // Upload Photo to Cloudinary
+    // Image Validation
+    const image = req.file;
+    if (!image) {
+        console.error('No image file in request');
+        return badRequestResponse(res, 'No image provided');
+    }
+
+    console.log('Image file details:', {
+        mimetype: image.mimetype,
+        size: image.size,
+        bufferLength: image.buffer?.length
+    });
+
+    // Upload Photo to Cloudinary
+    let uploadResponse;
+    try {
         const base64 = image.buffer.toString("base64");
         const mimeType = image.mimetype;
-        const uploadResponse = await cloudinary.uploader.upload(
-            `data:${mimeType};base64,${base64}`,
-        );
+        const dataUri = `data:${mimeType};base64,${base64}`;
 
-        // Save new book in database
-        const book = await Book.create({
-            title: req.body.title,
-            description: req.body.description,
-            category: req.body.category,
-            user: req.userId,
-            image: {
-                url: uploadResponse.secure_url,
-                publicId: uploadResponse.public_id,
-            },
-            author: req.body.author,
-            language: req.body.language,
-            PublicationDate: req.body.PublicationDate,
-        });
-
-        return createdResponse(res, book, 'Book created successfully');
-    } catch (err) {
-        console.error('Error creating book:', err.message);
-        return internalErrorResponse(res, 'Failed to create book');
+        console.log('Uploading to Cloudinary...');
+        uploadResponse = await cloudinary.uploader.upload(dataUri);
+        console.log('Cloudinary upload successful:', uploadResponse.public_id);
+    } catch (cloudinaryError) {
+        console.error('Cloudinary upload error:', cloudinaryError);
+        return badRequestResponse(res, `Failed to upload image: ${cloudinaryError.message}`);
     }
+
+    // Prepare book data
+    const bookData = {
+        title: req.body.title,
+        description: req.body.description,
+        category: req.body.category,
+        user: req.userId,
+        image: {
+            url: uploadResponse.secure_url,
+            publicId: uploadResponse.public_id,
+        },
+        author: req.body.author,
+        language: req.body.language,
+    };
+
+    // Only add PublicationDate if provided
+    if (req.body.PublicationDate) {
+        bookData.PublicationDate = new Date(req.body.PublicationDate);
+    }
+
+    console.log('Saving book to database...');
+
+    // Save new book in database
+    const book = await Book.create(bookData);
+
+    console.log('Book created successfully:', book._id);
+
+    return createdResponse(res, book, 'Book created successfully');
 });
 
 // method   GET
