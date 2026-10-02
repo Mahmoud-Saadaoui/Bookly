@@ -1,5 +1,5 @@
-import React from 'react';
-import { InputField, categories } from '../../components/utils/index';
+import React, { useEffect, useState } from 'react';
+import { InputField } from '../../components/utils/index';
 import { FaBookMedical } from 'react-icons/fa';
 
 function CreateNewBook({
@@ -18,6 +18,18 @@ function CreateNewBook({
   language,
   setLanguage,
   formSubmitHandler }) {
+  const [previewUrl, setPreviewUrl] = useState('');
+
+  useEffect(() => {
+    if (!fileName) {
+      setPreviewUrl('');
+      return undefined;
+    }
+
+    const objectUrl = URL.createObjectURL(fileName);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [fileName]);
 
   return (
     <div className="create-book-page">
@@ -41,7 +53,7 @@ function CreateNewBook({
                 {fileName ? (
                   <>
                     <div className="image-preview-wrapper">
-                      <img src={URL.createObjectURL(fileName)} alt="Preview" className="image-preview" />
+                      <img src={previewUrl} alt="Preview" className="image-preview" />
                       <div className="image-overlay">
                         <span>Change Image</span>
                       </div>
@@ -68,8 +80,8 @@ function CreateNewBook({
               name="image"
               id="image"
               style={{ display: "none" }}
-              accept="image/*"
-              onChange={(e) => setFileName(e.target.files[0])}
+               accept="image/jpeg,image/png,image/gif,image/webp"
+               onChange={(e) => setFileName(e.target.files?.[0] || null)}
             />
           </div>
 
@@ -95,36 +107,28 @@ function CreateNewBook({
                 />
               </div>
               <div className="form-group half-width">
-                <select
-                  className="create-book-input"
+                <InputField
+                  type="text"
+                  placeholder="Category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option disabled value="">
-                    Select Category
-                  </option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group half-width">
-                <InputField
-                  type="text"
-                  placeholder="Language"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                />
+                  <InputField
+                    type="text"
+                    placeholder="Language (optional)"
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                  />
               </div>
               <div className="form-group half-width">
                 <InputField
                   type="date"
-                  placeholder="Publication Date"
+                    placeholder="Publication Date (optional)"
                   value={PublicationDate}
                   onChange={(e) => setPublicationDate(e.target.value)}
                 />

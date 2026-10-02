@@ -1,54 +1,73 @@
-const multer = require('multer')
+const multer = require('multer');
+const HttpError = require('../utils/httpError');
 
-// Memory storage for Cloudinary upload
+const allowedMimeTypes = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp'
+]);
+
 const storage = multer.memoryStorage();
 
-// File filter to accept only images
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Only image files are allowed'), false);
+const fileFilter = (req, file, callback) => {
+  if (allowedMimeTypes.has(file.mimetype)) {
+    return callback(null, true);
   }
+
+  return callback(new HttpError('Only JPEG, PNG, GIF and WebP images are allowed', 400, 'INVALID_IMAGE_TYPE'));
 };
 
-// Upload middleware with validation
 const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
-    files: 1
+    fileSize: 5 * 1024 * 1024,
+    files: 1,
+    fields: 10,
+    parts: 12
   }
 });
 
-module.exports = { upload }
+const detectImageMimeType = (buffer) => {
+  if (!buffer || buffer.length < 12) {
+    return null;
+  }
 
-// Photo Storage
-// const photoStorage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, path.join(__dirname, "../images"));
-//   },
-//   filename: function (req, file, cb) {
-//     if (file) {
-//       cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
-//     } else {
-//       cb(null, false);
-//     }
-//   },
-// });
+  if (buffer.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) {
+    return 'image/jpeg';
+  }
 
-// Photo Upload Middleware
-// const photoUpload = multer({
-//     storage: photoStorage,
-//     fileFilter: function(req, file, cb) {
-//         if (file.mimetype.startsWith("image")) {
-//             cb(null, true)
-//         } else {
-//             cb({ message: "Unsupported File Format" }, false)
-//         }
-//     },
-//     limits: { fieldSize: 1024 * 1024 * 5 }
-// })
+  if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+    return 'image/png';
+  }
 
-// module.exports = photoUpload
+  const header = buffer.subarray(0, 12).toString('ascii');
+  if (header.startsWith('GIF87a') || header.startsWith('GIF89a')) {
+    return 'image/gif';
+  }
+
+  if (header.startsWith('RIFF') && header.slice(8, 12) === 'WEBP') {
+    return 'image/webp';
+  }
+
+  return null;
+};
+
+const validateUploadedImage = (req, res, next) => {
+  if (!req.file) {
+    return next();
+  }
+
+  const detectedMimeType = detectImageMimeType(req.file.buffer);
+  if (!detectedMimeType || detectedMimeType !== req.file.mimetype) {
+    return next(new HttpError('Uploaded file content is not a supported image', 400, 'INVALID_IMAGE_CONTENT'));
+  }
+
+  return next();
+};
+
+module.exports = {
+  upload,
+  validateUploadedImage
+};

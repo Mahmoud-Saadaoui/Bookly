@@ -3,24 +3,27 @@ import { BASE_URL } from "../constants";
 
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
 });
+
+export const getStoredUser = () => {
+  try {
+    const value = localStorage.getItem("userInfo");
+    return value ? JSON.parse(value) : null;
+  } catch {
+    localStorage.removeItem("userInfo");
+    return null;
+  }
+};
+
+export const getAuthToken = () => getStoredUser()?.accessToken || null;
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const userInfo = localStorage.getItem("userInfo");
-    if (userInfo) {
-      try {
-        const { accessToken } = JSON.parse(userInfo);
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-      } catch (e) {
-        console.error('Error parsing userInfo:', e);
-      }
+    const token = getAuthToken();
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -33,7 +36,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isAuthRequest = ['/login', '/register'].some((path) =>
+      error.config?.url?.endsWith(path)
+    );
+
+    if (error.response?.status === 401 && !isAuthRequest) {
       // Unauthorized - clear local storage and redirect to login
       localStorage.removeItem("userInfo");
       if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {

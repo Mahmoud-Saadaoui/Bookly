@@ -3,17 +3,16 @@ const logger = require('../utils/logger');
 const fs = require('fs');
 const path = require('path');
 
-// Ensure logs directory exists
+// Ensure logs directory exists when local file logging is enabled.
 const logsDir = path.join(__dirname, '../logs');
-if (!fs.existsSync(logsDir)) {
+if (process.env.NODE_ENV !== 'production' && !fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
-// Create a write stream for Morgan
-const accessLogStream = fs.createWriteStream(
-  path.join(logsDir, 'access.log'),
-  { flags: 'a' }
-);
+// Production logs should be rotated by the process supervisor or log platform.
+const accessLogStream = process.env.NODE_ENV === 'production'
+  ? process.stdout
+  : fs.createWriteStream(path.join(logsDir, 'access.log'), { flags: 'a' });
 
 // Morgan tokens
 morgan.token('user-id', (req) => req.userId || 'anonymous');
@@ -27,7 +26,7 @@ const httpLogger = morgan(morganFormat, {
   stream: accessLogStream,
   skip: (req, res) => {
     // Skip logging for health checks in production
-    return process.env.NODE_ENV === 'production' && req.path === '/health';
+    return process.env.NODE_ENV === 'production' && req.path.startsWith('/health');
   }
 });
 

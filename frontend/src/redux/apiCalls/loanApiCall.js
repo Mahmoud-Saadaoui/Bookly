@@ -1,152 +1,103 @@
-import { BASE_URL } from '../../constantes';
+import api from "../../services/axiosInstance";
+import { getAuthToken } from "../../services/axiosInstance";
+import { getApiErrorMessage } from "../../lib/normalize";
 
-export const LOANS_URL = `${BASE_URL}/loans`;
+const getMessage = (error, fallback) => getApiErrorMessage(error, fallback);
 
-// Helper function to get auth token from localStorage
-const getAuthToken = () => {
-    try {
-        const userInfo = localStorage.getItem('userInfo');
-        if (userInfo) {
-            const user = JSON.parse(userInfo);
-            return user.accessToken;
-        }
-    } catch (error) {
-        console.error('Error parsing userInfo from localStorage:', error);
-    }
-    return null;
+const throwApiError = (error, fallback) => {
+  const normalizedError = new Error(getMessage(error, fallback));
+  normalizedError.response = error.response;
+  throw normalizedError;
 };
 
-// Get book loan dates (unavailable dates)
 export const getBookLoanDates = async (bookId) => {
-    try {
-        const response = await fetch(`${LOANS_URL}/book/${bookId}`);
-        const data = await response.json();
-        if (data.success) {
-            return data.data;
-        }
-        return [];
-    } catch (error) {
-        console.error('Error fetching loan dates:', error);
-        return [];
-    }
+  try {
+    const { data } = await api.get(`/loans/book/${bookId}`);
+    return data.success ? data.data : [];
+  } catch (error) {
+    throwApiError(error, "Failed to load availability");
+  }
 };
 
-// Check book availability for specific dates
+export const getApplicationConfig = async () => {
+  try {
+    const { data } = await api.get('/config');
+    return data.success ? data.data : {};
+  } catch (error) {
+    throwApiError(error, "Failed to load application configuration");
+  }
+};
+
 export const checkBookAvailability = async (bookId, startDate, endDate) => {
-    try {
-        const response = await fetch(
-            `${LOANS_URL}/availability/${bookId}?startDate=${startDate}&endDate=${endDate}`
-        );
-        const data = await response.json();
-        return data.success ? data.isAvailable : false;
-    } catch (error) {
-        console.error('Error checking availability:', error);
-        return false;
-    }
+  try {
+    const { data } = await api.get(`/loans/availability/${bookId}`, {
+      params: { startDate, endDate },
+    });
+    return data.success ? data.data.isAvailable : false;
+  } catch (error) {
+    throwApiError(error, "Failed to check availability");
+  }
 };
 
-// Create a new loan
-export const createLoan = async (bookId, loanDate, returnDate, notes = '') => {
-    try {
-        const token = getAuthToken();
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-        const response = await fetch(`${LOANS_URL}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                bookId,
-                loanDate,
-                returnDate,
-                notes
-            })
-        });
+export const createLoan = async (
+  bookId,
+  loanDate,
+  returnDate,
+  notes = "",
+  idempotencyKey
+) => {
+  if (!getAuthToken()) {
+    throw new Error("No authentication token found");
+  }
 
-        const data = await response.json();
-        if (!data.success) {
-            throw new Error(data.message);
-        }
-        return data.data;
-    } catch (error) {
-        console.error('Error creating loan:', error);
-        throw error;
-    }
+  try {
+    const { data } = await api.post(
+      "/loans",
+      { bookId, loanDate, returnDate, notes },
+      idempotencyKey
+        ? { headers: { "Idempotency-Key": idempotencyKey } }
+        : undefined
+    );
+
+    if (!data.success) throw new Error(data.message || "Loan creation failed");
+    return data.data;
+  } catch (error) {
+    throwApiError(error, "Failed to create loan");
+  }
 };
 
-// Get user's loans
-export const getUserLoans = async () => {
-    try {
-        const token = getAuthToken();
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-        const response = await fetch(`${LOANS_URL}/user/all`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+export const getUserLoans = async (page = 1, limit = 20) => {
+  if (!getAuthToken()) throw new Error("No authentication token found");
 
-        const data = await response.json();
-        if (data.success) {
-            return data.data;
-        }
-        return [];
-    } catch (error) {
-        console.error('Error fetching user loans:', error);
-        return [];
-    }
+  try {
+    const { data } = await api.get("/loans/user/all", {
+      params: { page, limit },
+    });
+    return data.success ? data : { data: [], pagination: null };
+  } catch (error) {
+    throwApiError(error, "Failed to load loans");
+  }
 };
 
-// Return a book
 export const returnBook = async (loanId) => {
-    try {
-        const token = getAuthToken();
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-        const response = await fetch(`${LOANS_URL}/return/${loanId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
+  if (!getAuthToken()) throw new Error("No authentication token found");
 
-        const data = await response.json();
-        if (!data.success) {
-            throw new Error(data.message);
-        }
-        return data.data;
-    } catch (error) {
-        console.error('Error returning book:', error);
-        throw error;
-    }
+  try {
+    const { data } = await api.put(`/loans/return/${loanId}`);
+    if (!data.success) throw new Error(data.message || "Return failed");
+    return data.data;
+  } catch (error) {
+    throwApiError(error, "Failed to return book");
+  }
 };
 
-// Get loan details
 export const getLoanDetail = async (loanId) => {
-    try {
-        const token = getAuthToken();
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-        const response = await fetch(`${LOANS_URL}/${loanId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+  if (!getAuthToken()) throw new Error("No authentication token found");
 
-        const data = await response.json();
-        if (data.success) {
-            return data.data;
-        }
-        return null;
-    } catch (error) {
-        console.error('Error fetching loan details:', error);
-        return null;
-    }
+  try {
+    const { data } = await api.get(`/loans/${loanId}`);
+    return data.success ? data.data : null;
+  } catch (error) {
+    throwApiError(error, "Failed to load loan details");
+  }
 };

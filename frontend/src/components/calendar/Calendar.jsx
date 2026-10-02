@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './calendar.css';
 
-const Calendar = ({ bookId, onDateRangeSelect, unavailableDates = [] }) => {
+const Calendar = ({ onDateRangeSelect, onInvalidRange, unavailableDates = [] }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
     const [hoveredDate, setHoveredDate] = useState(null);
@@ -18,7 +18,7 @@ const Calendar = ({ bookId, onDateRangeSelect, unavailableDates = [] }) => {
         return unavailableDates.some(range => {
             const rangeStart = new Date(range.startDate);
             const rangeEnd = new Date(range.endDate);
-            return date >= rangeStart && date <= rangeEnd;
+            return date >= rangeStart && date < rangeEnd;
         });
     };
 
@@ -54,14 +54,32 @@ const Calendar = ({ bookId, onDateRangeSelect, unavailableDates = [] }) => {
         if (!selectedRange.start) {
             setSelectedRange({ start: clickedDate, end: null });
         } else if (!selectedRange.end) {
+            if (clickedDate.getTime() === selectedRange.start.getTime()) {
+                return;
+            }
+
+            const rangeStart = clickedDate < selectedRange.start ? clickedDate : selectedRange.start;
+            const rangeEnd = clickedDate > selectedRange.start ? clickedDate : selectedRange.start;
+            for (
+                const date = new Date(rangeStart);
+                date < rangeEnd;
+                date.setDate(date.getDate() + 1)
+            ) {
+                if (isDateUnavailable(date)) {
+                    onInvalidRange?.();
+                    setSelectedRange({ start: clickedDate, end: null });
+                    return;
+                }
+            }
+
             if (clickedDate < selectedRange.start) {
-                setSelectedRange({ start: clickedDate, end: selectedRange.start });
+                const range = { start: clickedDate, end: selectedRange.start };
+                setSelectedRange(range);
+                onDateRangeSelect(range);
             } else {
-                setSelectedRange({ ...selectedRange, end: clickedDate });
-                onDateRangeSelect({
-                    start: selectedRange.start,
-                    end: clickedDate
-                });
+                const range = { start: selectedRange.start, end: clickedDate };
+                setSelectedRange(range);
+                onDateRangeSelect(range);
             }
         } else {
             setSelectedRange({ start: clickedDate, end: null });
@@ -105,16 +123,19 @@ const Calendar = ({ bookId, onDateRangeSelect, unavailableDates = [] }) => {
             if (!isFutureDate) dayClass += ' past';
 
             days.push(
-                <div
+                <button
+                    type="button"
                     key={day}
                     className={dayClass}
-                    onClick={() => isFutureDate && !isUnavailable && handleDateClick(day)}
+                    disabled={!isFutureDate || isUnavailable}
+                    onClick={() => handleDateClick(day)}
                     onMouseEnter={() => setHoveredDate(date)}
                     onMouseLeave={() => setHoveredDate(null)}
                     title={isUnavailable ? 'Not available' : ''}
+                    aria-label={`${date.toLocaleDateString()}${isUnavailable ? ', unavailable' : ''}`}
                 >
                     {day}
-                </div>
+                </button>
             );
         }
 
@@ -124,18 +145,22 @@ const Calendar = ({ bookId, onDateRangeSelect, unavailableDates = [] }) => {
     return (
         <div className="calendar-container">
             <div className="calendar-header">
-                <button 
+                <button
+                    type="button"
                     className="calendar-nav-btn"
                     onClick={() => handleMonthChange(-1)}
+                    aria-label="Previous month"
                 >
                     ←
                 </button>
                 <h3>
                     {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                 </h3>
-                <button 
+                <button
+                    type="button"
                     className="calendar-nav-btn"
                     onClick={() => handleMonthChange(1)}
+                    aria-label="Next month"
                 >
                     →
                 </button>

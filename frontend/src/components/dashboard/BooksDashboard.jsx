@@ -44,21 +44,22 @@ function BooksDashboard({
                 alt={book?.image?.publicId}
                 className="book-dashboard-item-img"
               />
-              <span
-                className="book-dashboard-item-img-edit"
-                onClick={() => {
-                  setSelectedBook(book);
-                  setBookImageModal(true);
-                }}
-              >
-                Upload New Image
-              </span>
+                <button
+                  type="button"
+                  className="book-dashboard-item-img-edit"
+                  aria-label={`Update image for ${book?.title || 'book'}`}
+                  onClick={() => {
+                    setSelectedBook(book);
+                    setBookImageModal(true);
+                  }}
+                >
+                  Upload New Image
+                </button>
               {selectedBook &&
                 selectedBook.id === book?.id &&
                 bookImageModal && (
                   <BookImageModal
                     book={book}
-                    setFileName={setFileName}
                     setSelectedBook={setSelectedBook}
                     setBookImageModal={setBookImageModal}
                   />
@@ -68,13 +69,17 @@ function BooksDashboard({
             <p className="book-dashboard-item-category">{book?.category}</p>
             <Rating rating={book?.rate} />
             <div className="book-dashboard-icons-wrapper">
-              <FaEdit
+              <button
+                type="button"
                 className="icon edit-icon"
+                aria-label={`Edit ${book?.title || 'book'}`}
                 onClick={() => {
                   setBookModal(true);
                   setSelectedBook(book);
                 }}
-              />
+              >
+                <FaEdit aria-hidden="true" />
+              </button>
 
               {selectedBook && selectedBook.id === book?.id && bookModal && (
                 <BookFormModal
@@ -96,10 +101,14 @@ function BooksDashboard({
                 />
               )}
 
-              <MdDelete
+              <button
+                type="button"
                 className="icon delete-icon"
+                aria-label={`Delete ${book?.title || 'book'}`}
                 onClick={() => handleRemoveBook(book?.id)}
-              />
+              >
+                <MdDelete aria-hidden="true" />
+              </button>
             </div>
           </div>
         ))}

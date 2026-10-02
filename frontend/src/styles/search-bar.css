@@ -59,7 +59,7 @@
 }
 
 .search-submit-button:hover {
-  background: #2a4d8e;
+  background: var(--color-brand-dark);
 }
 
 .search-submit-button:focus-visible {

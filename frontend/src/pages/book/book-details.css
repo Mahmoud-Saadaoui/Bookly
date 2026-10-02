@@ -167,7 +167,7 @@
 }
 
 .favorite-btn button {
-  background: white;
+  background: var(--color-surface);
   color: var(--color-primary-700);
   border: 2px solid var(--color-primary-200);
 }
@@ -204,7 +204,7 @@
 .loan-section {
   margin: var(--spacing-3xl) 0;
   padding: var(--spacing-2xl);
-  background: linear-gradient(135deg, #F8FAFC 0%, #E0E7FF 100%);
+  background: linear-gradient(135deg, var(--color-paper) 0%, var(--color-sand) 100%);
   border-radius: var(--radius-2xl);
   border: 1px solid var(--color-primary-100);
 }
@@ -228,7 +228,7 @@
   color: var(--color-primary-900);
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-md) var(--spacing-lg);
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--radius-xl);
   display: inline-block;
   box-shadow: var(--shadow-sm);
@@ -241,7 +241,7 @@
 }
 
 .user-review {
-  background: white;
+  background: var(--color-surface);
   border: 1px solid var(--color-primary-100);
   border-radius: var(--radius-xl);
   padding: var(--spacing-lg);
@@ -271,7 +271,7 @@
   max-width: 400px;
   margin: var(--spacing-xl) auto 0;
   padding: var(--spacing-md) var(--spacing-xl);
-  background: white;
+  background: var(--color-surface);
   color: var(--color-primary-700);
   border: 2px solid var(--color-primary-200);
   border-radius: var(--radius-lg);
@@ -329,11 +329,15 @@
   inset: 0;
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(8px);
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
 }
 
 .modal-content {
   position: relative;
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--radius-2xl);
   padding: var(--spacing-2xl);
   max-width: 500px;
@@ -352,6 +356,9 @@
   cursor: pointer;
   transition: color var(--transition-fast);
   line-height: 1;
+  border: 0;
+  background: transparent;
+  padding: var(--spacing-xs);
 }
 
 .close:hover {
@@ -406,13 +413,13 @@
   border-radius: var(--radius-lg);
   font-size: var(--text-base);
   color: var(--color-primary-900);
-  background: white;
+  background: var(--color-surface);
 }
 
 .rating-input select:focus {
   outline: none;
   border-color: var(--color-accent-500);
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+  box-shadow: 0 0 0 4px rgb(var(--color-brand-rgb) / 0.1);
 }
 
 /* Comment Input */
@@ -442,7 +449,7 @@
 .comment textarea:focus {
   outline: none;
   border-color: var(--color-accent-500);
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+  box-shadow: 0 0 0 4px rgb(var(--color-brand-rgb) / 0.1);
 }
 
 .comment textarea::placeholder {

@@ -2,24 +2,22 @@ import React from 'react';
 import { useState } from 'react';
 import './book-card.css';
 
-function BookCard({ book, onClick }) {
+function BookCard({ book, onClick, onFavorite }) {
   const [imageError, setImageError] = useState(false);
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
+  const bookRating = book.rate ? book.rate.toFixed(1) : 'No rating';
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
       onClick();
     }
   };
-
-  const bookRating = book.rate ? book.rate.toFixed(1) : 'No rating';
-  const isAvailable = true; // You can determine this from book data
 
   return (
     <article
       className="book-card"
       onClick={onClick}
-      onKeyPress={handleKeyPress}
+      onKeyDown={handleKeyDown}
       tabIndex={0}
       role="button"
       aria-label={`View details for ${book.title} by ${book.author}`}
@@ -53,12 +51,24 @@ function BookCard({ book, onClick }) {
         {/* Hover Overlay */}
         <div className="book-card-overlay">
           <div className="quick-actions">
-            <button className="quick-action-btn primary">
+            <button
+              type="button"
+              className="quick-action-btn primary"
+              onClick={(event) => {
+                event.stopPropagation();
+                onClick();
+              }}
+            >
               Quick View
             </button>
             <button
+              type="button"
               className="quick-action-btn"
               aria-label="Add to favorites"
+              onClick={(event) => {
+                event.stopPropagation();
+                onFavorite?.(book.id);
+              }}
             >
               ❤️
             </button>
@@ -96,12 +106,18 @@ function BookCard({ book, onClick }) {
         {/* Footer */}
         <div className="book-card-footer">
           <div className="availability-status">
-            <span className={`status-dot ${isAvailable ? 'available' : 'unavailable'}`}></span>
-            <span className={`status-text ${isAvailable ? 'available' : ''}`}>
-              {isAvailable ? 'Available' : 'Borrowed'}
-            </span>
+            <span className="status-text">Check availability</span>
           </div>
-          <button className="borrow-btn">Borrow</button>
+          <button
+            type="button"
+            className="borrow-btn"
+            onClick={(event) => {
+              event.stopPropagation();
+              onClick();
+            }}
+          >
+            Borrow
+          </button>
         </div>
       </div>
     </article>

@@ -1,60 +1,26 @@
 import { toast } from "react-toastify";
 import { authActions } from "../slices/authSlice";
-import axios from "axios";
-import { USER_URL } from "../../constants";
+import api, { getStoredUser } from "../../services/axiosInstance";
 
-const api = axios.create({
-  baseURL: USER_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-// Add request interceptor to include token
-api.interceptors.request.use(
-  (config) => {
-    const userInfo = localStorage.getItem("userInfo");
-    if (userInfo) {
-      const token = JSON.parse(userInfo).accessToken;
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Add response interceptor for error handling
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const message = error.response?.data?.message || error.message || 'An error occurred';
-
-    if (error.response?.status === 401) {
-      // Token expired or invalid - logout user
-      localStorage.removeItem("userInfo");
-      window.location.href = '/login';
-    }
-
-    return Promise.reject(error);
-  }
-);
+const persistUser = (user) => {
+  localStorage.setItem("userInfo", JSON.stringify(user));
+};
 
 // Login User
 export function loginUser(user) {
   return async (dispatch) => {
     try {
-      const { data } = await api.post('/login', user);
+      const { data } = await api.post('/users/login', user);
 
       if (data.success) {
         dispatch(authActions.login(data.data));
-        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        dispatch(authActions.setHydrated());
+        persistUser(data.data);
         toast.success(data.message || 'Login successful');
+        return data.data;
       } else {
         toast.error(data.message || 'Login failed');
+        return null;
       }
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed. Please try again.';
@@ -68,19 +34,48 @@ export function loginUser(user) {
 export function registerUser(user) {
   return async (dispatch) => {
     try {
-      const { data } = await api.post('/register', user);
+      const { data } = await api.post('/users/register', user);
 
       if (data.success) {
         dispatch(authActions.login(data.data));
-        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        dispatch(authActions.setHydrated());
+        persistUser(data.data);
         toast.success(data.message || 'Registration successful');
+        return data.data;
       } else {
         toast.error(data.message || 'Registration failed');
+        return null;
       }
     } catch (error) {
       const message = error.response?.data?.message || 'Registration failed. Please try again.';
       toast.error(message);
       throw error;
+    }
+  };
+}
+
+export function getCurrentUser() {
+  return async (dispatch) => {
+    const storedUser = getStoredUser();
+    if (!storedUser?.accessToken) {
+      dispatch(authActions.setHydrated());
+      return null;
+    }
+
+    try {
+      const { data } = await api.get('/users/me');
+      const user = { ...storedUser, ...data.data, id: data.data?.id || data.data?._id };
+      dispatch(authActions.login(user));
+      persistUser(user);
+      dispatch(authActions.setHydrated());
+      return user;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        dispatch(authActions.logout());
+        localStorage.removeItem("userInfo");
+      }
+      dispatch(authActions.setHydrated());
+      return null;
     }
   };
 }

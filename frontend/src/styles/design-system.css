@@ -1,63 +1,74 @@
 /* ========================================
-   BOOKLY DESIGN SYSTEM - 2025
-   Cairo Font + Modern Colors
+   BOOKLY DESIGN SYSTEM
+   Warm library palette
    ======================================== */
 
 :root {
   /* ========================================
-     COLORS - Modern Palette 2025
+     COLORS - Shared palette
      ======================================== */
 
-  /* Primary - Deep Violet/Indigo */
-  --color-primary-50: #EEF2FF;
-  --color-primary-100: #E0E7FF;
-  --color-primary-200: #C7D2FE;
-  --color-primary-300: #A5B4FC;
-  --color-primary-400: #818CF8;
-  --color-primary-500: #6366F1;
-  --color-primary-600: #4F46E5;
-  --color-primary-700: #4338CA;
-  --color-primary-800: #3730A3;
-  --color-primary-900: #312E81;
+   --color-paper: #F7F2EB;
+   --color-surface: #EEEEEE;
+   --color-sand: #EAE2D6;
+   --color-brand: #8B9A6E;
+   --color-brand-dark: #65734E;
+   --color-ink: #30382A;
+   --color-ink-muted: #657052;
+   --color-brand-soft: #C9D1B8;
+   --color-brand-rgb: 139 154 110;
+   --color-surface-rgb: 238 238 238;
+   --color-ink-rgb: 48 56 42;
+   --gradient-brand: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand));
+   --gradient-brand-hover: linear-gradient(135deg, var(--color-brand-dark), var(--color-ink));
 
-  /* Secondary - Teal/Emerald */
-  --color-secondary-50: #ECFDF5;
-  --color-secondary-100: #D1FAE5;
-  --color-secondary-200: #A7F3D0;
-  --color-secondary-300: #6EE7B7;
-  --color-secondary-400: #34D399;
-  --color-secondary-500: #10B981;
-  --color-secondary-600: #059669;
-  --color-secondary-700: #047857;
+   /* Compatibility scales backed by the shared palette */
+   --color-primary-50: var(--color-paper);
+   --color-primary-100: var(--color-sand);
+   --color-primary-200: var(--color-surface);
+   --color-primary-300: var(--color-brand-soft);
+   --color-primary-400: #A9B493;
+   --color-primary-500: var(--color-brand);
+   --color-primary-600: var(--color-brand-dark);
+   --color-primary-700: #53603F;
+   --color-primary-800: #414B32;
+   --color-primary-900: var(--color-ink);
 
-  /* Accent - Coral/Orange */
-  --color-accent-50: #FFF7ED;
-  --color-accent-100: #FFEDD5;
-  --color-accent-200: #FED7AA;
-  --color-accent-300: #FDBA74;
-  --color-accent-400: #FB923C;
-  --color-accent-500: #F97316;
-  --color-accent-600: #EA580C;
-  --color-accent-700: #C2410C;
+   --color-secondary-50: var(--color-paper);
+   --color-secondary-100: var(--color-sand);
+   --color-secondary-200: var(--color-brand-soft);
+   --color-secondary-300: #A9B493;
+   --color-secondary-400: var(--color-brand);
+   --color-secondary-500: var(--color-brand);
+   --color-secondary-600: var(--color-brand-dark);
+   --color-secondary-700: #53603F;
 
-  /* Accent 2 - Pink/Rose */
-  --color-rose-50: #FFF1F2;
-  --color-rose-100: #FFE4E6;
-  --color-rose-200: #FECDD3;
-  --color-rose-300: #FDA4AF;
-  --color-rose-400: #FB7185;
-  --color-rose-500: #F43F5E;
-  --color-rose-600: #E11D48;
+   --color-accent-50: var(--color-paper);
+   --color-accent-100: var(--color-sand);
+   --color-accent-200: var(--color-brand-soft);
+   --color-accent-300: #A9B493;
+   --color-accent-400: var(--color-brand);
+   --color-accent-500: var(--color-brand);
+   --color-accent-600: var(--color-brand-dark);
+   --color-accent-700: #53603F;
+
+   --color-rose-50: var(--color-paper);
+   --color-rose-100: var(--color-sand);
+   --color-rose-200: var(--color-brand-soft);
+   --color-rose-300: #A9B493;
+   --color-rose-400: var(--color-brand);
+   --color-rose-500: var(--color-brand);
+   --color-rose-600: var(--color-brand-dark);
 
   /* Semantic */
-  --color-success: #10B981;
-  --color-success-bg: #D1FAE5;
+   --color-success: var(--color-brand-dark);
+   --color-success-bg: var(--color-brand-soft);
   --color-warning: #F59E0B;
   --color-warning-bg: #FEF3C7;
   --color-error: #EF4444;
   --color-error-bg: #FEE2E2;
-  --color-info: #3B82F6;
-  --color-info-bg: #DBEAFE;
+   --color-info: var(--color-brand-dark);
+   --color-info-bg: var(--color-surface);
 
   /* ========================================
      TYPOGRAPHY - Cairo Font
@@ -128,20 +139,20 @@
      SHADOWS - Modern & Soft
      ======================================== */
 
-  --shadow-xs: 0 1px 2px rgba(49, 46, 129, 0.05);
-  --shadow-sm: 0 1px 3px rgba(49, 46, 129, 0.1), 0 1px 2px rgba(49, 46, 129, 0.06);
-  --shadow-md: 0 4px 6px rgba(49, 46, 129, 0.07), 0 2px 4px rgba(49, 46, 129, 0.06);
-  --shadow-lg: 0 10px 15px rgba(49, 46, 129, 0.1), 0 4px 6px rgba(49, 46, 129, 0.05);
-  --shadow-xl: 0 20px 25px rgba(49, 46, 129, 0.1), 0 10px 10px rgba(49, 46, 129, 0.04);
-  --shadow-2xl: 0 25px 50px rgba(49, 46, 129, 0.25);
+   --shadow-xs: 0 1px 2px rgb(var(--color-ink-rgb) / 0.05);
+   --shadow-sm: 0 1px 3px rgb(var(--color-ink-rgb) / 0.1), 0 1px 2px rgb(var(--color-ink-rgb) / 0.06);
+   --shadow-md: 0 4px 6px rgb(var(--color-ink-rgb) / 0.07), 0 2px 4px rgb(var(--color-ink-rgb) / 0.06);
+   --shadow-lg: 0 10px 15px rgb(var(--color-ink-rgb) / 0.1), 0 4px 6px rgb(var(--color-ink-rgb) / 0.05);
+   --shadow-xl: 0 20px 25px rgb(var(--color-ink-rgb) / 0.1), 0 10px 10px rgb(var(--color-ink-rgb) / 0.04);
+   --shadow-2xl: 0 25px 50px rgb(var(--color-ink-rgb) / 0.25);
 
   /* Shadow Colors */
-  --shadow-indigo: 0 4px 14px rgba(99, 102, 241, 0.3);
-  --shadow-indigo-lg: 0 6px 20px rgba(99, 102, 241, 0.4);
-  --shadow-orange: 0 4px 14px rgba(249, 115, 22, 0.3);
-  --shadow-orange-lg: 0 6px 20px rgba(249, 115, 22, 0.4);
-  --shadow-teal: 0 4px 14px rgba(16, 185, 129, 0.3);
-  --shadow-rose: 0 4px 14px rgba(244, 63, 94, 0.3);
+   --shadow-indigo: 0 4px 14px rgb(var(--color-brand-rgb) / 0.3);
+   --shadow-indigo-lg: 0 6px 20px rgb(var(--color-brand-rgb) / 0.4);
+   --shadow-orange: var(--shadow-indigo);
+   --shadow-orange-lg: var(--shadow-indigo-lg);
+   --shadow-teal: var(--shadow-indigo);
+   --shadow-rose: var(--shadow-indigo);
 
   /* ========================================
      TRANSITIONS
@@ -171,25 +182,25 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg-primary: #0F172A;
-    --color-bg-secondary: #1E293B;
-    --color-bg-tertiary: #334155;
-    --color-text-primary: #F8FAFC;
-    --color-text-secondary: #94A3B8;
-    --color-text-muted: #64748B;
-    --color-border: #334155;
+    --color-bg-primary: var(--color-ink);
+    --color-bg-secondary: #414B32;
+    --color-bg-tertiary: var(--color-brand-dark);
+    --color-text-primary: var(--color-paper);
+    --color-text-secondary: var(--color-sand);
+    --color-text-muted: var(--color-brand-soft);
+    --color-border: var(--color-brand-dark);
   }
 }
 
 /* Dark mode toggle class */
 .dark {
-  --color-bg-primary: #0F172A;
-  --color-bg-secondary: #1E293B;
-  --color-bg-tertiary: #334155;
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
-  --color-border: #334155;
+  --color-bg-primary: var(--color-ink);
+  --color-bg-secondary: #414B32;
+  --color-bg-tertiary: var(--color-brand-dark);
+  --color-text-primary: var(--color-paper);
+  --color-text-secondary: var(--color-sand);
+  --color-text-muted: var(--color-brand-soft);
+  --color-border: var(--color-brand-dark);
 }
 
 /* ========================================
@@ -215,8 +226,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
-  color: var(--color-primary-900);
-  background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #FFF7ED 100%);
+  color: var(--color-ink);
+  background: var(--color-paper);
   min-height: 100vh;
 }
 
@@ -224,8 +235,8 @@ body {
    FOCUS STYLES (Accessibility)
    ======================================== */
 
-:focus-visible {
-  outline: 2px solid var(--color-primary-500);
+ :focus-visible {
+   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -240,8 +251,8 @@ a:focus-visible {
    ======================================== */
 
 ::selection {
-  background-color: var(--color-primary-200);
-  color: var(--color-primary-900);
+   background-color: var(--color-sand);
+   color: var(--color-ink);
 }
 
 /* ========================================
@@ -254,17 +265,17 @@ a:focus-visible {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-primary-100);
+  background: var(--color-sand);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-500));
+  background: var(--color-brand);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-600);
+  background: var(--color-brand-dark);
 }
 
 /* ========================================
@@ -315,7 +326,7 @@ a:focus-visible {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-500), var(--color-accent-500));
+   background: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand));
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -334,10 +345,10 @@ a:focus-visible {
 
 /* Glass morphism effect */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgb(var(--color-surface-rgb, 238 238 238) / 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--color-sand);
 }
 
 /* Visually hidden (accessible) */

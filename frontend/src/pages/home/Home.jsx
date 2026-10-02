@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './home.css'
-import Banner from '../../componenents/home/Banner';
-import Books from '../../componenents/home/Books';
+import Banner from '../../components/home/Banner';
+import Books from '../../components/home/Books';
 import ReactPaginate from 'react-paginate';
 import { useSelector } from 'react-redux';
 
@@ -22,7 +22,7 @@ function Home() {
         nextLabel = "next"
         onPageChange = {handlePageClick}
         pageRangeDisplayed = {3}
-        pageCount = {Number.isFinite(books?.pages) ? Math.ceil(books.pages) : 0}
+         pageCount = {Number.isFinite(books?.pagination?.pages) ? books.pagination.pages : 0}
         previousLabel = "previous"
         renderOnZeroPageCount = {null}
         containerClassName = {'pagination'}

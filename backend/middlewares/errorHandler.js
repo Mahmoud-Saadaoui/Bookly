@@ -1,35 +1,35 @@
-/**
- * Centralized Error Handling Middleware
- * Prevents HTML stack traces from being exposed to clients
- */
-
 const logger = require('../utils/logger');
-const { internalErrorResponse, badRequestResponse } = require('../utils/apiResponse');
+const {
+  badRequestResponse,
+  conflictResponse,
+  errorResponse
+} = require('../utils/apiResponse');
 
-exports.notFound = (req, res, next) => {
+exports.notFound = (req, res) => {
   logger.warn('404 - Route not found', {
     path: req.originalUrl,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
+    requestId: req.id
   });
 
-  return res.status(404).json({
-    success: false,
-    message: `Route ${req.originalUrl} not found`
-  });
+  return errorResponse(res, 'Route not found', 404);
 };
 
 exports.errorHandler = (err, req, res, next) => {
-  // Log error for debugging
   logger.error('Request error', {
     message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    stack: err.stack,
     path: req.originalUrl,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
+    requestId: req.id
   });
 
-  // Mongoose bad ObjectId
+  if (err.type === 'entity.too.large') {
+    return errorResponse(res, 'Request payload is too large', 413);
+  }
+
   if (err.name === 'CastError') {
     return badRequestResponse(res, 'Resource not found', {
       field: err.path,
@@ -37,53 +37,49 @@ exports.errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Mongoose duplicate key
   if (err.code === 11000) {
-    const field = Object.keys(err.keyPattern)[0];
-    return badRequestResponse(res, 'Duplicate field value entered', {
+    const field = Object.keys(err.keyPattern || {})[0] || 'resource';
+    return conflictResponse(res, 'Resource already exists', {
       field,
       error: `${field} already exists`
     });
   }
 
-  // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const messages = Object.values(err.errors).map(val => val.message);
+    const messages = Object.values(err.errors).map((value) => value.message);
     return badRequestResponse(res, 'Validation failed', {
       errors: messages
     });
   }
 
-  // JWT errors
   if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid token'
-    });
+    return errorResponse(res, 'Invalid token', 401);
   }
 
   if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({
-      success: false,
-      message: 'Token expired'
-    });
+    return errorResponse(res, 'Token expired', 401);
   }
 
-  // Multer errors (file upload)
   if (err.name === 'MulterError') {
-    return badRequestResponse(res, err.message);
+    return badRequestResponse(res, err.code === 'LIMIT_FILE_SIZE'
+      ? 'Image must not exceed 5 MB'
+      : 'Invalid file upload');
   }
 
-  // Express-validator errors
   if (err.array && typeof err.array === 'function') {
     return badRequestResponse(res, 'Validation failed', {
       errors: err.array()
     });
   }
 
-  // Default error
-  return res.status(err.statusCode || 500).json({
-    success: false,
-    message: err.message || 'Internal server error'
+  if (err.isOperational) {
+    return errorResponse(res, err.message, err.statusCode || 500, {
+      code: err.code || undefined,
+      requestId: req.id
+    });
+  }
+
+  return errorResponse(res, 'Internal server error', 500, {
+    requestId: req.id
   });
 };

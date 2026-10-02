@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const MAX_FAVORITES_PER_USER = Number(process.env.MAX_FAVORITES_PER_USER) || 500;
 
 const UserSchema = new mongoose.Schema({
 	name: {
@@ -18,20 +19,25 @@ const UserSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: [true, 'Password is required'],
-		minlength: [6, 'Password must be at least 6 characters']
+		minlength: [6, 'Password must be at least 6 characters'],
+		select: false
 	},
-	favoriteList: [
-		{
-			book: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Book'
-			},
-			favorite: {
-				type: Boolean,
-				default: true
-			}
-		}
-	],
+ 	favoriteList: {
+        type: [{
+            book: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Book'
+            },
+            favorite: {
+                type: Boolean,
+                default: true
+            }
+        }],
+        validate: {
+            validator: (favorites) => favorites.length <= MAX_FAVORITES_PER_USER,
+            message: `A user cannot have more than ${MAX_FAVORITES_PER_USER} favorites`
+        }
+    },
 	isAdmin: {
 		type: Boolean,
 		default: false

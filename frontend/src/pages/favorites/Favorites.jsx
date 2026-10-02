@@ -9,10 +9,8 @@ import {
 } from "../../redux/apiCalls/favoritesApiCall";
 import { Oval } from "react-loader-spinner";
 import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
 
 function Favorites() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { favoriteList, loading } = useSelector((state) => state.favorites);
 
@@ -25,10 +23,7 @@ function Favorites() {
       dangerMode: true,
     }).then((isOk) => {
       if (isOk) {
-        dispatch(removeFromFavorites(id)).then(() => {
-          // Don't navigate away - just refresh favorites
-          dispatch(getFavorites());
-        });
+        dispatch(removeFromFavorites(id)).catch(() => {});
       }
     });
   };
@@ -42,7 +37,7 @@ function Favorites() {
       <Oval
         height={120}
         width={120}
-        color="rgb(247, 96, 14)"
+        color="var(--color-brand)"
         wrapperStyle={{
           height: "90vh",
           display: "flex",
@@ -67,8 +62,11 @@ function Favorites() {
       {favoritesArray.length === 0 ? (
         <h1 className="empty">Your list of favorites is empty!!</h1>
       ) : (
-        favoritesArray.map((el, key) => (
-          <div className="book-item" key={key}>
+        favoritesArray.map((el) => {
+          const bookId = el?.book?.id || el?.book?._id;
+
+          return (
+          <div className="book-item" key={bookId}>
             <img
               src={el?.book?.image?.url}
               alt={el?.book?.image?.publicId}
@@ -78,10 +76,18 @@ function Favorites() {
             <p className="book-item-category">{el?.book?.category}</p>
             <Rating rating={el?.book?.rate} />
             <div className="book-icons-wrapper">
-              <MdFavorite onClick={() => handleRemove(el?.book?.id)} />
+              <button
+                type="button"
+                className="favorite-remove-button"
+                aria-label={`Remove ${el?.book?.title || 'book'} from favorites`}
+                onClick={() => handleRemove(bookId)}
+              >
+                <MdFavorite aria-hidden="true" />
+              </button>
             </div>
           </div>
-        ))
+          );
+        })
       )}
     </div>
   );

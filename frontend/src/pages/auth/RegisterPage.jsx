@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../redux/services/authApiCalls';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import '../../styles/auth.css';
 
 function RegisterPage() {
@@ -195,7 +193,6 @@ function RegisterPage() {
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  tabIndex="-1"
                 >
                   {showPassword ? "👁️" : "👁️"}
                 </button>
@@ -240,7 +237,6 @@ function RegisterPage() {
                   className="password-toggle"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                  tabIndex="-1"
                 >
                   {showConfirmPassword ? "👁️" : "👁️"}
                 </button>
@@ -292,7 +288,6 @@ function RegisterPage() {
           </div>
         </div>
       </div>
-      <ToastContainer theme="light" position="top-right" />
     </div>
   );
 }

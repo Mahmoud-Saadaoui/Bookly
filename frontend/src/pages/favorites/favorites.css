@@ -47,7 +47,7 @@
    ======================================== */
 
 .book-item {
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -100,14 +100,23 @@
   margin-top: auto;
 }
 
-.book-icons-wrapper svg {
-  font-size: 28px;
+.favorite-remove-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
   color: var(--color-accent-500);
   cursor: pointer;
+  padding: var(--spacing-sm);
+}
+
+.favorite-remove-button svg {
+  font-size: 28px;
   transition: all var(--transition-fast);
 }
 
-.book-icons-wrapper svg:hover {
+.favorite-remove-button:hover svg {
   color: var(--color-accent-600);
   transform: scale(1.1);
 }

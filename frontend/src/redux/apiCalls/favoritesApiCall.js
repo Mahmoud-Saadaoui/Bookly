@@ -1,61 +1,64 @@
-import axios from "axios";
 import { favoritesActions } from "../slices/favoriteSlice";
-import { FAVORITES_URL } from "../../constantes";
 import { toast } from "react-toastify";
+import api from "../../services/axiosInstance";
+import { getApiErrorMessage } from "../../lib/normalize";
 
-// Get Favorites Books
+const handleFavoriteError = (error, fallback) => {
+  const message = getApiErrorMessage(error, fallback);
+  toast.error(message);
+};
+
 export function getFavorites() {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
+    dispatch(favoritesActions.setLoading());
+
     try {
-      dispatch(favoritesActions.setLoading());
-      const { data } = await axios.get(`${FAVORITES_URL}`, {
-        headers: {
-          authorization: getState().auth.user.accessToken,
-        },
-      });
-      dispatch(favoritesActions.setFavorites(data.data));
-      dispatch(favoritesActions.clearLoading());
+      const { data } = await api.get("/favoriteList");
+      dispatch(favoritesActions.setFavorites(data.data || []));
+      return data.data || [];
     } catch (error) {
-      toast.error(error.response?.data.msg);
+      handleFavoriteError(error, "Failed to load favorites");
+      return [];
+    } finally {
       dispatch(favoritesActions.clearLoading());
     }
   };
 }
 
-// Add To Favorites
 export function postToFavorites(bookId) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
+    dispatch(favoritesActions.setLoading());
+
     try {
-      dispatch(favoritesActions.setLoading());
-      const { data } = await axios.post(`${FAVORITES_URL}`, { book:bookId, favorite:true }, {
-        headers: {
-          authorization: getState().auth.user.accessToken,
-        },
+      const { data } = await api.post("/favoriteList", {
+        book: bookId,
+        favorite: true,
       });
-      toast.success(data?.message)
-      dispatch(favoritesActions.setFavorites(bookId));
-      dispatch(favoritesActions.clearLoading());
+      dispatch(favoritesActions.setFavorites(data.data || []));
+      toast.success(data.message || "Book added to favorites");
+      return data.data || [];
     } catch (error) {
-      toast.error(error.response?.data.msg);
+      handleFavoriteError(error, "Failed to add favorite");
+      return [];
+    } finally {
       dispatch(favoritesActions.clearLoading());
     }
   };
 }
 
-// Remove From Favorites
 export function removeFromFavorites(bookId) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
+    dispatch(favoritesActions.setLoading());
+
     try {
-      dispatch(favoritesActions.setLoading());
-      await axios.delete(`${FAVORITES_URL}/${bookId}`, {
-        headers: {
-          authorization: getState().auth.user.accessToken,
-        },
-      });
-      dispatch(favoritesActions.removeFromFavorites(bookId));
-      dispatch(favoritesActions.clearLoading());
+      const { data } = await api.delete(`/favoriteList/${bookId}`);
+      dispatch(favoritesActions.setFavorites(data.data || []));
+      toast.success(data.message || "Book removed from favorites");
+      return data.data || [];
     } catch (error) {
-      toast.error(error.response?.data.msg);
+      handleFavoriteError(error, "Failed to remove favorite");
+      return [];
+    } finally {
       dispatch(favoritesActions.clearLoading());
     }
   };

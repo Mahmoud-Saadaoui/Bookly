@@ -1,7 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Calendar from '../calendar/Calendar';
-import { createLoan, getBookLoanDates } from '../../redux/apiCalls/loanApiCall';
+import {
+    checkBookAvailability,
+    createLoan,
+    getApplicationConfig,
+    getBookLoanDates,
+} from '../../redux/apiCalls/loanApiCall';
 import './loan-button.css';
+
+const createIdempotencyKey = () => (
+    globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`
+);
+
+const toDateValue = (date) => new Date(Date.UTC(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    12
+)).toISOString();
 
 const LoanButton = ({ bookId, isAuthenticated }) => {
     const [loading, setLoading] = useState(false);
@@ -9,11 +25,23 @@ const LoanButton = ({ bookId, isAuthenticated }) => {
     const [success, setSuccess] = useState(null);
     const [unavailableDates, setUnavailableDates] = useState([]);
     const [selectedDates, setSelectedDates] = useState(null);
+    const [maxLoanDurationDays, setMaxLoanDurationDays] = useState(null);
+    const loanRequestKey = useRef(null);
 
     useEffect(() => {
         // Fetch dates when component mounts
         if (bookId) {
             fetchLoanDates();
+            getApplicationConfig()
+                .then((config) => {
+                    const configuredLimit = Number(config?.maxLoanDurationDays);
+                    if (Number.isFinite(configuredLimit) && configuredLimit > 0) {
+                        setMaxLoanDurationDays(configuredLimit);
+                    }
+                })
+                .catch(() => {
+                    // The backend remains the source of truth if configuration cannot load.
+                });
         }
     }, [bookId]);
 
@@ -32,6 +60,7 @@ const LoanButton = ({ bookId, isAuthenticated }) => {
     };
 
     const handleDateRangeSelect = (range) => {
+        loanRequestKey.current = null;
         setSelectedDates(range);
     };
 
@@ -41,20 +70,47 @@ const LoanButton = ({ bookId, isAuthenticated }) => {
             return;
         }
 
+        const duration = selectedDates.end.getTime() - selectedDates.start.getTime();
+        if (duration <= 0) {
+            setError('Loan duration must be at least 1 day');
+            return;
+        }
+
+        if (maxLoanDurationDays && duration > maxLoanDurationDays * 24 * 60 * 60 * 1000) {
+            setError(`Loan duration cannot exceed ${maxLoanDurationDays} days`);
+            return;
+        }
+
         try {
             setLoading(true);
             setError(null);
             setSuccess(null);
 
+            if (!loanRequestKey.current) {
+                loanRequestKey.current = createIdempotencyKey();
+            }
+
+            const isAvailable = await checkBookAvailability(
+                bookId,
+                toDateValue(selectedDates.start),
+                toDateValue(selectedDates.end)
+            );
+
+            if (!isAvailable) {
+                throw new Error('Selected dates are no longer available');
+            }
+
             await createLoan(
                 bookId,
-                selectedDates.start.toISOString(),
-                selectedDates.end.toISOString(),
-                ''
+                toDateValue(selectedDates.start),
+                toDateValue(selectedDates.end),
+                '',
+                loanRequestKey.current
             );
 
             setSuccess('Loan created successfully!');
             setSelectedDates(null);
+            loanRequestKey.current = null;
 
             // Refresh unavailable dates
             await fetchLoanDates();
@@ -99,7 +155,7 @@ const LoanButton = ({ bookId, isAuthenticated }) => {
             {error && (
                 <div className="error-message">
                     <span>{error}</span>
-                    <button onClick={() => setError(null)}>×</button>
+                    <button type="button" onClick={() => setError(null)} aria-label="Dismiss error">×</button>
                 </div>
             )}
 
@@ -117,6 +173,7 @@ const LoanButton = ({ bookId, isAuthenticated }) => {
                         <Calendar
                             bookId={bookId}
                             onDateRangeSelect={handleDateRangeSelect}
+                            onInvalidRange={() => setError('Selected dates include an unavailable period')}
                             unavailableDates={unavailableDates}
                         />
                     </>

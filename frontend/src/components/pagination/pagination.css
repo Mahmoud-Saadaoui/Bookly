@@ -38,7 +38,7 @@
   padding: 0 var(--spacing-md);
   border: 2px solid var(--color-primary-200);
   border-radius: var(--radius-lg);
-  background: white;
+  background: var(--color-surface);
   color: var(--color-primary-700);
   text-decoration: none;
   font-size: var(--text-sm);
@@ -46,7 +46,7 @@
   font-family: 'Cairo', sans-serif;
   transition: all var(--transition-base);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+  box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
 }
@@ -56,16 +56,16 @@
   background: var(--color-primary-50);
   border-color: var(--color-primary-500);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  box-shadow: var(--shadow-md);
   color: var(--color-primary-900);
 }
 
 /* Active Page - Standout Design */
 .page-item.active .page-link {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  background: var(--gradient-brand);
   border-color: transparent;
   color: white;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: var(--shadow-indigo);
   transform: scale(1.05);
 }
 
@@ -227,7 +227,7 @@
 }
 
 .dark .page-item.active .page-link {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  background: var(--gradient-brand);
   border-color: transparent;
   color: white;
 }

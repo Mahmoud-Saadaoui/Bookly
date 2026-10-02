@@ -1,180 +1,178 @@
-import axios from "axios";
 import { toast } from "react-toastify";
 import { bookActions } from "../slices/bookSlice";
-import { BASE_URL, BOOK_URL } from "../../constantes";
+import api from "../../services/axiosInstance";
+import {
+  getApiErrorMessage,
+  normalizeBook,
+  normalizeBooksResponse,
+  normalizeReviewsResponse,
+} from "../../lib/normalize";
 
-// Get All Books
-export function fetchBooks(page) {
+const handleBookError = (dispatch, error, fallback) => {
+  const message = getApiErrorMessage(error, fallback);
+  dispatch(bookActions.setError(message));
+  toast.error(message);
+};
+
+export function fetchBooks(page = 1, filters = {}) {
+  return async (dispatch) => {
+    dispatch(bookActions.setLoading());
+
+    try {
+      const params = new URLSearchParams({
+        page: String(Math.max(Number(page) || 1, 1)),
+        limit: String(filters.limit || 10),
+      });
+
+      if (filters.q?.trim()) params.set("q", filters.q.trim());
+      if (filters.category && filters.category !== "All") {
+        params.set("category", filters.category);
+      }
+
+      const { data } = await api.get(`/books?${params.toString()}`);
+      dispatch(bookActions.getBooks(normalizeBooksResponse(data)));
+      return data;
+    } catch (error) {
+      handleBookError(dispatch, error, "Failed to fetch books");
+      return null;
+    } finally {
+      dispatch(bookActions.clearLoading());
+    }
+  };
+}
+
+export function fetchSingleBook(bookId) {
+  return async (dispatch) => {
+    dispatch(bookActions.setLoading());
+
+    try {
+      const { data } = await api.get(`/books/${bookId}`);
+      const book = normalizeBook(data.data);
+      dispatch(bookActions.findBook(book));
+      return book;
+    } catch (error) {
+      handleBookError(dispatch, error, "Failed to fetch book");
+      return null;
+    } finally {
+      dispatch(bookActions.clearLoading());
+    }
+  };
+}
+
+export async function fetchBookCategories() {
+  const { data } = await api.get('/books/categories');
+  return data.success && Array.isArray(data.data) ? data.data : [];
+}
+
+export const findBook = fetchSingleBook;
+
+export function getBookReviews(bookId, page = 1, append = false) {
+  return async (dispatch) => {
+    dispatch(bookActions.setReviewsLoading());
+
+    try {
+      const { data } = await api.get(`/books/${bookId}/reviews`, {
+        params: { page, limit: 20 },
+      });
+      const reviews = normalizeReviewsResponse(data);
+      dispatch(append ? bookActions.appendReviews(reviews) : bookActions.getReviews(reviews));
+      return reviews;
+    } catch (error) {
+      handleBookError(dispatch, error, "Failed to fetch reviews");
+      return null;
+    } finally {
+      dispatch(bookActions.clearReviewsLoading());
+    }
+  };
+}
+
+export function postReview(bookId, review) {
   return async (dispatch) => {
     try {
-      dispatch(bookActions.setLoading())
-      const { data } = await axios.get(`${BASE_URL}/books?page=${page+1}`);
-      dispatch(bookActions.getBooks(data));
-      dispatch(bookActions.clearLoading())
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.msg || "Failed to fetch books";
-      toast.error(errorMessage);
-      dispatch(bookActions.clearLoading());
-    }
-  };
-}
-
-// Get Book By Id
-export function fetchSingleBook(bookId) {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(bookActions.setLoading())
-      const { data } = await axios.get(`${BOOK_URL}/${bookId}`, {
-        headers: {
-          "authorization": getState().auth.user.accessToken
-        }
-      });
-      // Store the book data from response
-      dispatch(bookActions.findBook(data.success ? data.data : data));
-      dispatch(bookActions.clearLoading());
-    } catch (error) {
-      toast.error(error.response?.data.message);
-      dispatch(bookActions.clearLoading());
-    }
-  };
-}
-
-// Get Book Reviews
-export function getBookReviews(bookId) {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(bookActions.setLoading())
-      const {data} = await axios.get(`${BOOK_URL}/${bookId}/reviews`, {
-        headers: {
-          "authorization": getState().auth.user.accessToken
-        }
-      });
-      dispatch(bookActions.getReviews(data));
-      dispatch(bookActions.clearLoading());
-    } catch (error) {
-      toast.error(error?.response?.data.message);
-      dispatch(bookActions.clearLoading());
-    }
-  };
-}
-
-// Post Review
-export function postReview(bookId, review) {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(bookActions.setLoading())
-      const {data} = await axios.post(`${BOOK_URL}/${bookId}/reviews`, review, {
-        headers: {
-          "authorization": getState().auth.user.accessToken
-        }
-      });
-      toast.success(data?.message || "Review added successfully")
-      dispatch(getBookReviews(bookId));
-      dispatch(bookActions.clearLoading());
+      const { data } = await api.post(`/books/${bookId}/reviews`, review);
+      toast.success(data.message || "Review added successfully");
+      await dispatch(getBookReviews(bookId));
       return data;
     } catch (error) {
-      const errorMessage = error?.response?.data?.message || "Failed to add review";
-      toast.error(errorMessage);
-      dispatch(bookActions.clearLoading());
+      const message = getApiErrorMessage(error, "Failed to add review");
+      toast.error(message);
       throw error;
     }
   };
 }
 
-// Add Book
-export function addBook(newBook) {
-  return async (dispatch, getState) => {
+export function addBook(formData) {
+  return async (dispatch) => {
+    dispatch(bookActions.setLoading());
+
     try {
-      dispatch(bookActions.setLoading())
-      const {data} = await axios.post(`${BOOK_URL}`, newBook, {
-        headers: {
-          "authorization": getState().auth.user.accessToken,
-          "Content-Type": "multipart/form-data",
-        }
-      });
-      toast.success(data?.message || "Book created successfully");
-      // Add the new book to the state
-      if (data?.data) {
-        dispatch(bookActions.addBook(data.data));
-      }
-      dispatch(bookActions.clearLoading());
+      const { data } = await api.post("/books", formData);
+      const book = normalizeBook(data.data);
+      dispatch(bookActions.addBook(book));
+      toast.success(data.message || "Book created successfully");
       return data;
     } catch (error) {
-      let errorMessage = "Failed to create book";
-      const response = error?.response?.data;
-
-      if (response?.errors && Array.isArray(response.errors)) {
-        // Show first validation error
-        errorMessage = response.errors[0]?.message || errorMessage;
-      } else if (response?.message) {
-        errorMessage = response.message;
-      } else if (error?.message) {
-        errorMessage = error.message;
-      }
-
-      toast.error(errorMessage);
-      dispatch(bookActions.clearLoading());
+      handleBookError(dispatch, error, "Failed to create book");
       throw error;
+    } finally {
+      dispatch(bookActions.clearLoading());
     }
   };
 }
 
-// Remove Book
 export function removeBook(bookId) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
+    dispatch(bookActions.setLoading());
+
     try {
-      dispatch(bookActions.setLoading())
-      const {data} = await axios.delete(`${BOOK_URL}/${bookId}`, {
-        headers: {
-          "authorization": getState().auth.user.accessToken
-        }
-      });
-      toast.success(data.message)
-      dispatch(bookActions.deleteBook(data.bookId))
-      dispatch(bookActions.clearLoading());
+      const { data } = await api.delete(`/books/${bookId}`);
+      dispatch(bookActions.deleteBook(data.data?.bookId || bookId));
+      toast.success(data.message || "Book deleted successfully");
+      return data;
     } catch (error) {
-      toast.error(error?.response?.data.message);
+      handleBookError(dispatch, error, "Failed to delete book");
+      throw error;
+    } finally {
       dispatch(bookActions.clearLoading());
     }
   };
 }
 
-// Update Book Image
-export function updateBookImage(image, bookId) {
-  return async (dispatch, getState) => {
-    try {
-      dispatch(bookActions.setLoading())
-      const {data} = await axios.put(`${BOOK_URL}/update-image/${bookId}`, image, {
-        headers: {
-          "authorization": getState().auth.user.accessToken,
-          "Content-Type": "multipart/form-data",
-        }
-      });
-      toast.success(data?.message)
-      dispatch(bookActions.updateBook(data.data))
-      dispatch(bookActions.clearLoading());
-    } catch (error) {
-      toast.error(error?.response?.data.message);
-      dispatch(bookActions.clearLoading());
-    }
-  };
-}
-
-// Update Book Form
 export function updateBookForm(form, bookId) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
+    dispatch(bookActions.setLoading());
+
     try {
-      dispatch(bookActions.setLoading())
-      const {data} = await axios.put(`${BOOK_URL}/${bookId}`, form, {
-        headers: {
-          "authorization": getState().auth.user.accessToken,
-        }
-      });
-      toast.success(data.message)
-      dispatch(bookActions.updateBook(data.data))
-      dispatch(bookActions.clearLoading());
+      const { data } = await api.put(`/books/${bookId}`, form);
+      const book = normalizeBook(data.data);
+      dispatch(bookActions.updateBook(book));
+      toast.success(data.message || "Book updated successfully");
+      return data;
     } catch (error) {
-      toast.error(error?.response?.data.message);
+      handleBookError(dispatch, error, "Failed to update book");
+      throw error;
+    } finally {
+      dispatch(bookActions.clearLoading());
+    }
+  };
+}
+
+export const updateBook = updateBookForm;
+
+export function updateBookImage(formData, bookId) {
+  return async (dispatch) => {
+    dispatch(bookActions.setLoading());
+
+    try {
+      const { data } = await api.put(`/books/update-image/${bookId}`, formData);
+      const book = normalizeBook(data.data);
+      dispatch(bookActions.updateBook(book));
+      toast.success(data.message || "Image updated successfully");
+      return data;
+    } catch (error) {
+      handleBookError(dispatch, error, "Failed to update image");
+      throw error;
+    } finally {
       dispatch(bookActions.clearLoading());
     }
   };

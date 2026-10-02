@@ -39,15 +39,16 @@ const AdminSidebar = ({ setCurrentTab, currentTab }) => {
             {menuItems.map((item) => (
               <li
                 key={item.id}
-                className={currentTab === item.id ? "admin-sidebar-link active-tab" : "admin-sidebar-link"}
-                onClick={() => setCurrentTab(item.id)}
+                className={currentTab === item.id ? "admin-sidebar-link admin-menu-item active-tab" : "admin-sidebar-link admin-menu-item"}
                 title={item.description}
               >
-                <span className="sidebar-icon">{item.icon}</span>
-                <span className="sidebar-text">
-                  <span className="sidebar-label">{item.label}</span>
-                  <span className="sidebar-desc">{item.description}</span>
-                </span>
+                <button type="button" onClick={() => setCurrentTab(item.id)}>
+                  <span className="sidebar-icon">{item.icon}</span>
+                  <span className="sidebar-text">
+                    <span className="sidebar-label">{item.label}</span>
+                    <span className="sidebar-desc">{item.description}</span>
+                  </span>
+                </button>
               </li>
             ))}
           </ul>

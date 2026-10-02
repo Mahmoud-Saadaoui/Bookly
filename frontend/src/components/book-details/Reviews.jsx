@@ -1,44 +1,27 @@
 import moment from "moment";
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Rating from "../rating/Rating";
 import { Oval } from "react-loader-spinner";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getBookReviews } from "../../redux/apiCalls/bookApiCall";
 
-function Reviews() {
-  const { loading, reviews } = useSelector((state) => state.book);
-  const [showAll, setShowAll] = useState(false);
-
-  // Handle reviews data structure (could be array or object with data property)
-  const reviewsArray = useMemo(() => {
-    if (!reviews) return [];
-    return Array.isArray(reviews) ? reviews : (reviews.data || []);
-  }, [reviews]);
-
-  // Number of reviews to show initially
-  const INITIAL_REVIEWS = 5;
-
-  // Reviews to display
-  const displayedReviews = showAll ? reviewsArray : reviewsArray.slice(0, INITIAL_REVIEWS);
-
-  // Check if there are more reviews to show
-  const hasMoreReviews = reviewsArray.length > INITIAL_REVIEWS;
-
-  // Toggle show more/less
-  const toggleShowAll = () => {
-    setShowAll(!showAll);
-  };
+function Reviews({ bookId, reviews, loading }) {
+  const dispatch = useDispatch();
+  const reviewsArray = reviews?.data || [];
+  const pagination = reviews?.pagination;
+  const hasMoreReviews = pagination?.page < pagination?.pages;
 
   return (
     <div className="get-reviews">
       <h2 className="get-reviews-title">
-        Reviews ({reviewsArray.length})
+        Reviews ({pagination?.total || reviewsArray.length})
       </h2>
       <div className="reviews">
         {loading ? (
           <Oval
             height={120}
             width={120}
-            color="rgb(247, 96, 14)"
+            color="var(--color-brand)"
             wrapperStyle={{
               height: "90vh",
               display: "flex",
@@ -52,33 +35,33 @@ function Reviews() {
             strokeWidth={3}
             strokeWidthSecondary={3}
           />
-        ) : displayedReviews.length === 0 ? (
+        ) : reviewsArray.length === 0 ? (
           <div className="no-reviews">
             <p>No reviews yet. Be the first to review this book!</p>
           </div>
         ) : (
           <>
-            {displayedReviews.map((el, key) => (
-              <div className="user-review" key={key}>
+             {reviewsArray.map((el, key) => (
+               <div className="user-review" key={el.id || el._id || `${el.user}-${key}`}>
                 <p>
                   <span>{el?.username ? el?.username : "Unknown User"}</span>{" "}
                   {`-  `}
-                  {moment(el?.createdAt).format("DD MMM YYYY")}
+                  {el?.createdAt && moment(el.createdAt).isValid()
+                    ? moment(el.createdAt).format("DD MMM YYYY")
+                    : "Recently"}
                 </p>
                 <Rating rating={el?.rate} />
-                <p>{el?.comment}</p>
+                 <p>{el?.comment || "No comment provided"}</p>
               </div>
             ))}
 
             {hasMoreReviews && (
               <button
                 className="show-more-reviews-btn"
-                onClick={toggleShowAll}
+                onClick={() => dispatch(getBookReviews(bookId, pagination.page + 1, true))}
+                disabled={loading}
               >
-                {showAll
-                  ? `Show less (-${reviewsArray.length - INITIAL_REVIEWS})`
-                  : `Show ${reviewsArray.length - INITIAL_REVIEWS} more reviews`
-                }
+                {loading ? "Loading..." : "Load more reviews"}
               </button>
             )}
           </>

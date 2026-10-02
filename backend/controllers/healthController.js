@@ -16,14 +16,16 @@ exports.healthCheck = async (req, res) => {
         responseTime: null
       },
       api: {
-        status: 'up',
-        version: require('../package.json').version,
-        environment: process.env.NODE_ENV || 'development'
+        status: 'up'
       }
     }
   };
 
   try {
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('MongoDB connection is not ready');
+    }
+
     // Check database connection
     const dbStart = Date.now();
     await mongoose.connection.db.admin().ping();
@@ -32,7 +34,7 @@ exports.healthCheck = async (req, res) => {
 
     return res.status(200).json(healthcheck);
   } catch (error) {
-    logger.error('Database health check failed:', error);
+    logger.error('Database health check failed', { message: error.message });
     healthcheck.checks.database.status = 'down';
     healthcheck.message = 'Degraded';
     return res.status(503).json(healthcheck);

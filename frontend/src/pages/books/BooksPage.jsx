@@ -1,25 +1,31 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchBooks } from '../../redux/services/bookApiCalls';
+import { useSearchParams } from 'react-router-dom';
+import { fetchBookCategories, fetchBooks } from '../../redux/apiCalls/bookApiCall';
 import { Oval } from 'react-loader-spinner';
 import '../../styles/books-page.css';
 
 // Components
 import BookCard from '../../components/books/BookCard';
 import Pagination from '../../components/pagination/Pagination';
+import { postToFavorites } from '../../redux/apiCalls/favoritesApiCall';
 
 function BooksPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { books, loading } = useSelector((state) => state.book);
   const { user } = useSelector((state) => state.auth);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(() => (
+    Math.max(Number(searchParams.get('page')) || 1, 1) - 1
+  ));
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '');
+  const [selectedCategory, setSelectedCategory] = useState(() => searchParams.get('category') || 'All');
+  const [debouncedSearch, setDebouncedSearch] = useState(() => searchParams.get('q') || '');
+  const [availableCategories, setAvailableCategories] = useState([]);
 
   // Debounce search input
   React.useEffect(() => {
@@ -29,59 +35,52 @@ function BooksPage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Fetch books when page changes
-  const loadBooks = useCallback((page) => {
-    dispatch(fetchBooks(page));
-  }, [dispatch]);
-
-  // Handle page change with scroll to top
-  const handlePageClick = useCallback(({ selected }) => {
+  const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
-    loadBooks(selected);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [loadBooks]);
+  };
 
-  // Fetch initial data
-  React.useEffect(() => {
-    loadBooks(currentPage);
-  }, [loadBooks, currentPage]);
+  useEffect(() => {
+    dispatch(fetchBooks(currentPage + 1, {
+      q: debouncedSearch,
+      category: selectedCategory,
+    }));
+  }, [dispatch, currentPage, debouncedSearch, selectedCategory]);
 
-  // Get all unique categories from current page books
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchBookCategories()
+      .then((loadedCategories) => {
+        if (isMounted) setAvailableCategories(loadedCategories);
+      })
+      .catch(() => {
+        if (isMounted) setAvailableCategories([]);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) params.set('q', searchQuery.trim());
+    if (selectedCategory !== 'All') params.set('category', selectedCategory);
+    if (currentPage > 0) params.set('page', String(currentPage + 1));
+    setSearchParams(params, { replace: true });
+  }, [searchQuery, selectedCategory, currentPage, setSearchParams]);
+
+  // Use categories returned by the backend and include any newly observed value.
   const categories = useMemo(() => {
-    if (!books) return ['All'];
-    const cats = ['All'];
-    const booksArray = Array.isArray(books) ? books : (books.data || []);
-    booksArray.forEach(book => {
-      if (book.category && !cats.includes(book.category)) {
-        cats.push(book.category);
-      }
-    });
-    return cats;
-  }, [books]);
+    const loadedCategories = books.data.map((book) => book.category).filter(Boolean);
+    return ['All', ...new Set([...availableCategories, ...loadedCategories])];
+  }, [availableCategories, books.data]);
 
   // Filter books based on search and category
   const filteredBooks = useMemo(() => {
-    if (!books) return [];
-
-    let result = Array.isArray(books) ? books : (books.data || []);
-
-    // Filter by search query
-    if (debouncedSearch) {
-      const query = debouncedSearch.toLowerCase();
-      result = result.filter(book =>
-        book.title?.toLowerCase().includes(query) ||
-        book.author?.toLowerCase().includes(query) ||
-        book.category?.toLowerCase().includes(query)
-      );
-    }
-
-    // Filter by category
-    if (selectedCategory !== 'All') {
-      result = result.filter(book => book.category === selectedCategory);
-    }
-
-    return result;
-  }, [books, debouncedSearch, selectedCategory]);
+    return books.data;
+  }, [books.data]);
 
   const handleBookClick = useCallback((bookId) => {
     if (user) {
@@ -90,6 +89,14 @@ function BooksPage() {
       navigate('/login');
     }
   }, [user, navigate]);
+
+  const handleFavorite = useCallback((bookId) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    dispatch(postToFavorites(bookId));
+  }, [dispatch, navigate, user]);
 
   const handleSearch = useCallback((query) => {
     setSearchQuery(query);
@@ -109,19 +116,19 @@ function BooksPage() {
   }, []);
 
   // Get total pages from pagination metadata
-  const totalPages = books?.pagination?.pages || 0;
+  const totalPages = books.pagination?.pages || 0;
 
   // Get total count from pagination metadata
-  const totalCount = books?.pagination?.count || 0;
+  const totalCount = books.pagination?.total || 0;
 
-  if (loading && !books) {
+  if (loading && books.data.length === 0) {
     return (
       <div className="books-page-container">
         <div className="loading-container" role="status" aria-live="polite">
           <Oval
             height={80}
             width={80}
-            color="#F97316"
+            color="var(--color-brand)"
             wrapperStyle={{
               height: "50vh",
               display: "flex",
@@ -160,7 +167,7 @@ function BooksPage() {
           <input
             type="text"
             className="search-input"
-            placeholder="Search by title, author, or category..."
+            placeholder="Search by title, author, or description..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
             aria-label="Search books"
@@ -274,6 +281,7 @@ function BooksPage() {
                 <BookCard
                   book={book}
                   onClick={() => handleBookClick(book.id)}
+                  onFavorite={handleFavorite}
                 />
               </div>
             ))}
@@ -296,7 +304,7 @@ function BooksPage() {
           <Oval
             height={50}
             width={50}
-            color="#F97316"
+            color="var(--color-brand)"
             visible={true}
             ariaLabel="Loading more books"
           />

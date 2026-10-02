@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchBooks } from '../../redux/services/bookApiCalls';
@@ -7,6 +7,7 @@ import '../../styles/home.css';
 
 // Components
 import BookCard from '../../components/books/BookCard';
+import { postToFavorites } from '../../redux/apiCalls/favoritesApiCall';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -16,38 +17,16 @@ function HomePage() {
   const { user } = useSelector((state) => state.auth);
 
   // Fetch all books for featured section
-  const [allBooks, setAllBooks] = useState([]);
-  const [featuredLoading, setFeaturedLoading] = useState(true);
-
-  // Fetch initial data
-  React.useEffect(() => {
-    const fetchAllBooks = async () => {
-      setFeaturedLoading(true);
-      try {
-        // Fetch first few pages to get enough books for featured selection
-        const promises = [];
-        for (let i = 0; i < 3; i++) {
-          promises.push(dispatch(fetchBooks(i)));
-        }
-        await Promise.all(promises);
-        // After fetching, we'll have books in the state
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      } finally {
-        setFeaturedLoading(false);
-      }
-    };
-    fetchAllBooks();
+  useEffect(() => {
+    dispatch(fetchBooks(1, { limit: 10 }));
   }, [dispatch]);
 
-  // Get top 3 rated books from different categories
+  // Select up to three highly rated books from the loaded collection.
   const featuredBooks = useMemo(() => {
-    if (!books) return [];
-
-    const booksArray = Array.isArray(books) ? books : (books.data || []);
+    const booksArray = books.data;
     if (booksArray.length === 0) return [];
 
-    // Sort by rating and get unique categories
+    // The books endpoint returns the current collection page; rank that page locally.
     const sortedBooks = [...booksArray].sort((a, b) => (b.rate || 0) - (a.rate || 0));
     const seenCategories = new Set();
     const featured = [];
@@ -61,7 +40,7 @@ function HomePage() {
     }
 
     return featured;
-  }, [books]);
+  }, [books.data]);
 
   const handleBookClick = useCallback((bookId) => {
     if (user) {
@@ -71,9 +50,17 @@ function HomePage() {
     }
   }, [user, navigate]);
 
-  const handleBrowseBooks = useCallback(() => {
-    navigate('/books');
+  const handleBrowseBooks = useCallback((category) => {
+    navigate(category ? `/books?category=${encodeURIComponent(category)}` : '/books');
   }, [navigate]);
+
+  const handleFavorite = useCallback((bookId) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    dispatch(postToFavorites(bookId));
+  }, [dispatch, navigate, user]);
 
   return (
     <div className="home-container">
@@ -83,7 +70,7 @@ function HomePage() {
           {/* Badge */}
           <div className="hero-badge">
             <span className="hero-badge-icon">📚</span>
-            <span>Over 10,000+ Books Available</span>
+            <span>Find your next book</span>
           </div>
 
           {/* Title */}
@@ -94,7 +81,7 @@ function HomePage() {
           {/* Description */}
           <p className="hero-description">
             Browse, borrow, and manage your reading list with our modern library platform.
-            Explore thousands of titles across all genres.
+            Explore the collection and check availability before borrowing.
           </p>
 
           {/* CTA Buttons */}
@@ -110,18 +97,8 @@ function HomePage() {
           {/* Stats */}
           <div className="hero-stats">
             <div className="stat-item">
-              <span className="stat-number">10K+</span>
+              <span className="stat-number">{books.pagination?.total || 0}</span>
               <span className="stat-label">Books</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-number">5K+</span>
-              <span className="stat-label">Users</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-number">50+</span>
-              <span className="stat-label">Categories</span>
             </div>
           </div>
         </div>
@@ -139,7 +116,7 @@ function HomePage() {
             <div className="floating-card-author">John Smith</div>
           </div>
           <div className="floating-card card-2">
-            <div className="floating-card-cover" style={{background: 'linear-gradient(135deg, #F97316, #EC4899)'}}></div>
+            <div className="floating-card-cover floating-card-cover-accent"></div>
             <div className="floating-card-title">Mystery Tales</div>
             <div className="floating-card-author">Jane Doe</div>
           </div>
@@ -150,18 +127,18 @@ function HomePage() {
       <section className="featured-section" aria-label="Featured books">
         <div className="featured-header">
           <h2 className="featured-title">Featured Books</h2>
-          <p className="featured-subtitle">Top-rated books from different categories</p>
+           <p className="featured-subtitle">A selection from our collection</p>
           <button className="browse-all-button" onClick={handleBrowseBooks}>
             Browse All Books →
           </button>
         </div>
 
-        {featuredLoading ? (
+        {loading ? (
           <div className="featured-loading" role="status" aria-live="polite">
             <Oval
               height={60}
               width={60}
-              color="#F97316"
+              color="var(--color-brand)"
               wrapperStyle={{
                 height: "200px",
                 display: "flex",
@@ -184,6 +161,7 @@ function HomePage() {
                 <BookCard
                   book={book}
                   onClick={() => handleBookClick(book.id)}
+                  onFavorite={handleFavorite}
                   featured
                 />
               </div>
@@ -198,37 +176,6 @@ function HomePage() {
         )}
       </section>
 
-      {/* Categories Preview */}
-      <section className="categories-preview-section" aria-label="Browse by category">
-        <div className="categories-preview-header">
-          <h2 className="categories-preview-title">Browse by Category</h2>
-          <button className="browse-all-button" onClick={handleBrowseBooks}>
-            View All Categories →
-          </button>
-        </div>
-
-        <div className="categories-preview-grid">
-          {[
-            { name: 'Fiction', icon: '✨', color: 'from-purple-500 to-indigo-500' },
-            { name: 'Mystery', icon: '🔍', color: 'from-amber-500 to-orange-500' },
-            { name: 'Romance', icon: '💕', color: 'from-pink-500 to-rose-500' },
-            { name: 'Science Fiction', icon: '🚀', color: 'from-blue-500 to-cyan-500' },
-            { name: 'Fantasy', icon: '🐉', color: 'from-emerald-500 to-teal-500' },
-            { name: 'Historical Fiction', icon: '📜', color: 'from-yellow-500 to-amber-500' },
-          ].map((category) => (
-            <button
-              key={category.name}
-              className="category-preview-card"
-              onClick={handleBrowseBooks}
-            >
-              <div className={`category-preview-icon ${category.color}`}>
-                {category.icon}
-              </div>
-              <span className="category-preview-name">{category.name}</span>
-            </button>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

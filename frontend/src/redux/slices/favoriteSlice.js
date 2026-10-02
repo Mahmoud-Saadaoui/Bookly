@@ -1,31 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const getBookId = (favorite) => favorite?.book?.id || favorite?.book?._id;
+
 const favoritesSlice = createSlice({
-    name: "favoriteList",
-    initialState: {
-        favoriteList: [],
-        loading: false,
+  name: "favorites",
+  initialState: {
+    favoriteList: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    setFavorites(state, action) {
+      state.favoriteList = Array.isArray(action.payload) ? action.payload : [];
+      state.error = null;
     },
-    reducers: {
-        setFavorites(state, action) {
-            state.favoriteList = action.payload
-        },
-        addToFavorites(state, action) {
-            state.favoriteList.push(action.payload)
-        },
-        removeFromFavorites(state, action) {
-            state.favoriteList = state.favoriteList.filter(el => el.book?.id !== action.payload)
-        },
-        setLoading(state) {
-            state.loading = true;
-        },
-        clearLoading(state) {
-            state.loading = false;
-        },
-    }
-})
+    addToFavorites(state, action) {
+      state.favoriteList = [...state.favoriteList, action.payload];
+    },
+    removeFromFavorites(state, action) {
+      state.favoriteList = state.favoriteList.filter(
+        (favorite) => getBookId(favorite) !== action.payload
+      );
+    },
+    setLoading(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    clearLoading(state) {
+      state.loading = false;
+    },
+    setError(state, action) {
+      state.error = action.payload;
+    },
+  },
+});
 
 const favoritesReducer = favoritesSlice.reducer;
 const favoritesActions = favoritesSlice.actions;
 
-export {favoritesReducer, favoritesActions}
+export { favoritesReducer, favoritesActions };

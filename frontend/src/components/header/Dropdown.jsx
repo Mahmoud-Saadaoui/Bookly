@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../../redux/apiCalls/authApiCalls'
 import { Link } from 'react-router-dom'
-import { FaUser, FaHeart, FaSignOutAlt, FaCog, FaChevronDown } from 'react-icons/fa'
+import { FaHeart, FaSignOutAlt, FaCog, FaChevronDown, FaBookOpen } from 'react-icons/fa'
 
 function Dropdown() {
     const dispatch = useDispatch()
@@ -45,9 +45,9 @@ function Dropdown() {
             {isOpen && (
                 <ul className={`dropdown-menu ${isOpen ? 'show' : ''}`}>
                     <li className="dropdown-item">
-                        <Link className='dropdown-item-link' to='/profile' onClick={() => setIsOpen(false)}>
-                            <FaUser className="dropdown-icon" />
-                            My Profile
+                        <Link className='dropdown-item-link' to='/loans' onClick={() => setIsOpen(false)}>
+                            <FaBookOpen className="dropdown-icon" />
+                            My Loans
                         </Link>
                     </li>
                     <li className="dropdown-item">
@@ -65,9 +65,11 @@ function Dropdown() {
                         </li>
                     )}
                     <li className="dropdown-divider"></li>
-                    <li className="dropdown-item dropdown-item-danger" onClick={logout}>
-                        <FaSignOutAlt className="dropdown-icon" />
-                        Logout
+                    <li className="dropdown-item">
+                        <button type="button" className="dropdown-item-danger" onClick={logout}>
+                            <FaSignOutAlt className="dropdown-icon" />
+                            Logout
+                        </button>
                     </li>
                 </ul>
             )}

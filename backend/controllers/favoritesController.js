@@ -4,8 +4,10 @@ const User = require('../models/user');
 const {
   successResponse,
   notFoundResponse,
-  createdResponse
+  badRequestResponse,
 } = require('../utils/apiResponse');
+
+const MAX_FAVORITES_PER_USER = Number(process.env.MAX_FAVORITES_PER_USER) || 500;
 
 // method   POST
 // route    api/favoriteList
@@ -13,23 +15,79 @@ const {
 // access   Private | auth
 const addToFavorites = asyncHandler(async(req, res) => {
     const { book, favorite } = req.body;
+    const isFavorite = favorite === true || favorite === 'true';
 
-    const user = await User.findById(req.userId);
+    const [userExists, bookExists] = await Promise.all([
+        User.exists({ _id: req.userId }),
+        Book.exists({ _id: book, isDeleted: { $ne: true } })
+    ]);
 
-    if (!user) {
+    if (!userExists) {
         return notFoundResponse(res, 'User');
     }
 
-    const existingIndex = user.favoriteList.findIndex(e => e.book == book);
-    if (existingIndex > -1) {
-        user.favoriteList[existingIndex].favorite = favorite;
-    } else {
-        user.favoriteList.push({ book, favorite });
+    if (!bookExists) {
+        return notFoundResponse(res, 'Book');
     }
 
-    await user.save();
+    let updatedUser;
+    if (isFavorite) {
+        // The array predicate is re-evaluated atomically by MongoDB, preventing duplicates.
+        updatedUser = await User.findOneAndUpdate(
+            {
+                _id: req.userId,
+                'favoriteList.book': { $ne: book },
+                $expr: {
+                    $lt: [
+                        { $size: { $ifNull: ['$favoriteList', []] } },
+                        MAX_FAVORITES_PER_USER
+                    ]
+                }
+            },
+            {
+                $push: {
+                    favoriteList: { book, favorite: true }
+                }
+            },
+            { new: true }
+        );
 
-    return createdResponse(res, user.favoriteList, 'Book added to favorites');
+        if (!updatedUser) {
+            updatedUser = await User.findById(req.userId).select('favoriteList');
+
+            if (!updatedUser) {
+                return notFoundResponse(res, 'User');
+            }
+
+            if (updatedUser.favoriteList.some((favorite) => favorite.book?.toString() === book)) {
+                return successResponse(
+                    res,
+                    updatedUser.favoriteList,
+                    'Book already in favorites'
+                );
+            }
+
+            if (updatedUser.favoriteList.length >= MAX_FAVORITES_PER_USER) {
+                return badRequestResponse(res, 'Favorite list limit reached');
+            }
+        }
+    } else {
+        updatedUser = await User.findOneAndUpdate(
+            { _id: req.userId },
+            { $pull: { favoriteList: { book } } },
+            { new: true }
+        );
+    }
+
+    if (!updatedUser) {
+        return notFoundResponse(res, 'User');
+    }
+
+    return successResponse(
+        res,
+        updatedUser.favoriteList,
+        isFavorite ? 'Book added to favorites' : 'Book removed from favorites'
+    );
 });
 
 // method   DELETE
@@ -38,14 +96,15 @@ const addToFavorites = asyncHandler(async(req, res) => {
 // access   Private | auth
 const deleteFromFavorites = asyncHandler(async(req, res) => {
     const { id } = req.params;
-    const user = await User.findById(req.userId);
+    const user = await User.findOneAndUpdate(
+        { _id: req.userId },
+        { $pull: { favoriteList: { book: id } } },
+        { new: true }
+    );
 
     if (!user) {
         return notFoundResponse(res, 'User');
     }
-
-    user.favoriteList = user.favoriteList.filter(el => el.book != id);
-    await user.save();
 
     return successResponse(res, user.favoriteList, 'Book removed from favorites');
 });
@@ -57,13 +116,21 @@ const deleteFromFavorites = asyncHandler(async(req, res) => {
 const getFavorites = asyncHandler(async(req, res) => {
     const user = await User.findById(req.userId)
         .select('-favoriteList._id')
-        .populate('favoriteList.book', ['_id', 'title', 'category', 'rate', 'image']);
+        .populate({
+            path: 'favoriteList.book',
+            select: '_id title category rate image',
+            match: { isDeleted: { $ne: true } }
+        });
 
     if (!user) {
         return notFoundResponse(res, 'User');
     }
 
-    return successResponse(res, user.favoriteList, 'Favorites retrieved successfully');
+    return successResponse(
+        res,
+        user.favoriteList.filter((favorite) => favorite.book),
+        'Favorites retrieved successfully'
+    );
 });
 
 module.exports = {

@@ -1,59 +1,46 @@
-const express = require("express");
+require('dotenv').config();
+
+const mongoose = require('mongoose');
 const dbConnect = require("./config/connect");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const { httpLogger } = require("./middlewares/httpLogger");
-const { requestId } = require("./middlewares/requestId");
 const logger = require("./utils/logger");
+const { validateEnv } = require('./config/validateEnv');
 
-dotenv.config();
+validateEnv();
 
-// connection to db
-dbConnect();
+const app = require('./app');
 
-// init app
-const app = express();
-
-// Generate request ID middleware
-app.use(requestId);
-
-// HTTP logging middleware
-app.use(httpLogger);
-
-// middlewares
-app.use(express.json());
-
-// CORS configuration:
-// Only allow requests from trusted frontend domains defined in the .env file.
-// This includes both the local development domain and the production domain (e.g., Vercel).
-// Requests from tools like Postman (which have no origin) are also allowed for convenience.
-// This improves security by rejecting requests from unknown origins.
-const allowedOrigins = [
-  process.env.CLIENT_DEVELOPMENT_DOMAIN,
-  process.env.CLIENT_PRODUCTION_DOMAIN,
-];
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
-
-// routes
-app.use('/api/users', require('./routes/userRoute'));
-app.use('/api/books', require('./routes/bookRoute'));
-app.use('/api/favoriteList', require('./routes/favoritesRoute'));
-app.use('/api/loans', require('./routes/loanRoute'));
-
-// Health check endpoints
-app.use('/health', require('./routes/healthRoute'));
-
-// error handling middleware (must be after routes)
-const { notFound, errorHandler } = require('./middlewares/errorHandler');
-app.use(notFound);
-app.use(errorHandler);
-
-// running the server
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  logger.info(`Server Is Running in ${process.env.NODE_ENV || 'development'} Mode on Port ${PORT}`);
-});
+let server;
 
+const startServer = async () => {
+  try {
+    await dbConnect();
+    server = app.listen(PORT, () => {
+      logger.info(`Server Is Running in ${process.env.NODE_ENV || 'development'} Mode on Port ${PORT}`);
+    });
+  } catch (error) {
+    logger.error('Server startup failed', { message: error.message });
+    process.exitCode = 1;
+  }
+};
+
+const shutdown = (signal) => {
+  logger.info(`Received ${signal}, shutting down gracefully`);
+
+  const closeServer = server
+    ? new Promise((resolve) => server.close(resolve))
+    : Promise.resolve();
+
+  closeServer
+    .then(() => mongoose.connection.close(false))
+    .then(() => process.exit(0))
+    .catch((error) => {
+      logger.error('Graceful shutdown failed', { message: error.message });
+      process.exit(1);
+    });
+};
+
+process.once('SIGTERM', () => shutdown('SIGTERM'));
+process.once('SIGINT', () => shutdown('SIGINT'));
+
+startServer();

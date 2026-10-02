@@ -34,9 +34,9 @@ const loginValidation = [
     .isEmail().withMessage('Invalid email format')
     .normalizeEmail()
     .escape(),
+  // Passwords are opaque values: trimming here would change the password.
   body('password')
-    .notEmpty().withMessage('Password is required')
-    .trim(),
+    .notEmpty().withMessage('Password is required'),
   validate
 ];
 

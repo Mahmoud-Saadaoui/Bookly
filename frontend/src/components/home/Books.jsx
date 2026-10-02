@@ -13,7 +13,7 @@ function Books({ currentPage }) {
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    dispatch(fetchBooks(currentPage));
+    dispatch(fetchBooks(currentPage + 1));
   }, [dispatch, currentPage]);
 
   const showBookDetails = (id) => {
@@ -32,7 +32,7 @@ function Books({ currentPage }) {
           <Oval
             height={120}
             width={120}
-            color="rgb(247, 96, 14)"
+            color="var(--color-brand)"
             wrapperStyle={{
               height: "70vh",
               display: "flex",

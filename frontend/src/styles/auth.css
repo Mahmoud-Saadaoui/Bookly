@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--color-primary-900) 0%, #1e3a5f 50%, var(--color-secondary-600) 100%);
+  background: linear-gradient(135deg, var(--color-ink) 0%, var(--color-brand-dark) 50%, var(--color-brand) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -27,7 +27,7 @@
 .auth-wrapper::before {
   width: 500px;
   height: 500px;
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  background: var(--gradient-brand);
   top: -250px;
   right: -100px;
 }
@@ -85,7 +85,7 @@
    ======================================== */
 
 .auth-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--color-surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: var(--spacing-3xl);
@@ -162,7 +162,7 @@
   font-family: 'Cairo', sans-serif;
   font-weight: 500;
   color: var(--color-primary-900);
-  background: white;
+  background: var(--color-surface);
   transition: all var(--transition-base);
 }
 
@@ -177,7 +177,7 @@
 .form-input:focus {
   outline: none;
   border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 4px rgb(var(--color-brand-rgb) / 0.1);
 }
 
 .form-input::placeholder {
@@ -293,7 +293,7 @@
 
 .auth-button {
   padding: var(--spacing-md) var(--spacing-xl);
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+  background: var(--gradient-brand);
   color: white;
   border: none;
   border-radius: var(--radius-lg);
@@ -306,13 +306,13 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: var(--shadow-indigo);
 }
 
 .auth-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-600));
+  box-shadow: var(--shadow-indigo-lg);
+  background: var(--gradient-brand-hover);
 }
 
 .auth-button:active:not(:disabled) {
@@ -371,7 +371,7 @@
 }
 
 .auth-link:hover {
-  background: rgba(99, 102, 241, 0.1);
+  background: rgb(var(--color-brand-rgb) / 0.1);
   color: var(--color-rose-500);
 }
 
@@ -396,7 +396,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(244, 63, 94, 0.2) 100%);
+  background: linear-gradient(135deg, rgb(var(--color-brand-rgb) / 0.2) 0%, var(--color-sand) 100%);
   opacity: 0.6;
 }
 
@@ -476,7 +476,7 @@
    ======================================== */
 
 .dark .auth-wrapper {
-  background: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #0d2520 100%);
+  background: linear-gradient(135deg, var(--color-ink) 0%, var(--color-brand-dark) 50%, var(--color-ink) 100%);
 }
 
 .dark .auth-card {
@@ -508,7 +508,7 @@
 
 .dark .form-input:focus {
   border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 4px rgb(var(--color-brand-rgb) / 0.15);
 }
 
 .dark .form-input:disabled {

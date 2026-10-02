@@ -1,48 +1,32 @@
 const cloudinary = require('cloudinary').v2;
+const { Readable } = require('stream');
+const logger = require('./logger');
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-})
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-// Cloudinary Upload Image
-// const cloudinaryUploadImage = async(fileToUpload) => {
-//     try {
-//         const data = await cloudinary.uploader.upload(fileToUpload, {
-//             resource_type: 'auto',   
-//         })
-//         return data
-//     } catch (error) {
-//         console.log(error)
-//         throw new Error('Internal Server Error (cloudinary)')
-//     }
-// }
+const cloudinaryUploadImage = (buffer) => new Promise((resolve, reject) => {
+  const uploadStream = cloudinary.uploader.upload_stream(
+    { resource_type: 'image' },
+    (error, result) => error ? reject(error) : resolve(result)
+  );
 
-// Cloudinary Remove Image
-const cloudinaryRemoveImage = async(imagePublicId ) => {
-    try {
-        const result = await cloudinary.uploader.destroy(imagePublicId)
-        return result
-    } catch (error) {
-        console.log(error)
-        throw new Error('Internal Server Error (cloudinary)')
-    }
-}
+  Readable.from([buffer]).pipe(uploadStream);
+});
 
-// Cloudinary Remove Multiple Images
-const cloudinaryRemoveMultipleImages = async(publicIds ) => {
-    try {
-        const result = await cloudinary.v2.api.delete_resources(publicIds)
-        return result
-    } catch (error) {
-        console.log(error)
-        throw new Error('Internal Server Error (cloudinary)')
-    }
-}
+const cloudinaryRemoveImage = async (imagePublicId) => {
+  try {
+    return await cloudinary.uploader.destroy(imagePublicId);
+  } catch (error) {
+    logger.error('Cloudinary image deletion failed', { message: error.message });
+    throw new Error('Cloudinary image deletion failed');
+  }
+};
 
 module.exports = {
-    cloudinary,
-    cloudinaryRemoveImage,
-    cloudinaryRemoveMultipleImages
-}
+  cloudinaryUploadImage,
+  cloudinaryRemoveImage
+};

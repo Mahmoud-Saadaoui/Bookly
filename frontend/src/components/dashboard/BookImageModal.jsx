@@ -4,63 +4,101 @@ import { useDispatch } from "react-redux";
 import { updateBookImage } from '../../redux/apiCalls/bookApiCall';
 import { toast } from 'react-toastify';
 
-function BookImageModal({ book, setFileName, setSelectedBook, setBookImageModal }) {
-    const dispatch = useDispatch()
+function BookImageModal({ book, setSelectedBook, setBookImageModal }) {
+    const dispatch = useDispatch();
+    const [file, setFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(book?.image?.url || '');
 
-    const [file, setFile] = useState(null)
+    const closeImageModal = () => {
+        setSelectedBook(null);
+        setBookImageModal(false);
+    };
 
-    const updateImageHandler = (id) => {
-        if (!file) return toast.warning("There is no file");
+    useEffect(() => {
+        if (!file) {
+            setPreviewUrl(book?.image?.url || '');
+            return undefined;
+        }
+
+        const objectUrl = URL.createObjectURL(file);
+        setPreviewUrl(objectUrl);
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [book, file]);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") closeImageModal();
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    });
+
+    const updateImageHandler = async () => {
+        if (!file) {
+            toast.warning("There is no file");
+            return;
+        }
+
+        if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
+            toast.error("Only JPEG, PNG, GIF and WebP images are allowed");
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("Image must not exceed 5 MB");
+            return;
+        }
 
         const formData = new FormData();
         formData.append("image", file);
 
-        dispatch(updateBookImage(formData, id))
-        setSelectedBook(null)  
-        setBookImageModal(false)
-    }
-    
-    useEffect(() => {
-        if (book) {
-          setFileName(book?.image.url)
+        try {
+            await dispatch(updateBookImage(formData, book.id));
+            closeImageModal();
+        } catch {
+            // The API thunk already displays the actionable error.
         }
-      }, [book, setFileName]);
-  return (
-    <div className="book-image-modal">
-    <div className="book-modal-image-container">
-        <button
-            type="button"
-            className="book-image-modal-close-btn"
-            onClick={() => setSelectedBook(null)}
-        >
-            <FaWindowClose />
-        </button>
-        <div className="book-image-modal-img-content">
-            <img
-                className='book-image-modal-image'
-                src={file ? URL.createObjectURL(file) : book?.image.url}
-                alt="Book"
-            />
-            <label htmlFor="file-input" className="book-image-modal-img-content-label">
-                Upload
-            </label>
-            <input 
-                type="file" 
-                id="file-input" 
-                style={{ display: "none" }}
-                onChange={(e) => setFile(e.target.files[0])} 
-            />
-            <button
-                className="book-image-modal-save-btn"
-                type="button"
-                onClick={()=>updateImageHandler(book.id)}
-            >
-                Save
-            </button>
+    };
+
+    return (
+        <div className="book-image-modal show" role="dialog" aria-modal="true" aria-label="Update book image">
+            <div className="book-modal-image-container">
+                <button
+                    type="button"
+                    className="book-image-modal-close-btn"
+                    aria-label="Close image dialog"
+                    onClick={closeImageModal}
+                >
+                    <FaWindowClose aria-hidden="true" />
+                </button>
+                <div className="book-image-modal-img-content">
+                    <img
+                        className='book-image-modal-image'
+                        src={previewUrl}
+                        alt={`Cover of ${book?.title || 'book'}`}
+                    />
+                    <label htmlFor="file-input" className="book-image-modal-img-content-label">
+                        Upload
+                    </label>
+                    <input
+                        type="file"
+                        id="file-input"
+                        accept="image/jpeg,image/png,image/gif,image/webp"
+                        style={{ display: "none" }}
+                        onChange={(event) => setFile(event.target.files?.[0] || null)}
+                    />
+                    <button
+                        className="book-image-modal-save-btn"
+                        type="button"
+                        onClick={updateImageHandler}
+                    >
+                        Save
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-  )
+    );
 }
 
-export default BookImageModal
+export default BookImageModal;

@@ -8,7 +8,7 @@
   justify-content: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-xl);
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+   background: var(--color-brand);
   color: white;
   border: none;
   border-radius: var(--radius-lg);
@@ -17,7 +17,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition-base);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+   box-shadow: var(--shadow-indigo);
   text-decoration: none;
   position: relative;
   overflow: hidden;
@@ -40,8 +40,8 @@
 
 .loan-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-600));
+   box-shadow: var(--shadow-indigo-lg);
+   background: var(--color-brand-dark);
 }
 
 .loan-button:active:not(:disabled) {
@@ -98,10 +98,10 @@
 .loan-section {
   margin: var(--spacing-3xl) 0;
   padding: var(--spacing-2xl);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(244, 63, 94, 0.05) 100%);
+   background: linear-gradient(135deg, var(--color-paper) 0%, var(--color-sand) 100%);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.15);
+   box-shadow: var(--shadow-lg);
+   border: 1px solid var(--color-brand-soft);
 }
 
 .loan-header {
@@ -183,7 +183,7 @@
   gap: var(--spacing-sm);
   width: 100%;
   padding: var(--spacing-md) var(--spacing-xl);
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+   background: var(--gradient-brand);
   color: white;
   border: none;
   border-radius: var(--radius-lg);
@@ -192,13 +192,13 @@
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition-base);
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+   box-shadow: var(--shadow-indigo);
 }
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-  background: linear-gradient(135deg, var(--color-primary-600), var(--color-rose-600));
+   box-shadow: var(--shadow-indigo-lg);
+   background: var(--gradient-brand-hover);
 }
 
 .submit-btn:disabled {
@@ -227,8 +227,8 @@
 /* Error Message */
 .error-message {
   background: var(--color-error-bg);
-  border: 2px solid #FCA5A5;
-  color: #991B1B;
+   border: 2px solid var(--color-brand-soft);
+   color: var(--color-brand-dark);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-lg);
   margin: var(--spacing-md) 0;
@@ -417,8 +417,8 @@
 
 /* Dark Mode */
 .dark .loan-section {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(244, 63, 94, 0.1) 100%);
-  border-color: rgba(99, 102, 241, 0.3);
+   background: linear-gradient(135deg, rgb(var(--color-brand-rgb) / 0.1) 0%, var(--color-sand) 100%);
+   border-color: var(--color-brand);
 }
 
 .dark .loan-header h3 {
@@ -430,7 +430,7 @@
 }
 
 .dark .selected-dates-info {
-  background: rgba(99, 102, 241, 0.1);
+   background: rgb(var(--color-brand-rgb) / 0.1);
   border-color: var(--color-border);
 }
 
@@ -444,9 +444,9 @@
 }
 
 .dark .loan-button {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+   background: var(--gradient-brand);
 }
 
 .dark .submit-btn {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-rose-500));
+   background: var(--gradient-brand);
 }

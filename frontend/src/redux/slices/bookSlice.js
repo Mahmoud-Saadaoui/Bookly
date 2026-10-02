@@ -1,65 +1,90 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const emptyPagination = {
+  page: 1,
+  limit: 10,
+  total: 0,
+  pages: 0,
+};
+
+const initialState = {
+  books: {
+    data: [],
+    pagination: emptyPagination,
+  },
+  selectedBook: null,
+  reviews: {
+    data: [],
+    pagination: {
+      page: 1,
+      limit: 20,
+      total: 0,
+      pages: 0,
+    },
+  },
+  error: null,
+  loading: false,
+  reviewsLoading: false,
+};
+
 const bookSlice = createSlice({
   name: "book",
-  initialState: {
-    books: [],
-    reviews: [],
-    error: false,
-    loading: false,
-  },
+  initialState,
   reducers: {
     getBooks(state, action) {
       state.books = action.payload;
+      state.error = null;
     },
     findBook(state, action) {
-      state.books = action.payload;
-    },
-    addReview(state, action) {
-      if (Array.isArray(state.books)) {
-        const bookIndex = state.books.findIndex(b => b.id === action.payload.bookId);
-        if (bookIndex !== -1) {
-          state.books[bookIndex].reviews.push(action.payload.review);
-        }
-      }
+      state.selectedBook = action.payload;
+      state.error = null;
     },
     getReviews(state, action) {
       state.reviews = action.payload;
+      state.error = null;
+    },
+    appendReviews(state, action) {
+      state.reviews = {
+        ...action.payload,
+        data: [...state.reviews.data, ...action.payload.data],
+      };
+      state.error = null;
     },
     setLoading(state) {
       state.loading = true;
+      state.error = null;
     },
     clearLoading(state) {
       state.loading = false;
     },
-    setError(state) {
-      state.error = true;
+    setReviewsLoading(state) {
+      state.reviewsLoading = true;
+    },
+    clearReviewsLoading(state) {
+      state.reviewsLoading = false;
+    },
+    setError(state, action) {
+      state.error = action.payload || "An unexpected error occurred";
     },
     clearError(state) {
-      state.error = false;
+      state.error = null;
     },
     addBook(state, action) {
-      state.books = [...state.books, action.payload];
+      state.books.data = [action.payload, ...state.books.data];
     },
     deleteBook(state, action) {
-      if (Array.isArray(state.books)) {
-        state.books = state.books.filter(el => el.id !== action.payload);
-      } else if (state.books.data) {
-        state.books.data = state.books.data.filter(el => el.id !== action.payload);
-      }
+      state.books.data = state.books.data.filter((book) => book.id !== action.payload);
     },
     updateBook(state, action) {
-      if (Array.isArray(state.books)) {
-        state.books = state.books.map((book) =>
-          book.id === action.payload.id ? action.payload : book
-        );
-      } else if (state.books.data) {
-        state.books.data = state.books.data.map((book) =>
-          book.id === action.payload.id ? action.payload : book
-        );
+      state.books.data = state.books.data.map((book) => (
+        book.id === action.payload.id ? { ...book, ...action.payload } : book
+      ));
+
+      if (state.selectedBook?.id === action.payload.id) {
+        state.selectedBook = { ...state.selectedBook, ...action.payload };
       }
-    }
-  }
+    },
+  },
 });
 
 const bookReducer = bookSlice.reducer;

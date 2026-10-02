@@ -119,8 +119,8 @@ const badRequestResponse = (res, message = 'Bad request', errors = null) => {
  * @param {Response} res - Express response object
  * @param {string} message - Error message
  */
-const conflictResponse = (res, message = 'Resource conflict') => {
-  return errorResponse(res, message, 409);
+const conflictResponse = (res, message = 'Resource conflict', errors = null) => {
+  return errorResponse(res, message, 409, errors);
 };
 
 /**

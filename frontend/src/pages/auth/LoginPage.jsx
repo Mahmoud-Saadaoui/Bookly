@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/services/authApiCalls';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import '../../styles/auth.css';
 
 function LoginPage() {
@@ -54,8 +53,7 @@ function LoginPage() {
   };
 
   const showError = (message) => {
-    // This would be replaced by a toast in the API call
-    console.error(message);
+    toast.error(message);
   };
 
   return (
@@ -80,8 +78,7 @@ function LoginPage() {
                   placeholder="your.email@example.com"
                   className="form-input"
                   autoComplete="email"
-                  aria-invalid={!email || isValidEmail(email) ? "false" : "true"}
-                  aria-describedby="email-error"
+                  aria-invalid={email.length > 0 && !isValidEmail(email) ? "true" : "false"}
                   disabled={isSubmitting}
                 />
               </div>
@@ -101,8 +98,7 @@ function LoginPage() {
                   placeholder="Enter your password"
                   className="form-input"
                   autoComplete="current-password"
-                  aria-invalid={password ? "false" : "true"}
-                  aria-describedby="password-error"
+                  aria-invalid="false"
                   disabled={isSubmitting}
                 />
                 <button
@@ -110,7 +106,6 @@ function LoginPage() {
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  tabIndex="-1"
                 >
                   {showPassword ? (
                     <span aria-hidden="true">👁️</span>
@@ -119,20 +114,6 @@ function LoginPage() {
                   )}
                 </button>
               </div>
-            </div>
-
-            {/* Remember Me & Forgot Password */}
-            <div className="auth-options">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  className="checkbox"
-                />
-                <span>Remember me</span>
-              </label>
-              <a href="/forgot-password" className="forgot-link">
-                Forgot password?
-              </a>
             </div>
 
             {/* Submit Button */}
@@ -170,7 +151,6 @@ function LoginPage() {
           </div>
         </div>
       </div>
-      <ToastContainer theme="light" position="top-right" />
     </div>
   );
 }

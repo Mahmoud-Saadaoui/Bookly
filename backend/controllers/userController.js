@@ -5,96 +5,71 @@ const { asyncHandler } = require('../middlewares/asyncHandler');
 const {
   createdResponse,
   successResponse,
-  badRequestResponse,
   conflictResponse,
-  internalErrorResponse,
+  notFoundResponse,
   unauthorizedResponse
 } = require('../utils/apiResponse');
 
-// method   POST
-// route    api/users/register
-// desc     Register new user
-// access   Public
-const registerUser = asyncHandler(async(req, res) => {
-    const { name, email, password } = req.body;
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+  const existingUser = await User.exists({ email });
 
-    try {
-        let user = await User.findOne({ email });
+  if (existingUser) {
+    return conflictResponse(res, 'User already exists');
+  }
 
-        // Check if user exists
-        if (user) {
-            return conflictResponse(res, 'User already exists');
-        }
+  const saltRounds = parseInt(process.env.BCRYPT_ROUNDS, 10) || 12;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword
+  });
 
-        user = new User({
-            name,
-            email,
-            password
-        });
-
-        // Encrypt Password with increased cost factor
-        const saltRounds = parseInt(process.env.BCRYPT_ROUNDS) || 12;
-        user.password = await bcrypt.hash(password, saltRounds);
-        await user.save();
-
-        return createdResponse(res, {
-            name: user.name,
-            isAdmin: user.isAdmin,
-            accessToken: jwtHelpers.sign({ sub: user.id })
-        }, 'User registered successfully');
-    } catch (err) {
-        console.error('Error registering user:', err.message);
-        return internalErrorResponse(res, 'Failed to register user');
-    }
+    return createdResponse(res, {
+      id: user.id,
+      name: user.name,
+      isAdmin: user.isAdmin,
+    accessToken: jwtHelpers.sign({ sub: user.id })
+  }, 'User registered successfully');
 });
 
-// method   POST
-// route    api/users/login
-// desc     Login user
-// access   Public
-const loginUser = asyncHandler(async(req, res) => {
-    const { email, password } = req.body;
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email }).select('+password');
+  const isPasswordValid = user && await bcrypt.compare(password, user.password);
 
-    try {
-        let user = await User.findOne({ email });
+  if (!isPasswordValid) {
+    return unauthorizedResponse(res, 'Invalid email or password');
+  }
 
-        if (user && bcrypt.compareSync(password, user.password)) {
-            return successResponse(res, {
-                name: user.name,
-                isAdmin: user.isAdmin,
-                accessToken: jwtHelpers.sign({ sub: user.id })
-            }, 'Login successful');
-        } else {
-            return unauthorizedResponse(res, 'Invalid email or password');
-        }
-    } catch (err) {
-        console.error('Error logging in user:', err.message);
-        return internalErrorResponse(res, 'Failed to login');
-    }
+  return successResponse(res, {
+    id: user.id,
+    name: user.name,
+    isAdmin: user.isAdmin,
+    accessToken: jwtHelpers.sign({ sub: user.id })
+  }, 'Login successful');
 });
 
-// method   GET
-// route    api/users/me
-// desc     User Authentication
-// access   Private
-const getMe = asyncHandler(async(req, res) => {
-    try {
-        const user = await User.findById(req.userId).select('-password');
+const getMe = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.userId)
+    .select('name email isAdmin')
+    .lean();
 
-        return successResponse(res, {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            isAdmin: user.isAdmin
-        }, 'User retrieved successfully');
-    } catch (err) {
-        console.error('Error getting user:', err.message);
-        return internalErrorResponse(res, 'Failed to retrieve user');
-    }
+  if (!user) {
+    return notFoundResponse(res, 'User');
+  }
+
+  return successResponse(res, {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin
+  }, 'User retrieved successfully');
 });
 
 module.exports = {
-    registerUser,
-    loginUser,
-    getMe
+  registerUser,
+  loginUser,
+  getMe
 };

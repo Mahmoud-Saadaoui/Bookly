@@ -15,9 +15,10 @@ const {
   loanIdValidation,
   bookIdValidation
 } = require('../validators/loanValidator');
+const { loanCreationLimiter } = require('../middlewares/rateLimiter');
 
 // Create a new loan
-router.post('/', auth.check, createLoanValidation, createLoan);
+router.post('/', auth.check, loanCreationLimiter, createLoanValidation, createLoan);
 
 // Get all loans for a book (unavailable dates) - Public route
 router.get('/book/:bookId', bookIdValidation, getBookLoanDates);

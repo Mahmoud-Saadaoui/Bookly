@@ -26,7 +26,6 @@ function AdminDashboardPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
-    dispatch(fetchBooks(selected));
   };
 
   /**
@@ -44,13 +43,23 @@ function AdminDashboardPage() {
     e.preventDefault();
     if (title.trim() === "") return toast.error("Book Title is required");
     if (category.trim() === "") return toast.error("Book Category is required");
-    if (description.trim() === "")
-      return toast.error("Book Description is required (min. 10 characters)");
-    if (author.trim() === "") return toast.error("Book Author is required");
-    if (language.trim() === "") return toast.error("Book Language is required");
-    if (PublicationDate.trim() === "")
-      return toast.error("Book Publication Date is required");
+    if (description.trim().length < 10)
+      return toast.error("Book Description must contain at least 10 characters");
+    if (description.length > 5000)
+      return toast.error("Book Description cannot exceed 5000 characters");
+    if (title.trim().length > 200)
+      return toast.error("Book Title cannot exceed 200 characters");
+    if (category.trim().length < 2 || category.trim().length > 50)
+      return toast.error("Book Category must contain between 2 and 50 characters");
+    if (author.trim().length < 2 || author.trim().length > 100)
+      return toast.error("Book Author must contain between 2 and 100 characters");
+    if (language.trim().length > 50)
+      return toast.error("Book Language cannot exceed 50 characters");
     if (!fileName) return toast.error("Book Image is required");
+    if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(fileName.type))
+      return toast.error("Only JPEG, PNG, GIF and WebP images are allowed");
+    if (fileName.size > 5 * 1024 * 1024)
+      return toast.error("Image must not exceed 5 MB");
 
     const formData = new FormData();
     formData.append("image", fileName);
@@ -63,7 +72,7 @@ function AdminDashboardPage() {
 
     dispatch(addBook(formData))
       .then(() => {
-        dispatch(fetchBooks(currentPage));
+        dispatch(fetchBooks(currentPage + 1));
         // Only reset form on success
         setFileName(null);
         setTitle("");
@@ -82,7 +91,7 @@ function AdminDashboardPage() {
    * Fetch All Books With Pagination
    */
   useEffect(() => {
-    dispatch(fetchBooks(currentPage));
+    dispatch(fetchBooks(currentPage + 1));
   }, [dispatch, currentPage]);
 
   /**
@@ -98,7 +107,7 @@ function AdminDashboardPage() {
     }).then((isOk) => {
       if (isOk) {
         dispatch(removeBook(id)).then(() => {
-          dispatch(fetchBooks(currentPage));
+          dispatch(fetchBooks(currentPage + 1));
         });
       } else {
         swal("something went wrong");
@@ -126,7 +135,7 @@ function AdminDashboardPage() {
       <Oval
         height={120}
         width={120}
-        color="rgb(247, 96, 14)"
+        color="var(--color-brand)"
         wrapperStyle={{
           height: "90vh",
           display: "flex",

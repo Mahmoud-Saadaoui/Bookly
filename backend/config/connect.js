@@ -1,12 +1,17 @@
 const mongoose = require("mongoose")
+const logger = require('../utils/logger');
+
+mongoose.set('sanitizeFilter', true);
 
 const dbConnect = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI)
-        console.log("Connect To MongoDB")
-    } catch (error) {
-        console.log("Connection Failed To MongoDB!", error)
-    }
+    await mongoose.connect(process.env.MONGO_URI, {
+        maxPoolSize: Number(process.env.MONGO_MAX_POOL_SIZE) || 20,
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 5000,
+        socketTimeoutMS: 45000
+    });
+
+    logger.info('Connected to MongoDB');
 }
 
 module.exports = dbConnect

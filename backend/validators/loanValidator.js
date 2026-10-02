@@ -1,5 +1,29 @@
-const { body, param, query } = require('express-validator');
+const { body, param, query, header } = require('express-validator');
 const { validate } = require('./validate');
+
+const MAX_LOAN_DURATION_DAYS = Number(process.env.MAX_LOAN_DURATION_DAYS) || 30;
+
+const validateLoanDates = (loanDateValue, returnDateValue, { allowPast = false } = {}) => {
+  const loanDate = new Date(loanDateValue);
+  const returnDate = new Date(returnDateValue);
+
+  if (Number.isNaN(loanDate.getTime()) || Number.isNaN(returnDate.getTime())) {
+    throw new Error('Loan and return dates must be valid dates');
+  }
+
+  if (!allowPast && loanDate < new Date()) {
+    throw new Error('Loan date cannot be in the past');
+  }
+
+  const duration = returnDate.getTime() - loanDate.getTime();
+  if (duration <= 0) {
+    throw new Error('Return date must be after loan date');
+  }
+
+  if (duration > MAX_LOAN_DURATION_DAYS * 24 * 60 * 60 * 1000) {
+    throw new Error(`Loan duration cannot exceed ${MAX_LOAN_DURATION_DAYS} days`);
+  }
+};
 
 /**
  * Validation rules for creating a loan
@@ -11,22 +35,30 @@ const createLoanValidation = [
   body('loanDate')
     .notEmpty().withMessage('Loan date is required')
     .isISO8601().withMessage('Invalid loan date format')
-    .custom((value, { req }) => {
-      const loanDate = new Date(value);
-      const returnDate = new Date(req.body.returnDate);
-      if (loanDate >= returnDate) {
-        throw new Error('Loan date must be before return date');
-      }
-      return true;
-    }),
+     .custom((value, { req }) => {
+       if (req.body.returnDate) {
+         validateLoanDates(value, req.body.returnDate);
+       }
+       return true;
+     }),
   body('returnDate')
     .notEmpty().withMessage('Return date is required')
-    .isISO8601().withMessage('Invalid return date format'),
+     .isISO8601().withMessage('Invalid return date format')
+     .custom((value, { req }) => {
+       if (req.body.loanDate) {
+         validateLoanDates(req.body.loanDate, value);
+       }
+       return true;
+     }),
   body('notes')
     .optional()
     .trim()
     .isLength({ max: 500 }).withMessage('Notes must be less than 500 characters')
     .escape(),
+  header('Idempotency-Key')
+    .optional()
+    .trim()
+    .isLength({ min: 8, max: 128 }).withMessage('Idempotency key must be between 8 and 128 characters'),
   validate
 ];
 
@@ -43,11 +75,7 @@ const checkAvailabilityValidation = [
     .notEmpty().withMessage('End date is required')
     .isISO8601().withMessage('Invalid end date format')
     .custom((value, { req }) => {
-      const startDate = new Date(req.query.startDate);
-      const endDate = new Date(value);
-      if (startDate >= endDate) {
-        throw new Error('End date must be after start date');
-      }
+      validateLoanDates(req.query.startDate, value, { allowPast: true });
       return true;
     }),
   validate

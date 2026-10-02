@@ -4,7 +4,9 @@ const { forbiddenResponse } = require('../utils/apiResponse');
 
 exports.check = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId)
+      .select('_id isAdmin')
+      .lean();
 
     if (!user) {
       logger.warn('Admin check failed - user not found', { userId: req.userId });
@@ -23,6 +25,6 @@ exports.check = async (req, res, next) => {
     return forbiddenResponse(res, 'Admin access required');
   } catch (error) {
     logger.error('Error in admin middleware', { error: error.message });
-    return forbiddenResponse(res, 'Failed to verify admin status');
+    return next(error);
   }
 };

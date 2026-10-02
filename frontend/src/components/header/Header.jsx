@@ -42,7 +42,14 @@ function Header() {
   return (
     <>
       {/* Overlay for mobile menu */}
-      {click && <div className="nav-overlay active" onClick={handleClick}></div>}
+      {click && (
+        <button
+          type="button"
+          className="nav-overlay active"
+          onClick={handleClick}
+          aria-label="Close navigation menu"
+        />
+      )}
 
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-container">
@@ -51,7 +58,10 @@ function Header() {
             <span className="nav-logo-text">Bookly</span>
           </Link>
 
-          <ul className={click ? "nav-menu active" : "nav-menu"}>
+          <ul
+            id="primary-navigation"
+            className={click ? "nav-menu active" : "nav-menu"}
+          >
             {user ? (
               <>
                 <li className="nav-item">
@@ -79,6 +89,19 @@ function Header() {
                     }}
                   >
                     Books
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    to="/loans"
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
+                    My Loans
                   </NavLink>
                 </li>
                 <li className="nav-item">
@@ -175,6 +198,8 @@ function Header() {
             onClick={handleClick}
             aria-label="Toggle navigation menu"
             aria-expanded={click}
+            aria-controls="primary-navigation"
+            type="button"
           >
             {click ? (
               <span className="icon">
