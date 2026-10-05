@@ -30,47 +30,7 @@ const apiLimiter = rateLimit({
   legacyHeaders: false
 });
 
-/**
- * Rate limiter for book creation (admin only)
- * Prevents spam book creation
- */
-const bookCreationLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10, // Limit to 10 books per hour per admin
-  message: {
-    success: false,
-    message: 'Book creation rate limit exceeded'
-  },
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-const reviewLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 20,
-  message: {
-    success: false,
-    message: 'Review rate limit exceeded'
-  },
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-const loanCreationLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 30,
-  message: {
-    success: false,
-    message: 'Loan creation rate limit exceeded'
-  },
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
 module.exports = {
   authLimiter,
-  apiLimiter,
-  bookCreationLimiter,
-  reviewLimiter,
-  loanCreationLimiter
+  apiLimiter
 };

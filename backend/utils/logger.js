@@ -28,7 +28,7 @@ const consoleFormat = winston.format.combine(
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: logFormat,
-  defaultMeta: { service: 'bookly-backend' },
+  defaultMeta: { service: 'fleetly-api' },
   transports: [
     // Write all logs to file
     new winston.transports.File({

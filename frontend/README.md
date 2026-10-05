@@ -1,121 +1,126 @@
-# Bookly Frontend
+<div align="center">
 
-Frontend React/Vite de Bookly.
+# React Starter Kit
 
-## Stack actuelle
+[![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![i18next](https://img.shields.io/badge/i18next-25-26A69A?style=for-the-badge&logo=i18next&logoColor=white)](https://www.i18next.com/)
 
-- React 18
-- Vite 7
-- Redux Toolkit et React Redux
-- React Router DOM 6
-- Axios
-- Vitest
-- CSS natif
+**A reusable, multilingual, RTL-ready React boilerplate for fast project bootstrapping.**
 
-Les versions déclarées sont conservées dans `package.json`.
+</div>
 
-## Installation
+---
 
-Prérequis : Node.js `20.19+` et un backend disponible sur `http://localhost:5000`.
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| **i18n Ready** | English, French, Arabic with RTL auto-switching |
+| **Routing** | React Router 7 with lazy-loaded routes |
+| **Styling** | Tailwind CSS 4 configured out of the box |
+| **Error Handling** | Global error boundary with i18n support |
+| **Loading States** | Reusable spinner component |
+| **DX** | ESLint + Vite HMR, code-split vendor chunks |
+
+## Tech Stack
+
+- **React 18** + **Vite 7**
+- **Tailwind CSS 4** (`@tailwindcss/vite`)
+- **React Router 7** (lazy routes + Suspense)
+- **i18next** + **react-i18next** + **browser-language-detector**
+- **ESLint 9** (flat config, react-hooks, react-refresh)
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** v18 or higher
+- **npm** (or yarn / pnpm)
+
+### Installation
 
 ```bash
+git clone <your-repo-url> my-project
+cd my-project
 npm install
-cp .env.example .env
-npm run frontend
+cp .env.example .env   # optional, configures client vars
+npm run dev
 ```
 
-Vite utilise le port `5173`.
+The app is available at `http://localhost:5173`.
 
-## Configuration
+### Available Scripts
 
-```env
-VITE_API_URL=http://localhost:5000/api
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | Auto-fix ESLint issues |
+| `npm run build:analyze` | Build with bundle analysis mode |
+
+## Project Structure
+
 ```
-
-Sans cette variable, l’application utilise `http://localhost:5000/api` en développement et `https://bookly-1rvp.onrender.com/api` en production.
-
-## Scripts
-
-```bash
-npm run frontend   # serveur de développement
-npm run build      # build dans dist/
-npm run preview    # prévisualisation du build
-npm test           # tests Vitest
-```
-
-## Routes
-
-| Route | Accès | Description |
-|---|---|---|
-| `/` | Public | Accueil |
-| `/books` | Public | Recherche, catégories et pagination |
-| `/login` | Public | Connexion |
-| `/register` | Public | Inscription |
-| `/books/:bookId` | Authentifié | Détails, avis et emprunt |
-| `/favorites` | Authentifié | Favoris |
-| `/loans` | Authentifié | Historique et retour des emprunts |
-| `/admin` | Administrateur | Gestion des livres |
-
-Les routes `/profile` et `/forgot-password` ne sont pas proposées car aucun endpoint backend correspondant n’existe.
-
-## Organisation
-
-```text
 src/
-├── components/       # Composants réutilisables
-├── pages/            # Pages liées aux routes
-├── redux/apiCalls/   # Appels API et thunks
-├── redux/slices/     # État Redux
-├── services/         # Instance Axios et intercepteurs
-├── hooks/            # Hooks réutilisables
-├── lib/              # Normalisation des réponses API
-└── styles/           # Styles
+├── assets/            # Images and media
+├── components/
+│   └── common/        # Reusable UI base (Loading, ErrorBoundary, ...)
+├── config/            # i18n configuration
+├── hooks/             # Custom hooks (shared, project-agnostic)
+├── layouts/           # Page layouts (MainLayout)
+├── locales/           # Translation files (en/fr/ar)
+├── pages/             # Route page components
+├── services/          # External services / API clients
+├── styles/            # Global styles, design tokens
+├── utils/             # Shared utility functions
+├── App.jsx            # Routes (lazy loaded)
+├── main.jsx           # Entry point
+└── index.css          # Tailwind import + global styles
 ```
 
-## API
+## Add a New Language
 
-`src/services/axiosInstance.js` :
+1. Create `src/locales/es.json` with the same keys.
+2. Register it in `src/config/i18n.js`:
 
-- utilise `VITE_API_URL` ;
-- ajoute automatiquement le token Bearer ;
-- gère les réponses `401` ;
-- exploite les réponses `{ success, message, data }` ;
-- gère les métadonnées de pagination.
+```javascript
+import es from "../locales/es.json";
 
-Les appels sont regroupés dans :
+i18n.init({
+  resources: {
+    en: { translation: en },
+    fr: { translation: fr },
+    ar: { translation: ar },
+    es: { translation: es },
+  },
+});
+```
 
-- `redux/apiCalls/authApiCalls.js`
-- `redux/apiCalls/bookApiCall.js`
-- `redux/apiCalls/favoritesApiCall.js`
-- `redux/apiCalls/loanApiCall.js`
+RTL languages (e.g. Arabic) are handled automatically by `MainLayout`.
 
-## Fonctionnalités connectées
+## Environment Variables
 
-- Authentification JWT.
-- Livres, recherche, catégories et pagination.
-- Favoris et avis.
-- Disponibilité, création et retour des emprunts.
-- Administration des livres et des couvertures.
+All client-exposed variables must be prefixed with `VITE_`. See `.env.example`.
 
-## Déploiement
+## Customization
+
+- **Fonts**: edit `src/index.css` (web font import).
+- **Theme colors**: add Tailwind theme tokens or CSS variables in `src/index.css`.
+- **UI base components**: extend `src/components/common/`.
+- **Default language**: change `fallbackLng` in `src/config/i18n.js`.
+
+## Deployment
 
 ```bash
-npm run build
+npm run build   # outputs to dist/
 ```
 
-Le build est généré dans `dist/`.
+Deploy the `dist/` folder to Vercel, Netlify, or any static host. Set your `VITE_*` variables in the hosting platform dashboard.
 
-Pour Netlify :
+## License
 
-- répertoire de publication : `dist`
-- commande : `npm run build`
-- variable : `VITE_API_URL`
-
-Le fichier `public/_redirects` configure le fallback SPA.
-
-## Règles de contribution
-
-- Utiliser l’instance `api` plutôt qu’un appel Axios direct dans un composant.
-- Gérer les états loading, empty et error.
-- Ne pas ajouter de fonctionnalité frontend sans contrat backend correspondant.
-- Ne jamais stocker de secret dans une variable `VITE_*`.
+MIT

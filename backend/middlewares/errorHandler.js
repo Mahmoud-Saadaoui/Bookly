@@ -60,12 +60,6 @@ exports.errorHandler = (err, req, res, next) => {
     return errorResponse(res, 'Token expired', 401);
   }
 
-  if (err.name === 'MulterError') {
-    return badRequestResponse(res, err.code === 'LIMIT_FILE_SIZE'
-      ? 'Image must not exceed 5 MB'
-      : 'Invalid file upload');
-  }
-
   if (err.array && typeof err.array === 'function') {
     return badRequestResponse(res, 'Validation failed', {
       errors: err.array()

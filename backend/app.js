@@ -36,10 +36,14 @@ app.use(cors({
 app.use('/api', apiLimiter);
 
 app.use('/api/users', require('./routes/userRoute'));
-app.use('/api/books', require('./routes/bookRoute'));
-app.use('/api/favoriteList', require('./routes/favoritesRoute'));
-app.use('/api/loans', require('./routes/loanRoute'));
-app.use('/api/config', require('./routes/configRoute'));
+app.use('/api/admin/users', require('./routes/userAdminRoute'));
+app.use('/api/vehicles', require('./routes/vehicleRoute'));
+app.use('/api/admin/vehicles', require('./routes/vehicleAdminRoute'));
+app.use('/api/bookings', require('./routes/bookingRoute'));
+app.use('/api/agent/bookings', require('./routes/bookingAgentRoute'));
+app.use('/api/branches', require('./routes/branchRoute'));
+app.use('/api/analytics', require('./routes/analyticsRoute'));
+app.use('/api/auth', require('./routes/authSocialRoute'));
 app.use('/health', require('./routes/healthRoute'));
 
 const { notFound, errorHandler } = require('./middlewares/errorHandler');

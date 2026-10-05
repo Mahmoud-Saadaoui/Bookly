@@ -30,6 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
       id: user.id,
       name: user.name,
       isAdmin: user.isAdmin,
+      role: user.isAdmin ? 'admin' : user.role,
     accessToken: jwtHelpers.sign({ sub: user.id })
   }, 'User registered successfully');
 });
@@ -47,13 +48,14 @@ const loginUser = asyncHandler(async (req, res) => {
     id: user.id,
     name: user.name,
     isAdmin: user.isAdmin,
+    role: user.isAdmin ? 'admin' : user.role,
     accessToken: jwtHelpers.sign({ sub: user.id })
   }, 'Login successful');
 });
 
 const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.userId)
-    .select('name email isAdmin')
+    .select('name email isAdmin role branchIds')
     .lean();
 
   if (!user) {
@@ -64,7 +66,9 @@ const getMe = asyncHandler(async (req, res) => {
     id: user._id,
     name: user.name,
     email: user.email,
-    isAdmin: user.isAdmin
+    isAdmin: user.isAdmin,
+    role: user.isAdmin ? 'admin' : user.role,
+    branchIds: user.branchIds
   }, 'User retrieved successfully');
 });
 

@@ -1,10 +1,7 @@
 const requiredVariables = [
   'MONGO_URI',
   'JWT_SECRET',
-  'JWT_EXPIRES_IN',
-  'CLOUDINARY_CLOUD_NAME',
-  'CLOUDINARY_API_KEY',
-  'CLOUDINARY_API_SECRET'
+  'JWT_EXPIRES_IN'
 ];
 
 const validateInteger = (name, { min, max }) => {
@@ -37,9 +34,6 @@ const validateEnv = () => {
   validateInteger('PORT', { min: 1, max: 65535 });
   validateInteger('TRUST_PROXY_HOPS', { min: 0, max: 10 });
   validateInteger('MONGO_MAX_POOL_SIZE', { min: 1, max: 500 });
-  validateInteger('MAX_LOAN_DURATION_DAYS', { min: 1, max: 365 });
-  validateInteger('MAX_REVIEWS_PER_BOOK', { min: 1, max: 10000 });
-  validateInteger('MAX_FAVORITES_PER_USER', { min: 1, max: 10000 });
 
   if (process.env.NODE_ENV === 'production' && !process.env.CLIENT_PRODUCTION_DOMAIN?.trim()) {
     throw new Error('CLIENT_PRODUCTION_DOMAIN is required in production');
@@ -49,6 +43,26 @@ const validateEnv = () => {
     const rounds = Number(process.env.BCRYPT_ROUNDS);
     if (!Number.isInteger(rounds) || rounds < 10 || rounds > 15) {
       throw new Error('BCRYPT_ROUNDS must be an integer between 10 and 15');
+    }
+  }
+
+  // Google OAuth validation (if configured)
+  if (process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_SECRET) {
+    if (!process.env.GOOGLE_CLIENT_ID?.trim()) {
+      throw new Error('GOOGLE_CLIENT_ID is required when Google OAuth is configured');
+    }
+    if (!process.env.GOOGLE_CLIENT_SECRET?.trim()) {
+      throw new Error('GOOGLE_CLIENT_SECRET is required when Google OAuth is configured');
+    }
+  }
+
+  // Facebook OAuth validation (if configured)
+  if (process.env.FACEBOOK_APP_ID || process.env.FACEBOOK_APP_SECRET) {
+    if (!process.env.FACEBOOK_APP_ID?.trim()) {
+      throw new Error('FACEBOOK_APP_ID is required when Facebook OAuth is configured');
+    }
+    if (!process.env.FACEBOOK_APP_SECRET?.trim()) {
+      throw new Error('FACEBOOK_APP_SECRET is required when Facebook OAuth is configured');
     }
   }
 };

@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "React Starter"
+  },
+  "nav": {
+    "home": "Accueil"
+  },
+  "home": {
+    "title": "Bonjour le monde",
+    "description": "Bienvenue dans le React Starter Kit. Cette page valide que le routing, i18n, Tailwind CSS et le layout sont correctement connectés."
+  },
+  "demo": {
+    "language": "Langue détectée",
+    "direction": "Direction du document",
+    "staks": "Environnement",
+    "status": "Prêt"
+  },
+  "footer": {
+    "copyright": "© {{year}} React Starter Kit",
+    "slogan": "Multilingue • RTL-ready • Réutilisable"
+  },
+  "common": {
+    "goHome": "Retour à l'accueil"
+  },
+  "error": {
+    "title": "Une erreur est survenue",
+    "message": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "goHome": "Retour à l'accueil",
+    "refresh": "Rafraîchir la page"
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "message": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "goHome": "Retour à l'accueil"
+  }
+}

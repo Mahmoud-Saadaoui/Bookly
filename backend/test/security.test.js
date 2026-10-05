@@ -78,12 +78,9 @@ test('replaces an invalid incoming request id', () => {
 
 test('rejects an invalid proxy configuration', () => {
   const requiredVariables = {
-    MONGO_URI: 'mongodb://localhost:27017/bookly',
+    MONGO_URI: 'mongodb://localhost:27017/fleetly',
     JWT_SECRET: 'test-secret-with-at-least-32-characters',
     JWT_EXPIRES_IN: '1h',
-    CLOUDINARY_CLOUD_NAME: 'cloud',
-    CLOUDINARY_API_KEY: 'key',
-    CLOUDINARY_API_SECRET: 'secret'
   };
   const previousValues = Object.fromEntries(
     Object.keys(requiredVariables).concat(['NODE_ENV', 'TRUST_PROXY_HOPS']).map((name) => [name, process.env[name]])

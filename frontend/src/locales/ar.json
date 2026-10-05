@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "React Starter"
+  },
+  "nav": {
+    "home": "الرئيسية"
+  },
+  "home": {
+    "title": "مرحبًا بالعالم",
+    "description": "مرحبًا بك في React Starter Kit. تتحقق هذه الصفحة من أن التوجيه وi18n وTailwind CSS والتخطيط متصلة بشكل صحيح."
+  },
+  "demo": {
+    "language": "اللغة المكتشفة",
+    "direction": "اتجاه المستند",
+    "staks": "البيئة",
+    "status": "جاهز"
+  },
+  "footer": {
+    "copyright": "© {{year}} React Starter Kit",
+    "slogan": "متعدد اللغات • دعم RTL • قابل لإعادة الاستخدام"
+  },
+  "common": {
+    "goHome": "الذهاب للرئيسية"
+  },
+  "error": {
+    "title": "حدث خطأ ما",
+    "message": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+    "goHome": "العودة للرئيسية",
+    "refresh": "تحديث الصفحة"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "message": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "goHome": "العودة للرئيسية"
+  }
+}
