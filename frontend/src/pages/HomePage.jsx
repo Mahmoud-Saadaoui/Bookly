@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeSection, setActiveSection] = useState(0);
   const sectionsRef = useRef([]);
 
   useEffect(() => {
@@ -12,13 +11,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(Number(entry.target.dataset.index));
-          }
-        });
-      },
+      () => {},
       { threshold: 0.3 }
     );
 
@@ -28,10 +21,6 @@ const HomePage = () => {
 
     return () => observer.disconnect();
   }, []);
-
-  const scrollToSection = (index) => {
-    sectionsRef.current[index]?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <div className="min-h-screen bg-dark text-white overflow-x-hidden">
