@@ -44,7 +44,7 @@ const BookingsList = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold mb-2">Réservations</h1>
+        <h1 className="text-3xl font-cairo font-bold mb-2">Réservations</h1>
         <p className="text-gray-400">Gérer les réservations</p>
       </div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl overflow-hidden">

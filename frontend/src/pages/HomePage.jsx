@@ -24,41 +24,6 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-dark text-white overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold font-cairo tracking-tight">
-            Fleet<span className="text-accent">ly</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-8">
-            {["Home", "Vehicles", "Offers", "About", "Contact"].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-sm font-cairo text-gray-300 hover:text-white transition-colors relative group"
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent group-hover:w-full transition-all duration-300" />
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/login"
-              className="text-sm font-cairo text-gray-300 hover:text-white transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/register"
-              className="px-6 py-2 bg-accent text-dark text-sm font-semibold rounded-full hover:bg-accent-light transition-colors"
-            >
-              Book Now
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section
         ref={(el) => (sectionsRef.current[0] = el)}
@@ -94,17 +59,17 @@ const HomePage = () => {
             }`}
           >
             <Link
-              to="/fleet"
+              to="/vehicles"
               className="px-8 py-4 bg-accent text-dark font-semibold rounded-full hover:bg-accent-light transition-all hover:scale-105"
             >
               Explore Fleet
             </Link>
-            <a
-              href="#about"
+            <Link
+              to="/about"
               className="px-8 py-4 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition-all"
             >
               Learn More
-            </a>
+            </Link>
           </div>
 
           {/* Search Widget */}
@@ -192,14 +157,16 @@ const HomePage = () => {
                 </svg>
               </Link>
             </div>
-            <div className="relative">
-              <div className="aspect-3/4 bg-linear-to-br from-dark-light to-dark rounded-2xl overflow-hidden">
-                <div className="absolute inset-0 bg-linear-to-t from-dark/80 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-sm text-gray-300 font-cairo italic">
-                    "The perfect blend of power and elegance"
-                  </p>
-                </div>
+            <div className="relative rounded-2xl overflow-hidden aspect-3/4">
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: "url(/cars/vertical-porsche.jpg)" }}
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <p className="text-sm text-gray-200 font-cairo italic">
+                  "The perfect blend of power and elegance"
+                </p>
               </div>
             </div>
           </div>
@@ -228,6 +195,7 @@ const HomePage = () => {
                 description:
                   "The perfect blend of power, aerodynamics, and adrenaline on track and road.",
                 price: "350€",
+                image: "/cars/side-1.jpg",
               },
               {
                 name: "Porsche Panamera",
@@ -235,6 +203,7 @@ const HomePage = () => {
                 description:
                   "Ultimate comfort for long journeys, combining VIP elegance and onboard technology.",
                 price: "280€",
+                image: "/cars/side-2.jpg",
               },
               {
                 name: "Porsche 911 Classic",
@@ -242,16 +211,21 @@ const HomePage = () => {
                 description:
                   "Relive the timeless charm of legendary automobiles for your exceptional events.",
                 price: "400€",
+                image: "/cars/side-3.jpg",
               },
             ].map((car, index) => (
               <div
                 key={index}
                 className="group bg-dark border border-white/10 rounded-2xl overflow-hidden hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="aspect-4/3 bg-linear-to-br from-dark-light to-dark relative overflow-hidden">
-                  <div className="absolute inset-0 bg-linear-to-t from-dark to-transparent opacity-60" />
+                <div className="aspect-[16/10] relative overflow-hidden">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                    style={{ backgroundImage: `url(${car.image})` }}
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-dark via-dark/30 to-transparent opacity-80" />
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-accent/20 text-accent text-xs font-semibold rounded-full">
+                    <span className="px-3 py-1 bg-accent/20 text-accent text-xs font-semibold rounded-full backdrop-blur-sm">
                       {car.category}
                     </span>
                   </div>
@@ -266,14 +240,40 @@ const HomePage = () => {
                       <span className="text-xs text-gray-500">From</span>
                       <p className="text-2xl font-bold text-accent">{car.price}/day</p>
                     </div>
-                    <button className="px-4 py-2 border border-white/20 text-sm rounded-full hover:bg-white/10 transition-colors">
+                    <Link
+                      to="/vehicles"
+                      className="px-4 py-2 border border-white/20 text-sm rounded-full hover:bg-white/10 transition-colors"
+                    >
                       View Details
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="relative py-32 px-6 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          style={{ backgroundImage: "url(/cars/stripe-porsche.jpg)" }}
+        />
+        <div className="absolute inset-0 bg-dark/80" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-cairo font-bold mb-6">
+            Ready to <span className="text-accent">Drive</span>?
+          </h2>
+          <p className="text-lg text-gray-300 font-cairo mb-10 max-w-2xl mx-auto">
+            Book your dream car in minutes and get it delivered wherever you are.
+          </p>
+          <Link
+            to="/vehicles"
+            className="inline-block px-10 py-4 bg-accent text-dark font-semibold rounded-full hover:bg-accent-light transition-all hover:scale-105"
+          >
+            Browse the Fleet
+          </Link>
         </div>
       </section>
 

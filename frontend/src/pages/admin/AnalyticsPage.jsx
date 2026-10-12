@@ -27,7 +27,7 @@ const AnalyticsPage = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold mb-2">Analytique</h1>
+        <h1 className="text-3xl font-cairo font-bold mb-2">Analytique</h1>
         <p className="text-gray-400">Aperçu sur 90 jours</p>
       </div>
       {overview && (

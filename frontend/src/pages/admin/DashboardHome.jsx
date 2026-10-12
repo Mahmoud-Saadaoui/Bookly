@@ -62,7 +62,7 @@ const DashboardHome = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold mb-2">Tableau de bord</h1>
+        <h1 className="text-3xl font-cairo font-bold mb-2">Tableau de bord</h1>
         <p className="text-gray-400">Bienvenue, {user?.name}</p>
       </div>
 
@@ -82,7 +82,7 @@ const DashboardHome = () => {
       </div>
 
       <div className="bg-dark-light/50 border border-white/10 rounded-xl p-6">
-        <h2 className="text-xl font-montserrat font-semibold mb-6">Réservations récentes</h2>
+        <h2 className="text-xl font-cairo font-semibold mb-6">Réservations récentes</h2>
         {recentBookings.length === 0 ? (
           <p className="text-gray-400 text-sm">Aucune réservation récente</p>
         ) : (

@@ -144,7 +144,7 @@ const VehicleDetailPage = () => {
           <div className="p-8">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6">
               <div>
-                <h1 className="text-3xl md:text-4xl font-montserrat font-bold mb-2">
+                <h1 className="text-3xl md:text-4xl font-cairo font-bold mb-2">
                   {vehicle.make} {vehicle.model}
                 </h1>
                 <p className="text-gray-400">{vehicle.category} • {vehicle.transmission} • {vehicle.fuelType}</p>
@@ -185,7 +185,7 @@ const VehicleDetailPage = () => {
 
         {showBookingForm && (
           <div className="bg-dark-light/50 border border-white/10 rounded-2xl p-8">
-            <h2 className="text-2xl font-montserrat font-semibold mb-6">Formulaire de réservation</h2>
+            <h2 className="text-2xl font-cairo font-semibold mb-6">Formulaire de réservation</h2>
             <form onSubmit={handleSubmitBooking} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>

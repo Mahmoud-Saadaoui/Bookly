@@ -51,7 +51,7 @@ const CalendarPage = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold mb-2">Calendrier des réservations</h1>
+        <h1 className="text-3xl font-cairo font-bold mb-2">Calendrier des réservations</h1>
         <p className="text-gray-400">Réservations confirmées et en cours</p>
       </div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl p-6">

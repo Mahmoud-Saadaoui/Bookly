@@ -47,7 +47,7 @@ const BranchesList = () => {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-montserrat font-bold mb-2">Agences</h1>
+          <h1 className="text-3xl font-cairo font-bold mb-2">Agences</h1>
           <p className="text-gray-400">Gérer les agences</p>
         </div>
         <Link to="/admin/branches/new" className="flex items-center gap-2 px-4 py-2 bg-accent text-dark rounded-lg hover:bg-accent-light">

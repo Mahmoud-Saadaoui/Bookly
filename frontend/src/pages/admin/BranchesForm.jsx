@@ -66,7 +66,7 @@ const BranchesForm = () => {
 
   return (
     <div>
-      <div className="mb-8"><h1 className="text-3xl font-montserrat font-bold">{isEdit ? "Modifier" : "Ajouter"} une agence</h1></div>
+      <div className="mb-8"><h1 className="text-3xl font-cairo font-bold">{isEdit ? "Modifier" : "Ajouter"} une agence</h1></div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">

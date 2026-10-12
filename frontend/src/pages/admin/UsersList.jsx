@@ -31,7 +31,7 @@ const UsersList = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold mb-2">Utilisateurs</h1>
+        <h1 className="text-3xl font-cairo font-bold mb-2">Utilisateurs</h1>
         <p className="text-gray-400">Gérer les utilisateurs</p>
       </div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl overflow-hidden">

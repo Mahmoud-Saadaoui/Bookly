@@ -108,7 +108,7 @@ const VehiclesForm = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold mb-2">{isEdit ? "Modifier" : "Ajouter"} un véhicule</h1>
+        <h1 className="text-3xl font-cairo font-bold mb-2">{isEdit ? "Modifier" : "Ajouter"} un véhicule</h1>
       </div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl p-8">
         <form onSubmit={handleSubmit} className="space-y-6">

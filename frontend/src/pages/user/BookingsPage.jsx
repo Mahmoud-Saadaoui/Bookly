@@ -55,10 +55,10 @@ const BookingsPage = () => {
     <div className="min-h-screen bg-dark pt-24 pb-16 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-montserrat font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-cairo font-bold mb-4">
             Mes <span className="text-accent">Locations</span>
           </h1>
-          <p className="text-gray-400 font-raleway">Gérez vos réservations et votre historique</p>
+          <p className="text-gray-400 font-cairo">Gérez vos réservations et votre historique</p>
         </div>
 
         {/* Filtres */}
@@ -97,7 +97,7 @@ const BookingsPage = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-xl font-montserrat font-semibold">
+                        <h3 className="text-xl font-cairo font-semibold">
                           {booking.vehicle?.make} {booking.vehicle?.model}
                         </h3>
                         <p className="text-sm text-gray-400">{booking.vehicle?.registrationNumber}</p>

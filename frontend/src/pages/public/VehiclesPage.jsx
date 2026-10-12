@@ -75,10 +75,10 @@ const VehiclesPage = () => {
     <div className="min-h-screen bg-dark pt-24 pb-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-montserrat font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-cairo font-bold mb-4">
             Notre <span className="text-accent">Flotte</span>
           </h1>
-          <p className="text-gray-400 font-raleway">Découvrez notre sélection de véhicules premium</p>
+          <p className="text-gray-400 font-cairo">Découvrez notre sélection de véhicules premium</p>
         </div>
 
         {/* Filtres */}
@@ -176,7 +176,7 @@ const VehiclesPage = () => {
                     )}
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-montserrat font-semibold mb-1 group-hover:text-accent transition-colors">
+                    <h3 className="text-xl font-cairo font-semibold mb-1 group-hover:text-accent transition-colors">
                       {vehicle.make} {vehicle.model}
                     </h3>
                     <p className="text-sm text-gray-400 mb-4">{vehicle.transmission} • {vehicle.fuelType} • {vehicle.seats} places</p>

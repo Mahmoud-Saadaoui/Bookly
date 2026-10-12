@@ -33,7 +33,7 @@ const DashboardLayout = ({ children }) => {
       {/* Sidebar */}
       <aside className="w-64 bg-dark-light/50 border-r border-white/10 hidden lg:block">
         <div className="p-6 border-b border-white/10">
-          <h2 className="text-lg font-montserrat font-semibold">Dashboard</h2>
+          <h2 className="text-lg font-cairo font-semibold">Dashboard</h2>
           <p className="text-sm text-gray-400 mt-1">{user?.name}</p>
           <p className="text-xs text-accent mt-1 uppercase tracking-wider">{userRole}</p>
         </div>

@@ -52,7 +52,7 @@ const VehiclesList = () => {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-montserrat font-bold mb-2">Véhicules</h1>
+          <h1 className="text-3xl font-cairo font-bold mb-2">Véhicules</h1>
           <p className="text-gray-400">Gérer la flotte</p>
         </div>
         <Link
