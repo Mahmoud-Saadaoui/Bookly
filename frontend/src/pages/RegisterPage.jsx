@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -12,15 +14,30 @@ const RegisterPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement backend connection
-    console.log("Register attempt:", formData);
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Les mots de passe ne correspondent pas");
+      return;
+    }
+    setLoading(true);
+    const result = await register({
+      name: `${formData.firstName} ${formData.lastName}`.trim(),
+      email: formData.email,
+      password: formData.password,
+    });
+    if (result.success) {
+      navigate("/");
+    }
+    setLoading(false);
   };
 
   return (
@@ -157,9 +174,10 @@ const RegisterPage = () => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-accent text-dark font-semibold rounded-lg hover:bg-accent-light transition-colors"
+              disabled={loading}
+              className="w-full py-3 bg-accent text-dark font-semibold rounded-lg hover:bg-accent-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {loading ? "Création..." : "Create Account"}
             </button>
           </form>
 

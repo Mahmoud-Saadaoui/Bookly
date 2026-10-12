@@ -1,15 +1,25 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement backend connection
-    console.log("Login attempt:", { email, password });
+    setLoading(true);
+    const result = await login({ email, password });
+    if (result.success) {
+      navigate(from, { replace: true });
+    }
+    setLoading(false);
   };
 
   return (
@@ -82,9 +92,10 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-accent text-dark font-semibold rounded-lg hover:bg-accent-light transition-colors"
+              disabled={loading}
+              className="w-full py-3 bg-accent text-dark font-semibold rounded-lg hover:bg-accent-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {loading ? "Connexion..." : "Sign In"}
             </button>
           </form>
 

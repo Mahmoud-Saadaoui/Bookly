@@ -65,18 +65,18 @@ const HomePage = () => {
         data-index="0"
         className="relative min-h-screen flex items-center justify-center pt-20"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/50 to-dark" />
+        <div className="absolute inset-0 bg-linear-to-b from-dark via-dark/50 to-dark" />
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
           <h1
             className={`text-5xl md:text-7xl lg:text-8xl font-montserrat font-extrabold uppercase tracking-tight mb-6 transition-all duration-1000 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <span className="bg-gradient-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
               Liberate Your
             </span>
             <br />
-            <span className="bg-gradient-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
               Drive
             </span>
           </h1>
@@ -192,8 +192,8 @@ const HomePage = () => {
               </Link>
             </div>
             <div className="relative">
-              <div className="aspect-[3/4] bg-gradient-to-br from-dark-light to-dark rounded-2xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent" />
+              <div className="aspect-3/4 bg-linear-to-br from-dark-light to-dark rounded-2xl overflow-hidden">
+                <div className="absolute inset-0 bg-linear-to-t from-dark/80 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
                   <p className="text-sm text-gray-300 font-raleway italic">
                     "The perfect blend of power and elegance"
@@ -247,8 +247,8 @@ const HomePage = () => {
                 key={index}
                 className="group bg-dark border border-white/10 rounded-2xl overflow-hidden hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-dark-light to-dark relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-60" />
+                <div className="aspect-4/3 bg-linear-to-br from-dark-light to-dark relative overflow-hidden">
+                  <div className="absolute inset-0 bg-linear-to-t from-dark to-transparent opacity-60" />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-accent/20 text-accent text-xs font-semibold rounded-full">
                       {car.category}

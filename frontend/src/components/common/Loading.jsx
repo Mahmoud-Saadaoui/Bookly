@@ -1,16 +1,13 @@
+import React from "react";
+
 const Loading = ({ fullScreen = false }) => {
+  const containerClass = fullScreen
+    ? "min-h-screen flex items-center justify-center bg-dark"
+    : "flex items-center justify-center py-8";
+
   return (
-    <div
-      role="status"
-      aria-label="Loading"
-      className={
-        fullScreen
-          ? "min-h-screen flex items-center justify-center"
-          : "flex items-center justify-center p-8"
-      }
-    >
-      <div className="size-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-      <span className="sr-only">Loading...</span>
+    <div className={containerClass}>
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
     </div>
   );
 };
