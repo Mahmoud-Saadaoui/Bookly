@@ -1,16 +1,8 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { bookingsAPI } from "../../api/endpoints";
 import { formatCurrency, formatDateTime } from "../../utils/format";
 import toast from "react-hot-toast";
-
-const STATUS_LABELS = {
-  pending_payment: "En attente",
-  confirmed: "Confirmée",
-  active: "En cours",
-  completed: "Terminée",
-  cancelled: "Annulée",
-  no_show: "No-show",
-};
 
 const STATUS_COLORS = {
   pending_payment: "bg-yellow-500/20 text-yellow-400",
@@ -22,6 +14,7 @@ const STATUS_COLORS = {
 };
 
 const BookingsPage = () => {
+  const { t } = useTranslation();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, pages: 0 });
@@ -40,25 +33,25 @@ const BookingsPage = () => {
         setPagination(res.data.pagination);
       }
     } catch (err) {
-      toast.error("Erreur lors du chargement des réservations");
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredBookings = filter === "all" 
-    ? bookings 
-    : bookings.filter(b => b.status === filter);
+  const statusLabel = (status) => t(`bookings.status.${status}`);
+
+  const filteredBookings =
+    filter === "all" ? bookings : bookings.filter((b) => b.status === filter);
 
   return (
-    <div className="min-h-screen bg-dark pt-24 pb-16 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
+    <div className="min-h-screen bg-dark px-6 pt-24 pb-16">
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-10">
           <h1 className="text-4xl md:text-5xl font-cairo font-bold mb-4">
-            Mes <span className="text-accent">Locations</span>
+            {t("bookings.title")} <span className="text-accent">{t("bookings.titleAccent")}</span>
           </h1>
-          <p className="text-gray-400 font-cairo">Gérez vos réservations et votre historique</p>
+          <p className="text-gray-400 font-cairo">{t("bookings.subtitle")}</p>
         </div>
 
         {/* Filtres */}
@@ -67,13 +60,13 @@ const BookingsPage = () => {
             <button
               key={status}
               onClick={() => setFilter(status)}
-              className={`px-4 py-2 rounded-full text-sm transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-cairo transition-colors ${
                 filter === status
-                  ? "bg-accent text-dark"
-                  : "bg-dark-light/50 border border-white/10 text-gray-300 hover:bg-white/5"
+                  ? "bg-accent text-dark font-semibold"
+                  : "border border-white/20 text-gray-300 hover:bg-white/5"
               }`}
             >
-              {status === "all" ? "Toutes" : STATUS_LABELS[status]}
+              {status === "all" ? t("bookings.all") : statusLabel(status)}
             </button>
           ))}
         </div>
@@ -83,9 +76,7 @@ const BookingsPage = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
           </div>
         ) : filteredBookings.length === 0 ? (
-          <div className="text-center py-16 bg-dark-light/30 border border-white/10 rounded-2xl">
-            <p className="text-gray-400">Aucune réservation trouvée</p>
-          </div>
+          <div className="text-center py-16 text-gray-400">{t("bookings.none")}</div>
         ) : (
           <div className="space-y-4">
             {filteredBookings.map((booking) => (
@@ -93,37 +84,33 @@ const BookingsPage = () => {
                 key={booking._id}
                 className="bg-dark-light/50 border border-white/10 rounded-2xl p-6 hover:border-accent/30 transition-colors"
               >
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="text-xl font-cairo font-semibold">
-                          {booking.vehicle?.make} {booking.vehicle?.model}
-                        </h3>
-                        <p className="text-sm text-gray-400">{booking.vehicle?.registrationNumber}</p>
-                      </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[booking.status]}`}>
-                        {STATUS_LABELS[booking.status]}
-                      </span>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="text-gray-400 mb-1">Prise en charge</p>
-                        <p>{formatDateTime(booking.startAt)}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 mb-1">Retour</p>
-                        <p>{formatDateTime(booking.endAt)}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 mb-1">Nombre de jours</p>
-                        <p>{booking.pricing?.rentalDays}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 mb-1">Montant total</p>
-                        <p className="text-accent font-semibold">{formatCurrency(booking.pricing?.totalCents)}</p>
-                      </div>
-                    </div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-xl font-cairo font-semibold">
+                      {booking.vehicle?.make} {booking.vehicle?.model}
+                    </h3>
+                    <p className="text-sm text-gray-400">{booking.vehicle?.registrationNumber}</p>
+                  </div>
+                  <span className={`self-start px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[booking.status] || ""}`}>
+                    {statusLabel(booking.status)}
+                  </span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-400 mb-1">{t("bookings.pickup")}</p>
+                    <p>{formatDateTime(booking.startAt)}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 mb-1">{t("bookings.return")}</p>
+                    <p>{formatDateTime(booking.endAt)}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 mb-1">{t("bookings.days")}</p>
+                    <p>{booking.pricing?.rentalDays}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 mb-1">{t("bookings.total")}</p>
+                    <p className="text-accent font-semibold">{formatCurrency(booking.pricing?.totalCents)}</p>
                   </div>
                 </div>
               </div>
@@ -132,23 +119,23 @@ const BookingsPage = () => {
         )}
 
         {pagination.pages > 1 && (
-          <div className="flex justify-center gap-2 mt-12">
+          <div className="flex justify-center items-center gap-4 mt-12">
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
               disabled={pagination.page === 1}
-              className="px-4 py-2 border border-white/20 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5"
+              className="px-4 py-2 border border-white/20 rounded-lg text-white hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Précédent
+              {t("bookings.previous")}
             </button>
-            <span className="px-4 py-2 text-gray-400">
-              Page {pagination.page} / {pagination.pages}
+            <span className="text-gray-400 font-cairo">
+              {t("bookings.page", { page: pagination.page, pages: pagination.pages })}
             </span>
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
               disabled={pagination.page === pagination.pages}
-              className="px-4 py-2 border border-white/20 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5"
+              className="px-4 py-2 border border-white/20 rounded-lg text-white hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Suivant
+              {t("bookings.next")}
             </button>
           </div>
         )}

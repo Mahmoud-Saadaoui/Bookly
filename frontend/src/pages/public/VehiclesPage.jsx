@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { vehiclesAPI, branchesAPI } from "../../api/endpoints";
 import { formatCurrency } from "../../utils/format";
 import toast from "react-hot-toast";
@@ -7,6 +8,7 @@ import toast from "react-hot-toast";
 const VEHICLE_CATEGORIES = ["Premium", "Sport", "Business", "Électrique", "SUV", "Citadine"];
 
 const VehiclesPage = () => {
+  const { t } = useTranslation();
   const [vehicles, setVehicles] = useState([]);
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,7 +56,7 @@ const VehiclesPage = () => {
         setPagination(res.data.pagination);
       }
     } catch (err) {
-      toast.error("Erreur lors du chargement des véhicules");
+      toast.error(t("vehicles.loadingError"));
       console.error(err);
     } finally {
       setLoading(false);
@@ -76,44 +78,44 @@ const VehiclesPage = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-cairo font-bold mb-4">
-            Notre <span className="text-accent">Flotte</span>
+            {t("vehicles.title")} <span className="text-accent">{t("vehicles.titleAccent")}</span>
           </h1>
-          <p className="text-gray-400 font-cairo">Découvrez notre sélection de véhicules premium</p>
+          <p className="text-gray-400 font-cairo">{t("vehicles.subtitle")}</p>
         </div>
 
         {/* Filtres */}
         <div className="bg-dark-light/50 border border-white/10 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
-              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">Catégorie</label>
+              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">{t("vehicles.category")}</label>
               <select
                 name="category"
                 value={filters.category}
                 onChange={handleFilterChange}
                 className="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:outline-none focus:border-accent"
               >
-                <option value="">Toutes</option>
+                <option value="">{t("vehicles.all")}</option>
                 {VEHICLE_CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">Agence</label>
+              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">{t("vehicles.agency")}</label>
               <select
                 name="branch"
                 value={filters.branch}
                 onChange={handleFilterChange}
                 className="w-full px-4 py-2 bg-white/5 border border-white/20 rounded-lg text-white focus:outline-none focus:border-accent"
               >
-                <option value="">Toutes</option>
+                <option value="">{t("vehicles.all")}</option>
                 {branches.map(branch => (
                   <option key={branch._id} value={branch._id}>{branch.name} ({branch.code})</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">Date début</label>
+              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">{t("vehicles.startDate")}</label>
               <input
                 type="date"
                 name="from"
@@ -123,7 +125,7 @@ const VehiclesPage = () => {
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">Date fin</label>
+              <label className="block text-xs text-gray-400 mb-2 uppercase tracking-wider">{t("vehicles.endDate")}</label>
               <input
                 type="date"
                 name="to"
@@ -137,7 +139,7 @@ const VehiclesPage = () => {
                 onClick={handleReset}
                 className="w-full py-2 border border-white/20 rounded-lg text-white hover:bg-white/5 transition-colors"
               >
-                Réinitialiser
+                {t("vehicles.reset")}
               </button>
             </div>
           </div>
@@ -150,7 +152,7 @@ const VehiclesPage = () => {
           </div>
         ) : vehicles.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-gray-400">Aucun véhicule ne correspond à vos critères</p>
+            <p className="text-gray-400">{t("vehicles.none")}</p>
           </div>
         ) : (
           <>
@@ -170,7 +172,7 @@ const VehiclesPage = () => {
                     {(filters.from && filters.to && vehicle.available === false) && (
                       <div className="absolute top-4 right-4">
                         <span className="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-semibold rounded-full">
-                          Non disponible
+                          {t("vehicles.unavailable")}
                         </span>
                       </div>
                     )}
@@ -179,18 +181,18 @@ const VehiclesPage = () => {
                     <h3 className="text-xl font-cairo font-semibold mb-1 group-hover:text-accent transition-colors">
                       {vehicle.make} {vehicle.model}
                     </h3>
-                    <p className="text-sm text-gray-400 mb-4">{vehicle.transmission} • {vehicle.fuelType} • {vehicle.seats} places</p>
+                    <p className="text-sm text-gray-400 mb-4">{vehicle.transmission} • {vehicle.fuelType} • {t("vehicles.seats", { count: vehicle.seats })}</p>
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-xs text-gray-500">À partir de</span>
+                        <span className="text-xs text-gray-500">{t("vehicles.from")}</span>
                         <p className="text-2xl font-bold text-accent">{formatCurrency(vehicle.dailyRateCents)}</p>
-                        <span className="text-xs text-gray-400">/jour</span>
+                        <span className="text-xs text-gray-400">{t("vehicles.perDay")}</span>
                       </div>
                       <Link
                         to={`/vehicles/${vehicle._id}`}
                         className="px-4 py-2 border border-white/20 text-sm rounded-full hover:bg-white/10 transition-colors"
                       >
-                        Voir détails
+                        {t("vehicles.viewDetails")}
                       </Link>
                     </div>
                   </div>
@@ -206,17 +208,17 @@ const VehiclesPage = () => {
                   disabled={pagination.page === 1}
                   className="px-4 py-2 border border-white/20 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5"
                 >
-                  Précédent
+                  {t("vehicles.previous")}
                 </button>
                 <span className="px-4 py-2 text-gray-400">
-                  Page {pagination.page} / {pagination.pages}
+                  {t("vehicles.page", { page: pagination.page, pages: pagination.pages })}
                 </span>
                 <button
                   onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
                   disabled={pagination.page === pagination.pages}
                   className="px-4 py-2 border border-white/20 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/5"
                 >
-                  Suivant
+                  {t("vehicles.next")}
                 </button>
               </div>
             )}

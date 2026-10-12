@@ -1,26 +1,210 @@
 {
   "brand": {
-    "name": "React Starter"
+    "name": "Fleetly"
   },
   "nav": {
-    "home": "الرئيسية"
+    "home": "الرئيسية",
+    "vehicles": "السيارات",
+    "myBookings": "حجوزاتي",
+    "dashboard": "لوحة التحكم",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج"
+  },
+  "language": {
+    "label": "تغيير اللغة"
   },
   "home": {
-    "title": "مرحبًا بالعالم",
-    "description": "مرحبًا بك في React Starter Kit. تتحقق هذه الصفحة من أن التوجيه وi18n وTailwind CSS والتخطيط متصلة بشكل صحيح."
+    "hero": {
+      "titleLine1": "أطلق",
+      "titleLine2": "العنان لقيادتك",
+      "subtitle": "استأجر سيارات استثنائية لتصنع لحظات لا تُنسى",
+      "exploreFleet": "استكشف الأسطول",
+      "learnMore": "اعرف المزيد",
+      "pickupLocation": "مكان الاستلام",
+      "pickupPlaceholder": "المدينة أو المطار",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ النهاية",
+      "search": "بحث"
+    },
+    "experience": {
+      "title": "اشعر",
+      "titleAccent": "بالطريق",
+      "subtitle": "تجربة قيادة لا مثيل لها",
+      "heading": "لم تجرّب شيئًا كهذا من قبل.",
+      "text": "استمتع بحرية تامة خلف عجلة سيارات مختارة بعناية من حيث الأداء والراحة والأناقة. سواء كان ذلك في نهاية أسبوع للاسترخاء أو مناسبة خاصة أو رحلة عمل راقية، نضع مفتاح أحلامك بين يديك.",
+      "contactUs": "اتصل بنا",
+      "quote": "«المزيج المثالي بين القوة والأناقة»"
+    },
+    "fleet": {
+      "title": "استكشف",
+      "titleAccent": "طرازاتنا",
+      "subtitle": "اختر سيارتك المفضلة",
+      "from": "ابتداءً من",
+      "perDay": "/يوم",
+      "viewDetails": "عرض التفاصيل",
+      "gt3": {
+        "name": "بورش 911 GT3",
+        "category": "رياضية وأداء",
+        "description": "المزيج المثالي من القوة والديناميكية الهوائية والأدرينالين على الحلبة وعلى الطريق."
+      },
+      "panamera": {
+        "name": "بورش باناميرا",
+        "category": "سيدان فاخرة",
+        "description": "راحة قصوى للرحلات الطويلة، تجمع بين أناقة VIP والتقنية المتقدمة."
+      },
+      "classic": {
+        "name": "بورش 911 كلاسيك",
+        "category": "كلاسيكية وأسطورية",
+        "description": "أحيِ السحر الخالد للسيارات الأسطورية في مناسباتك الاستثنائية."
+      }
+    },
+    "cta": {
+      "title": "مستعد",
+      "titleAccent": "للقيادة",
+      "text": "احجز سيارة أحلامك في دقائق واحصل عليها أينما كنت.",
+      "button": "تصفّح الأسطول"
+    },
+    "why": {
+      "title": "لماذا",
+      "titleAccent": "تختارنا",
+      "insuranceTitle": "شامل كل شيء",
+      "insuranceText": "تأمين شامل ومساعدة على مدار الساعة.",
+      "deliveryTitle": "توصيل مخصّص",
+      "deliveryText": "الاستلام في المطار أو الفندق أو منزلك.",
+      "onlineTitle": "100% عبر الإنترنت",
+      "onlineText": "عملية حجز بسيطة وسريعة دون رسوم خفية."
+    },
+    "testimonials": {
+      "title": "ماذا يقول",
+      "titleAccent": "عملاؤنا",
+      "quote": "«تجربة رائعة من البداية إلى النهاية. كانت السيارة في حالة ممتازة. أنصح بها بشدة!»",
+      "author": "مارك د.",
+      "role": "عميل موثّق"
+    },
+    "footer": {
+      "tagline": "تأجير سيارات استثنائية لصنع لحظات لا تُنسى.",
+      "quickLinks": "روابط سريعة",
+      "legalNotice": "إشعار قانوني",
+      "privacyPolicy": "سياسة الخصوصية",
+      "faq": "الأسئلة الشائعة",
+      "termsConditions": "الشروط والأحكام",
+      "followUs": "تابعنا",
+      "newsletter": "النشرة البريدية",
+      "newsletterText": "اشترك لتستلم عروضنا الخاصة وأخبارنا.",
+      "emailPlaceholder": "بريدك الإلكتروني",
+      "ok": "حسنًا",
+      "rights": "© {{year}} Fleetly. جميع الحقوق محفوظة."
+    }
   },
-  "demo": {
-    "language": "اللغة المكتشفة",
-    "direction": "اتجاه المستند",
-    "staks": "البيئة",
-    "status": "جاهز"
+  "auth": {
+    "welcomeBack": "مرحبًا بعودتك",
+    "signIn": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "your@email.com",
+    "password": "كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "orContinueWith": "أو تابع باستخدام",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "إنشاء حساب",
+    "signingIn": "جارٍ تسجيل الدخول...",
+    "createYourAccount": "أنشئ حسابك",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "phone": "الهاتف",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "acceptTerms": "أوافق على",
+    "and": "و",
+    "createAccount": "إنشاء الحساب",
+    "creating": "جارٍ الإنشاء...",
+    "orSignUpWith": "أو سجّل باستخدام",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "passwordsMismatch": "كلمتا المرور غير متطابقتين"
+  },
+  "vehicles": {
+    "title": "تصفّح",
+    "titleAccent": "أسطولنا",
+    "subtitle": "اكتشف مجموعتنا من السيارات الفاخرة",
+    "category": "الفئة",
+    "agency": "الفرع",
+    "all": "الكل",
+    "startDate": "تاريخ البداية",
+    "endDate": "تاريخ النهاية",
+    "reset": "إعادة الضبط",
+    "loadingError": "خطأ أثناء تحميل السيارات",
+    "none": "لا توجد سيارة تطابق معاييرك",
+    "unavailable": "غير متاحة",
+    "seats": "{{count}} مقاعد",
+    "from": "ابتداءً من",
+    "perDay": "/يوم",
+    "viewDetails": "عرض التفاصيل",
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "صفحة {{page}} / {{pages}}"
+  },
+  "vehicleDetail": {
+    "notFound": "لم يتم العثور على السيارة",
+    "perDay": "/يوم",
+    "seats": "المقاعد",
+    "transmission": "نوع النقل",
+    "fuel": "الوقود",
+    "registration": "رقم التسجيل",
+    "cancel": "إلغاء",
+    "book": "احجز هذه السيارة",
+    "bookingForm": "نموذج الحجز",
+    "pickupDate": "تاريخ الاستلام",
+    "returnDate": "تاريخ الإرجاع",
+    "selectDates": "يرجى تحديد التواريخ",
+    "pickupBranch": "فرع الاستلام",
+    "returnBranch": "فرع الإرجاع",
+    "select": "اختر",
+    "notes": "ملاحظات",
+    "notesPlaceholder": "معلومات إضافية...",
+    "quoteOk": "تم حساب العرض بنجاح",
+    "quoteError": "خطأ أثناء حساب العرض",
+    "quote": "العرض",
+    "dailyRate": "السعر اليومي",
+    "days": "عدد الأيام",
+    "subtotal": "المجموع الفرعي",
+    "tax": "الضريبة",
+    "total": "الإجمالي",
+    "confirm": "تأكيد الحجز",
+    "booking": "جارٍ الحجز...",
+    "loginRequired": "يرجى تسجيل الدخول للحجز",
+    "quoteFirst": "يرجى الحصول على عرض أولاً",
+    "bookingSuccess": "تم إنشاء الحجز بنجاح",
+    "bookingError": "خطأ أثناء الحجز",
+    "back": "العودة إلى الأسطول"
+  },
+  "bookings": {
+    "title": "إدارة",
+    "titleAccent": "حجوزاتي",
+    "subtitle": "أدر حجوزاتك وسجلك",
+    "all": "الكل",
+    "none": "لا توجد حجوزات",
+    "pickup": "الاستلام",
+    "return": "الإرجاع",
+    "days": "عدد الأيام",
+    "total": "المبلغ الإجمالي",
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "صفحة {{page}} / {{pages}}",
+    "status": {
+      "pending_payment": "قيد الانتظار",
+      "confirmed": "مؤكّد",
+      "active": "نشط",
+      "completed": "مكتمل",
+      "cancelled": "ملغى",
+      "no_show": "لم يحضر"
+    }
   },
   "footer": {
-    "copyright": "© {{year}} React Starter Kit",
+    "copyright": "© {{year}} Fleetly",
     "slogan": "متعدد اللغات • دعم RTL • قابل لإعادة الاستخدام"
   },
   "common": {
-    "goHome": "الذهاب للرئيسية"
+    "goHome": "العودة للرئيسية",
+    "loading": "جارٍ التحميل..."
   },
   "error": {
     "title": "حدث خطأ ما",

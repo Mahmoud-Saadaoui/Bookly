@@ -1,36 +1,220 @@
 {
   "brand": {
-    "name": "React Starter"
+    "name": "Fleetly"
   },
   "nav": {
-    "home": "Home"
+    "home": "Home",
+    "vehicles": "Vehicles",
+    "myBookings": "My bookings",
+    "dashboard": "Dashboard",
+    "login": "Sign in",
+    "register": "Sign up",
+    "logout": "Log out"
+  },
+  "language": {
+    "label": "Change language"
   },
   "home": {
-    "title": "Hello World",
-    "description": "Welcome to the React Starter Kit. This page validates that routing, i18n, Tailwind CSS and the layout are wired up correctly."
+    "hero": {
+      "titleLine1": "Liberate Your",
+      "titleLine2": "Drive",
+      "subtitle": "Rent exceptional vehicles for unforgettable moments",
+      "exploreFleet": "Explore Fleet",
+      "learnMore": "Learn More",
+      "pickupLocation": "Pickup Location",
+      "pickupPlaceholder": "City or airport",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "search": "Search"
+    },
+    "experience": {
+      "title": "Feel the",
+      "titleAccent": "Road",
+      "subtitle": "An unparalleled driving experience",
+      "heading": "You've never experienced anything like it.",
+      "text": "Enjoy total freedom behind the wheel of carefully selected vehicles for their performance, comfort, and style. Whether for a getaway weekend, a special event, or a high-end business trip, we put the key to your dreams in your hands.",
+      "contactUs": "Contact us",
+      "quote": "“The perfect blend of power and elegance”"
+    },
+    "fleet": {
+      "title": "Browse Our",
+      "titleAccent": "models",
+      "subtitle": "Choose your favorite vehicle",
+      "from": "From",
+      "perDay": "/day",
+      "viewDetails": "View details",
+      "gt3": {
+        "name": "Porsche 911 GT3",
+        "category": "Sport & Performance",
+        "description": "The perfect blend of power, aerodynamics and adrenaline, on track and on the road."
+      },
+      "panamera": {
+        "name": "Porsche Panamera",
+        "category": "Luxury Sedan",
+        "description": "Ultimate comfort for long journeys, combining VIP elegance and onboard technology."
+      },
+      "classic": {
+        "name": "Porsche 911 Classic",
+        "category": "Classic & Legend",
+        "description": "Relive the timeless charm of legendary automobiles for your exceptional events."
+      }
+    },
+    "cta": {
+      "title": "Ready to",
+      "titleAccent": "drive",
+      "text": "Book your dream car in minutes and get it delivered wherever you are.",
+      "button": "Browse the fleet"
+    },
+    "why": {
+      "title": "Why",
+      "titleAccent": "choose us",
+      "insuranceTitle": "All-inclusive",
+      "insuranceText": "Comprehensive insurance and 24/7 assistance.",
+      "deliveryTitle": "Custom delivery",
+      "deliveryText": "Pickup at the airport, hotel or your home.",
+      "onlineTitle": "100% online",
+      "onlineText": "Simple, fast booking process with no hidden fees."
+    },
+    "testimonials": {
+      "title": "What our",
+      "titleAccent": "clients say",
+      "quote": "\"An impeccable experience from start to finish. The vehicle was in pristine condition. I highly recommend it!\"",
+      "author": "Marc D.",
+      "role": "Verified customer"
+    },
+    "footer": {
+      "tagline": "Exceptional car rental for unforgettable moments.",
+      "quickLinks": "Quick links",
+      "legalNotice": "Legal notice",
+      "privacyPolicy": "Privacy policy",
+      "faq": "FAQ",
+      "termsConditions": "Terms & conditions",
+      "followUs": "Follow us",
+      "newsletter": "Newsletter",
+      "newsletterText": "Subscribe to receive our private offers and news.",
+      "emailPlaceholder": "Your email",
+      "ok": "OK",
+      "rights": "© {{year}} Fleetly. All rights reserved."
+    }
   },
-  "demo": {
-    "language": "Detected language",
-    "direction": "Document direction",
-    "staks": "Environment",
-    "status": "Ready"
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "signIn": "Sign in",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "showPassword": "Show password",
+    "orContinueWith": "or continue with",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "signingIn": "Signing in...",
+    "createYourAccount": "Create your account",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "confirmPassword": "Confirm password",
+    "acceptTerms": "I accept the",
+    "and": "and the",
+    "createAccount": "Create account",
+    "creating": "Creating...",
+    "orSignUpWith": "or sign up with",
+    "haveAccount": "Already have an account?",
+    "passwordsMismatch": "Passwords do not match"
+  },
+  "vehicles": {
+    "title": "Our",
+    "titleAccent": "fleet",
+    "subtitle": "Discover our selection of premium vehicles",
+    "category": "Category",
+    "agency": "Branch",
+    "all": "All",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "reset": "Reset",
+    "loadingError": "Error while loading vehicles",
+    "none": "No vehicle matches your criteria",
+    "unavailable": "Unavailable",
+    "seats": "{{count}} seats",
+    "from": "From",
+    "perDay": "/day",
+    "viewDetails": "View details",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} / {{pages}}"
+  },
+  "vehicleDetail": {
+    "notFound": "Vehicle not found",
+    "perDay": "/day",
+    "seats": "Seats",
+    "transmission": "Transmission",
+    "fuel": "Fuel",
+    "registration": "Registration",
+    "cancel": "Cancel",
+    "book": "Book this vehicle",
+    "bookingForm": "Booking form",
+    "pickupDate": "Pickup date",
+    "returnDate": "Return date",
+    "selectDates": "Please select the dates",
+    "pickupBranch": "Pickup branch",
+    "returnBranch": "Return branch",
+    "select": "Select",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional information...",
+    "quoteOk": "Quote calculated successfully",
+    "quoteError": "Error while calculating the quote",
+    "quote": "Quote",
+    "dailyRate": "Daily rate",
+    "days": "Number of days",
+    "subtotal": "Subtotal",
+    "tax": "VAT / Tax",
+    "total": "Total",
+    "confirm": "Confirm booking",
+    "booking": "Booking...",
+    "loginRequired": "Please sign in to book",
+    "quoteFirst": "Please get a quote first",
+    "bookingSuccess": "Booking created successfully",
+    "bookingError": "Error while booking",
+    "back": "Back to the fleet"
+  },
+  "bookings": {
+    "title": "My",
+    "titleAccent": "bookings",
+    "subtitle": "Manage your bookings and history",
+    "all": "All",
+    "none": "No booking found",
+    "pickup": "Pickup",
+    "return": "Return",
+    "days": "Number of days",
+    "total": "Total amount",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} / {{pages}}",
+    "status": {
+      "pending_payment": "Pending",
+      "confirmed": "Confirmed",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "no_show": "No-show"
+    }
   },
   "footer": {
-    "copyright": "© {{year}} React Starter Kit",
+    "copyright": "© {{year}} Fleetly",
     "slogan": "Multilingual • RTL-ready • Reusable"
   },
   "common": {
-    "goHome": "Go to Home"
+    "goHome": "Go to home",
+    "loading": "Loading..."
   },
   "error": {
     "title": "Something went wrong",
     "message": "An unexpected error occurred. Please try again.",
-    "goHome": "Return to Home",
-    "refresh": "Refresh Page"
+    "goHome": "Return to home",
+    "refresh": "Refresh page"
   },
   "notFound": {
-    "title": "Page Not Found",
+    "title": "Page not found",
     "message": "The page you are looking for does not exist or has been moved.",
-    "goHome": "Return to Home"
+    "goHome": "Return to home"
   }
 }

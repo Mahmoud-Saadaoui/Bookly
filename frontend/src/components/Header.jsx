@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth";
 import RoleGuard from "./auth/RoleGuard";
+import LanguageSwitcher from "./common/LanguageSwitcher";
 
 const Header = () => {
-  const { user, isAuthenticated, logout, isStaff } = useAuth();
+  const { t } = useTranslation();
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
@@ -13,23 +16,24 @@ const Header = () => {
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
-            Accueil
+            {t("nav.home")}
           </Link>
           <Link to="/vehicles" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
-            Véhicules
+            {t("nav.vehicles")}
           </Link>
           {isAuthenticated && (
             <Link to="/my-bookings" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
-              Mes locations
+              {t("nav.myBookings")}
             </Link>
           )}
           <RoleGuard roles={['admin', 'fleet_manager', 'agent', 'finance_manager']}>
             <Link to="/admin" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
-              Dashboard
+              {t("nav.dashboard")}
             </Link>
           </RoleGuard>
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           {isAuthenticated ? (
             <>
               <span className="text-sm text-gray-300 hidden sm:block">{user?.name}</span>
@@ -37,7 +41,7 @@ const Header = () => {
                 onClick={logout}
                 className="px-6 py-2 bg-accent text-dark text-sm font-semibold rounded-full hover:bg-accent-light transition-colors"
               >
-                Déconnexion
+                {t("nav.logout")}
               </button>
             </>
           ) : (
@@ -46,13 +50,13 @@ const Header = () => {
                 to="/login"
                 className="text-sm font-cairo text-gray-300 hover:text-white transition-colors"
               >
-                Connexion
+                {t("nav.login")}
               </Link>
               <Link
                 to="/register"
                 className="px-6 py-2 bg-accent text-dark text-sm font-semibold rounded-full hover:bg-accent-light transition-colors"
               >
-                S'inscrire
+                {t("nav.register")}
               </Link>
             </>
           )}

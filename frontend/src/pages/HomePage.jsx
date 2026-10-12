@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const sectionsRef = useRef([]);
 
@@ -22,6 +24,40 @@ const HomePage = () => {
     return () => observer.disconnect();
   }, []);
 
+  const fleetCars = [
+    { key: "gt3", price: "350€", image: "/cars/side-1.jpg" },
+    { key: "panamera", price: "280€", image: "/cars/side-2.jpg" },
+    { key: "classic", price: "400€", image: "/cars/side-3.jpg" },
+  ];
+
+  const features = [
+    {
+      key: "insurance",
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      ),
+    },
+    {
+      key: "delivery",
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      ),
+    },
+    {
+      key: "online",
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-dark text-white overflow-x-hidden">
       {/* Hero Section */}
@@ -39,11 +75,11 @@ const HomePage = () => {
             }`}
           >
             <span className="bg-linear-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
-              Liberate Your
+              {t("home.hero.titleLine1")}
             </span>
             <br />
             <span className="bg-linear-to-r from-gray-400 via-white to-gray-400 bg-clip-text text-transparent">
-              Drive
+              {t("home.hero.titleLine2")}
             </span>
           </h1>
           <p
@@ -51,7 +87,7 @@ const HomePage = () => {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            Rent exceptional vehicles for unforgettable moments
+            {t("home.hero.subtitle")}
           </p>
           <div
             className={`flex flex-col sm:flex-row gap-4 justify-center mb-16 transition-all duration-1000 delay-500 ${
@@ -62,13 +98,13 @@ const HomePage = () => {
               to="/vehicles"
               className="px-8 py-4 bg-accent text-dark font-semibold rounded-full hover:bg-accent-light transition-all hover:scale-105"
             >
-              Explore Fleet
+              {t("home.hero.exploreFleet")}
             </Link>
             <Link
               to="/about"
               className="px-8 py-4 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition-all"
             >
-              Learn More
+              {t("home.hero.learnMore")}
             </Link>
           </div>
 
@@ -79,23 +115,23 @@ const HomePage = () => {
             }`}
           >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-left">
-                <label className="text-xs text-gray-400 uppercase tracking-wider">Pickup Location</label>
+              <div className="text-start">
+                <label className="text-xs text-gray-400 uppercase tracking-wider">{t("home.hero.pickupLocation")}</label>
                 <input
                   type="text"
-                  placeholder="City or airport"
+                  placeholder={t("home.hero.pickupPlaceholder")}
                   className="w-full mt-2 bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-accent transition-colors"
                 />
               </div>
-              <div className="text-left">
-                <label className="text-xs text-gray-400 uppercase tracking-wider">Start Date</label>
+              <div className="text-start">
+                <label className="text-xs text-gray-400 uppercase tracking-wider">{t("home.hero.startDate")}</label>
                 <input
                   type="datetime-local"
                   className="w-full mt-2 bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-accent transition-colors"
                 />
               </div>
-              <div className="text-left">
-                <label className="text-xs text-gray-400 uppercase tracking-wider">End Date</label>
+              <div className="text-start">
+                <label className="text-xs text-gray-400 uppercase tracking-wider">{t("home.hero.endDate")}</label>
                 <input
                   type="datetime-local"
                   className="w-full mt-2 bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-accent transition-colors"
@@ -103,7 +139,7 @@ const HomePage = () => {
               </div>
               <div className="flex items-end">
                 <button className="w-full py-3 bg-accent text-dark font-semibold rounded-lg hover:bg-accent-light transition-colors">
-                  Search
+                  {t("home.hero.search")}
                 </button>
               </div>
             </div>
@@ -127,28 +163,26 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-cairo font-light mb-4">
-              Feel the <span className="font-bold">Road</span>
+              {t("home.experience.title")} <span className="font-bold">{t("home.experience.titleAccent")}</span>
             </h2>
-            <p className="text-gray-400 font-cairo">An unparalleled driving experience</p>
+            <p className="text-gray-400 font-cairo">{t("home.experience.subtitle")}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h3 className="text-2xl font-cairo font-normal">
-                You've never experienced anything like it.
+                {t("home.experience.heading")}
               </h3>
               <p className="text-gray-400 font-cairo leading-relaxed">
-                Enjoy total freedom behind the wheel of carefully selected vehicles for their
-                performance, comfort, and style. Whether for a getaway weekend, a special event,
-                or a high-end business trip, we put the key to your dreams in your hands.
+                {t("home.experience.text")}
               </p>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 text-accent hover:text-accent-light transition-colors group"
               >
-                <span className="font-cairo">Contact Us</span>
+                <span className="font-cairo">{t("home.experience.contactUs")}</span>
                 <svg
-                  className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                  className="w-4 h-4 group-hover:translate-x-1 transition-transform rtl:rotate-180"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -163,9 +197,9 @@ const HomePage = () => {
                 style={{ backgroundImage: "url(/cars/vertical-porsche.jpg)" }}
               />
               <div className="absolute inset-0 bg-linear-to-t from-dark/90 via-dark/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
+              <div className="absolute bottom-6 start-6 end-6">
                 <p className="text-sm text-gray-200 font-cairo italic">
-                  "The perfect blend of power and elegance"
+                  {t("home.experience.quote")}
                 </p>
               </div>
             </div>
@@ -182,40 +216,15 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-cairo font-light mb-4">
-              Browse Our <span className="font-bold">Models</span>
+              {t("home.fleet.title")} <span className="font-bold">{t("home.fleet.titleAccent")}</span>
             </h2>
-            <p className="text-gray-400 font-cairo">Choose your favorite vehicle</p>
+            <p className="text-gray-400 font-cairo">{t("home.fleet.subtitle")}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Porsche 911 GT3",
-                category: "Sport & Performance",
-                description:
-                  "The perfect blend of power, aerodynamics, and adrenaline on track and road.",
-                price: "350€",
-                image: "/cars/side-1.jpg",
-              },
-              {
-                name: "Porsche Panamera",
-                category: "Luxury Sedan",
-                description:
-                  "Ultimate comfort for long journeys, combining VIP elegance and onboard technology.",
-                price: "280€",
-                image: "/cars/side-2.jpg",
-              },
-              {
-                name: "Porsche 911 Classic",
-                category: "Classic & Legend",
-                description:
-                  "Relive the timeless charm of legendary automobiles for your exceptional events.",
-                price: "400€",
-                image: "/cars/side-3.jpg",
-              },
-            ].map((car, index) => (
+            {fleetCars.map((car) => (
               <div
-                key={index}
+                key={car.key}
                 className="group bg-dark border border-white/10 rounded-2xl overflow-hidden hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
               >
                 <div className="aspect-[16/10] relative overflow-hidden">
@@ -224,27 +233,27 @@ const HomePage = () => {
                     style={{ backgroundImage: `url(${car.image})` }}
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-dark via-dark/30 to-transparent opacity-80" />
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-4 start-4">
                     <span className="px-3 py-1 bg-accent/20 text-accent text-xs font-semibold rounded-full backdrop-blur-sm">
-                      {car.category}
+                      {t(`home.fleet.${car.key}.category`)}
                     </span>
                   </div>
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-cairo font-semibold mb-2 group-hover:text-accent transition-colors">
-                    {car.name}
+                    {t(`home.fleet.${car.key}.name`)}
                   </h3>
-                  <p className="text-gray-400 text-sm font-cairo mb-4">{car.description}</p>
+                  <p className="text-gray-400 text-sm font-cairo mb-4">{t(`home.fleet.${car.key}.description`)}</p>
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-xs text-gray-500">From</span>
-                      <p className="text-2xl font-bold text-accent">{car.price}/day</p>
+                      <span className="text-xs text-gray-500">{t("home.fleet.from")}</span>
+                      <p className="text-2xl font-bold text-accent">{car.price}{t("home.fleet.perDay")}</p>
                     </div>
                     <Link
                       to="/vehicles"
                       className="px-4 py-2 border border-white/20 text-sm rounded-full hover:bg-white/10 transition-colors"
                     >
-                      View Details
+                      {t("home.fleet.viewDetails")}
                     </Link>
                   </div>
                 </div>
@@ -263,16 +272,16 @@ const HomePage = () => {
         <div className="absolute inset-0 bg-dark/80" />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-cairo font-bold mb-6">
-            Ready to <span className="text-accent">Drive</span>?
+            {t("home.cta.title")} <span className="text-accent">{t("home.cta.titleAccent")}</span>?
           </h2>
           <p className="text-lg text-gray-300 font-cairo mb-10 max-w-2xl mx-auto">
-            Book your dream car in minutes and get it delivered wherever you are.
+            {t("home.cta.text")}
           </p>
           <Link
             to="/vehicles"
             className="inline-block px-10 py-4 bg-accent text-dark font-semibold rounded-full hover:bg-accent-light transition-all hover:scale-105"
           >
-            Browse the Fleet
+            {t("home.cta.button")}
           </Link>
         </div>
       </section>
@@ -286,50 +295,21 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-cairo font-light mb-4">
-              Why <span className="font-bold">Choose Us</span>?
+              {t("home.why.title")} <span className="font-bold">{t("home.why.titleAccent")}</span>?
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "All-Inclusive",
-                description: "Comprehensive insurance and 24/7 assistance.",
-                icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                ),
-              },
-              {
-                title: "Custom Delivery",
-                description: "Pickup at airport, hotel, or your home.",
-                icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                ),
-              },
-              {
-                title: "100% Online",
-                description: "Simple, fast booking process with no hidden fees.",
-                icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                ),
-              },
-            ].map((feature, index) => (
+            {features.map((feature) => (
               <div
-                key={index}
+                key={feature.key}
                 className="text-center p-8 border border-white/10 rounded-2xl hover:border-accent/30 transition-all duration-500"
               >
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-accent/10 flex items-center justify-center text-accent">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-cairo font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-400 font-cairo">{feature.description}</p>
+                <h3 className="text-xl font-cairo font-semibold mb-3">{t(`home.why.${feature.key}Title`)}</h3>
+                <p className="text-gray-400 font-cairo">{t(`home.why.${feature.key}Text`)}</p>
               </div>
             ))}
           </div>
@@ -344,26 +324,25 @@ const HomePage = () => {
       >
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-cairo font-light mb-16">
-            What Our <span className="font-bold">Clients Say</span>
+            {t("home.testimonials.title")} <span className="font-bold">{t("home.testimonials.titleAccent")}</span>
           </h2>
           <blockquote className="text-2xl md:text-3xl font-cairo font-light italic text-gray-300 mb-8">
-            "An impeccable experience from start to finish. The vehicle was in pristine condition.
-            I highly recommend!"
+            {t("home.testimonials.quote")}
           </blockquote>
           <div className="flex items-center justify-center gap-4">
             <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">
-              M
+              {t("home.testimonials.author").charAt(0)}
             </div>
-            <div className="text-left">
-              <p className="font-semibold">Marc D.</p>
-              <p className="text-sm text-gray-400">Verified Customer</p>
+            <div className="text-start">
+              <p className="font-semibold">{t("home.testimonials.author")}</p>
+              <p className="text-sm text-gray-400">{t("home.testimonials.role")}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-16 px-6">
+      <footer className="py-16 px-6 border-t border-white/10">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
@@ -371,20 +350,20 @@ const HomePage = () => {
                 Fleet<span className="text-accent">ly</span>
               </Link>
               <p className="mt-4 text-gray-400 text-sm font-cairo">
-                Exceptional vehicle rental for unforgettable moments.
+                {t("home.footer.tagline")}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <h4 className="font-semibold mb-4">{t("home.footer.quickLinks")}</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Legal Notice</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms & Conditions</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">{t("home.footer.legalNotice")}</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">{t("home.footer.privacyPolicy")}</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">{t("home.footer.faq")}</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">{t("home.footer.termsConditions")}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Follow Us</h4>
+              <h4 className="font-semibold mb-4">{t("home.footer.followUs")}</h4>
               <div className="flex gap-4">
                 {["Instagram", "LinkedIn", "Facebook"].map((social) => (
                   <a
@@ -398,24 +377,24 @@ const HomePage = () => {
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Newsletter</h4>
+              <h4 className="font-semibold mb-4">{t("home.footer.newsletter")}</h4>
               <p className="text-sm text-gray-400 mb-4">
-                Subscribe to receive our private offers and news.
+                {t("home.footer.newsletterText")}
               </p>
               <div className="flex">
                 <input
                   type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-4 py-2 bg-white/5 border border-white/20 rounded-l-lg text-sm focus:outline-none focus:border-accent"
+                  placeholder={t("home.footer.emailPlaceholder")}
+                  className="flex-1 px-4 py-2 bg-white/5 border border-white/20 rounded-s-lg text-sm focus:outline-none focus:border-accent"
                 />
-                <button className="px-4 py-2 bg-accent text-dark rounded-r-lg hover:bg-accent-light transition-colors">
-                  OK
+                <button className="px-4 py-2 bg-accent text-dark rounded-e-lg hover:bg-accent-light transition-colors">
+                  {t("home.footer.ok")}
                 </button>
               </div>
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-sm text-gray-500">
-            <p>&copy; {new Date().getFullYear()} Fleetly. All rights reserved.</p>
+            <p>{t("home.footer.rights", { year: new Date().getFullYear() })}</p>
           </div>
         </div>
       </footer>

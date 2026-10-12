@@ -1,26 +1,210 @@
 {
   "brand": {
-    "name": "React Starter"
+    "name": "Fleetly"
   },
   "nav": {
-    "home": "Accueil"
+    "home": "Accueil",
+    "vehicles": "Véhicules",
+    "myBookings": "Mes locations",
+    "dashboard": "Tableau de bord",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion"
+  },
+  "language": {
+    "label": "Changer de langue"
   },
   "home": {
-    "title": "Bonjour le monde",
-    "description": "Bienvenue dans le React Starter Kit. Cette page valide que le routing, i18n, Tailwind CSS et le layout sont correctement connectés."
+    "hero": {
+      "titleLine1": "Libérez votre",
+      "titleLine2": "conduite",
+      "subtitle": "Louez des véhicules d'exception pour des moments inoubliables",
+      "exploreFleet": "Explorer la flotte",
+      "learnMore": "En savoir plus",
+      "pickupLocation": "Lieu de prise en charge",
+      "pickupPlaceholder": "Ville ou aéroport",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "search": "Rechercher"
+    },
+    "experience": {
+      "title": "Ressentez la",
+      "titleAccent": "route",
+      "subtitle": "Une expérience de conduite inégalée",
+      "heading": "Vous n'avez jamais rien vécu de tel.",
+      "text": "Profitez d'une liberté totale au volant de véhicules soigneusement sélectionnés pour leur performance, leur confort et leur style. Que ce soit pour un week-end d'évasion, un événement spécial ou un déplacement professionnel haut de gamme, nous mettons la clé de vos rêves entre vos mains.",
+      "contactUs": "Nous contacter",
+      "quote": "« Le parfait équilibre entre puissance et élégance »"
+    },
+    "fleet": {
+      "title": "Découvrez nos",
+      "titleAccent": "modèles",
+      "subtitle": "Choisissez votre véhicule préféré",
+      "from": "À partir de",
+      "perDay": "/jour",
+      "viewDetails": "Voir détails",
+      "gt3": {
+        "name": "Porsche 911 GT3",
+        "category": "Sport & Performance",
+        "description": "Le parfait équilibre entre puissance, aérodynamisme et adrénaline, sur circuit comme sur route."
+      },
+      "panamera": {
+        "name": "Porsche Panamera",
+        "category": "Berline de luxe",
+        "description": "Un confort ultime pour les longs trajets, alliant élégance VIP et technologie embarquée."
+      },
+      "classic": {
+        "name": "Porsche 911 Classic",
+        "category": "Classique & Légende",
+        "description": "Revivez le charme intemporel des automobiles légendaires pour vos événements d'exception."
+      }
+    },
+    "cta": {
+      "title": "Prêt à",
+      "titleAccent": "conduire",
+      "text": "Réservez la voiture de vos rêves en quelques minutes et faites-vous livrer partout où vous êtes.",
+      "button": "Parcourir la flotte"
+    },
+    "why": {
+      "title": "Pourquoi",
+      "titleAccent": "nous choisir",
+      "insuranceTitle": "Tout inclus",
+      "insuranceText": "Assurance complète et assistance 24/7.",
+      "deliveryTitle": "Livraison sur mesure",
+      "deliveryText": "Prise en charge à l'aéroport, à l'hôtel ou chez vous.",
+      "onlineTitle": "100% en ligne",
+      "onlineText": "Processus de réservation simple et rapide, sans frais cachés."
+    },
+    "testimonials": {
+      "title": "Ce que disent nos",
+      "titleAccent": "clients",
+      "quote": "« Une expérience impeccable du début à la fin. Le véhicule était en parfait état. Je recommande vivement ! »",
+      "author": "Marc D.",
+      "role": "Client vérifié"
+    },
+    "footer": {
+      "tagline": "Location de véhicules d'exception pour des moments inoubliables.",
+      "quickLinks": "Liens rapides",
+      "legalNotice": "Mentions légales",
+      "privacyPolicy": "Politique de confidentialité",
+      "faq": "FAQ",
+      "termsConditions": "Conditions générales",
+      "followUs": "Suivez-nous",
+      "newsletter": "Newsletter",
+      "newsletterText": "Abonnez-vous pour recevoir nos offres privées et nos actualités.",
+      "emailPlaceholder": "Votre email",
+      "ok": "OK",
+      "rights": "© {{year}} Fleetly. Tous droits réservés."
+    }
   },
-  "demo": {
-    "language": "Langue détectée",
-    "direction": "Direction du document",
-    "staks": "Environnement",
-    "status": "Prêt"
+  "auth": {
+    "welcomeBack": "Bon retour",
+    "signIn": "Se connecter",
+    "email": "Email",
+    "emailPlaceholder": "votre@email.com",
+    "password": "Mot de passe",
+    "showPassword": "Afficher le mot de passe",
+    "orContinueWith": "ou continuer avec",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUp": "S'inscrire",
+    "signingIn": "Connexion...",
+    "createYourAccount": "Créez votre compte",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Téléphone",
+    "confirmPassword": "Confirmer le mot de passe",
+    "acceptTerms": "J'accepte les",
+    "and": "et la",
+    "createAccount": "Créer un compte",
+    "creating": "Création...",
+    "orSignUpWith": "ou s'inscrire avec",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "passwordsMismatch": "Les mots de passe ne correspondent pas"
+  },
+  "vehicles": {
+    "title": "Notre",
+    "titleAccent": "flotte",
+    "subtitle": "Découvrez notre sélection de véhicules premium",
+    "category": "Catégorie",
+    "agency": "Agence",
+    "all": "Toutes",
+    "startDate": "Date début",
+    "endDate": "Date fin",
+    "reset": "Réinitialiser",
+    "loadingError": "Erreur lors du chargement des véhicules",
+    "none": "Aucun véhicule ne correspond à vos critères",
+    "unavailable": "Non disponible",
+    "seats": "{{count}} places",
+    "from": "À partir de",
+    "perDay": "/jour",
+    "viewDetails": "Voir détails",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page {{page}} / {{pages}}"
+  },
+  "vehicleDetail": {
+    "notFound": "Véhicule non trouvé",
+    "perDay": "/jour",
+    "seats": "Places",
+    "transmission": "Transmission",
+    "fuel": "Carburant",
+    "registration": "Immatriculation",
+    "cancel": "Annuler",
+    "book": "Réserver ce véhicule",
+    "bookingForm": "Formulaire de réservation",
+    "pickupDate": "Date de prise en charge",
+    "returnDate": "Date de retour",
+    "selectDates": "Veuillez sélectionner les dates",
+    "pickupBranch": "Agence de prise en charge",
+    "returnBranch": "Agence de retour",
+    "select": "Sélectionner",
+    "notes": "Notes",
+    "notesPlaceholder": "Informations complémentaires...",
+    "quoteOk": "Devis calculé avec succès",
+    "quoteError": "Erreur lors du calcul du devis",
+    "quote": "Devis",
+    "dailyRate": "Tarif journalier",
+    "days": "Nombre de jours",
+    "subtotal": "Sous-total",
+    "tax": "TVA / Taxe",
+    "total": "Total",
+    "confirm": "Confirmer la réservation",
+    "booking": "Réservation...",
+    "loginRequired": "Veuillez vous connecter pour réserver",
+    "quoteFirst": "Veuillez d'abord obtenir un devis",
+    "bookingSuccess": "Réservation créée avec succès",
+    "bookingError": "Erreur lors de la réservation",
+    "back": "Retour à la flotte"
+  },
+  "bookings": {
+    "title": "Mes",
+    "titleAccent": "locations",
+    "subtitle": "Gérez vos réservations et votre historique",
+    "all": "Toutes",
+    "none": "Aucune réservation trouvée",
+    "pickup": "Prise en charge",
+    "return": "Retour",
+    "days": "Nombre de jours",
+    "total": "Montant total",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page {{page}} / {{pages}}",
+    "status": {
+      "pending_payment": "En attente",
+      "confirmed": "Confirmée",
+      "active": "En cours",
+      "completed": "Terminée",
+      "cancelled": "Annulée",
+      "no_show": "No-show"
+    }
   },
   "footer": {
-    "copyright": "© {{year}} React Starter Kit",
-    "slogan": "Multilingue • RTL-ready • Réutilisable"
+    "copyright": "© {{year}} Fleetly",
+    "slogan": "Multilingue • Compatible RTL • Réutilisable"
   },
   "common": {
-    "goHome": "Retour à l'accueil"
+    "goHome": "Retour à l'accueil",
+    "loading": "Chargement..."
   },
   "error": {
     "title": "Une erreur est survenue",
