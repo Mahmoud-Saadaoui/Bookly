@@ -227,7 +227,7 @@ const HomePage = () => {
                 key={car.key}
                 className="group bg-dark border border-white/10 rounded-2xl overflow-hidden hover:border-accent/50 transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="aspect-[16/10] relative overflow-hidden">
+                <div className="aspect-16/10 relative overflow-hidden">
                   <div
                     className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
                     style={{ backgroundImage: `url(${car.image})` }}
