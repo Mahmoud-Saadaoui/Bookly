@@ -27,7 +27,7 @@ const HomePage = () => {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-bold font-montserrat tracking-tight">
+          <Link to="/" className="text-2xl font-bold font-cairo tracking-tight">
             Fleet<span className="text-accent">ly</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
@@ -35,7 +35,7 @@ const HomePage = () => {
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="text-sm font-raleway text-gray-300 hover:text-white transition-colors relative group"
+                className="text-sm font-cairo text-gray-300 hover:text-white transition-colors relative group"
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent group-hover:w-full transition-all duration-300" />
@@ -45,7 +45,7 @@ const HomePage = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/login"
-              className="text-sm font-raleway text-gray-300 hover:text-white transition-colors"
+              className="text-sm font-cairo text-gray-300 hover:text-white transition-colors"
             >
               Sign In
             </Link>
@@ -65,10 +65,11 @@ const HomePage = () => {
         data-index="0"
         className="relative min-h-screen flex items-center justify-center pt-20"
       >
-        <div className="absolute inset-0 bg-linear-to-b from-dark via-dark/50 to-dark" />
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url(/cars/hero-porsche.jpg)" }} />
+        <div className="absolute inset-0 bg-linear-to-b from-dark/90 via-dark/60 to-dark" />
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
           <h1
-            className={`text-5xl md:text-7xl lg:text-8xl font-montserrat font-extrabold uppercase tracking-tight mb-6 transition-all duration-1000 ${
+            className={`text-5xl md:text-7xl lg:text-8xl font-cairo font-extrabold uppercase tracking-tight mb-6 transition-all duration-1000 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -81,7 +82,7 @@ const HomePage = () => {
             </span>
           </h1>
           <p
-            className={`text-lg md:text-xl font-raleway font-light text-gray-300 mb-12 max-w-2xl mx-auto transition-all duration-1000 delay-300 ${
+            className={`text-lg md:text-xl font-cairo font-light text-gray-300 mb-12 max-w-2xl mx-auto transition-all duration-1000 delay-300 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
@@ -160,18 +161,18 @@ const HomePage = () => {
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-montserrat font-light mb-4">
+            <h2 className="text-4xl md:text-6xl font-cairo font-light mb-4">
               Feel the <span className="font-bold">Road</span>
             </h2>
-            <p className="text-gray-400 font-raleway">An unparalleled driving experience</p>
+            <p className="text-gray-400 font-cairo">An unparalleled driving experience</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h3 className="text-2xl font-raleway font-normal">
+              <h3 className="text-2xl font-cairo font-normal">
                 You've never experienced anything like it.
               </h3>
-              <p className="text-gray-400 font-raleway leading-relaxed">
+              <p className="text-gray-400 font-cairo leading-relaxed">
                 Enjoy total freedom behind the wheel of carefully selected vehicles for their
                 performance, comfort, and style. Whether for a getaway weekend, a special event,
                 or a high-end business trip, we put the key to your dreams in your hands.
@@ -180,7 +181,7 @@ const HomePage = () => {
                 to="/contact"
                 className="inline-flex items-center gap-2 text-accent hover:text-accent-light transition-colors group"
               >
-                <span className="font-raleway">Contact Us</span>
+                <span className="font-cairo">Contact Us</span>
                 <svg
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -195,7 +196,7 @@ const HomePage = () => {
               <div className="aspect-3/4 bg-linear-to-br from-dark-light to-dark rounded-2xl overflow-hidden">
                 <div className="absolute inset-0 bg-linear-to-t from-dark/80 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-sm text-gray-300 font-raleway italic">
+                  <p className="text-sm text-gray-300 font-cairo italic">
                     "The perfect blend of power and elegance"
                   </p>
                 </div>
@@ -213,10 +214,10 @@ const HomePage = () => {
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-montserrat font-light mb-4">
+            <h2 className="text-4xl md:text-6xl font-cairo font-light mb-4">
               Browse Our <span className="font-bold">Models</span>
             </h2>
-            <p className="text-gray-400 font-raleway">Choose your favorite vehicle</p>
+            <p className="text-gray-400 font-cairo">Choose your favorite vehicle</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -256,10 +257,10 @@ const HomePage = () => {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-montserrat font-semibold mb-2 group-hover:text-accent transition-colors">
+                  <h3 className="text-xl font-cairo font-semibold mb-2 group-hover:text-accent transition-colors">
                     {car.name}
                   </h3>
-                  <p className="text-gray-400 text-sm font-raleway mb-4">{car.description}</p>
+                  <p className="text-gray-400 text-sm font-cairo mb-4">{car.description}</p>
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-xs text-gray-500">From</span>
@@ -284,7 +285,7 @@ const HomePage = () => {
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-montserrat font-light mb-4">
+            <h2 className="text-4xl md:text-6xl font-cairo font-light mb-4">
               Why <span className="font-bold">Choose Us</span>?
             </h2>
           </div>
@@ -327,8 +328,8 @@ const HomePage = () => {
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-accent/10 flex items-center justify-center text-accent">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-montserrat font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-400 font-raleway">{feature.description}</p>
+                <h3 className="text-xl font-cairo font-semibold mb-3">{feature.title}</h3>
+                <p className="text-gray-400 font-cairo">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -342,10 +343,10 @@ const HomePage = () => {
         className="py-32 px-6 bg-dark-light/50"
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-6xl font-montserrat font-light mb-16">
+          <h2 className="text-4xl md:text-6xl font-cairo font-light mb-16">
             What Our <span className="font-bold">Clients Say</span>
           </h2>
-          <blockquote className="text-2xl md:text-3xl font-raleway font-light italic text-gray-300 mb-8">
+          <blockquote className="text-2xl md:text-3xl font-cairo font-light italic text-gray-300 mb-8">
             "An impeccable experience from start to finish. The vehicle was in pristine condition.
             I highly recommend!"
           </blockquote>
@@ -366,10 +367,10 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <Link to="/" className="text-2xl font-bold font-montserrat tracking-tight">
+              <Link to="/" className="text-2xl font-bold font-cairo tracking-tight">
                 Fleet<span className="text-accent">ly</span>
               </Link>
-              <p className="mt-4 text-gray-400 text-sm font-raleway">
+              <p className="mt-4 text-gray-400 text-sm font-cairo">
                 Exceptional vehicle rental for unforgettable moments.
               </p>
             </div>

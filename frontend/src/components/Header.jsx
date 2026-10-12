@@ -8,23 +8,23 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold font-montserrat tracking-tight">
+        <Link to="/" className="text-2xl font-bold font-cairo tracking-tight">
           Fleet<span className="text-accent">ly</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-sm font-raleway text-gray-300 hover:text-white transition-colors">
+          <Link to="/" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
             Accueil
           </Link>
-          <Link to="/vehicles" className="text-sm font-raleway text-gray-300 hover:text-white transition-colors">
+          <Link to="/vehicles" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
             Véhicules
           </Link>
           {isAuthenticated && (
-            <Link to="/my-bookings" className="text-sm font-raleway text-gray-300 hover:text-white transition-colors">
+            <Link to="/my-bookings" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
               Mes locations
             </Link>
           )}
           <RoleGuard roles={['admin', 'fleet_manager', 'agent', 'finance_manager']}>
-            <Link to="/admin" className="text-sm font-raleway text-gray-300 hover:text-white transition-colors">
+            <Link to="/admin" className="text-sm font-cairo text-gray-300 hover:text-white transition-colors">
               Dashboard
             </Link>
           </RoleGuard>
@@ -44,7 +44,7 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="text-sm font-raleway text-gray-300 hover:text-white transition-colors"
+                className="text-sm font-cairo text-gray-300 hover:text-white transition-colors"
               >
                 Connexion
               </Link>

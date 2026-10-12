@@ -45,20 +45,20 @@ const RegisterPage = () => {
       <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="text-center mb-12">
-          <Link to="/" className="text-3xl font-bold font-montserrat tracking-tight">
+          <Link to="/" className="text-3xl font-bold font-cairo tracking-tight">
             Fleet<span className="text-accent">ly</span>
           </Link>
-          <p className="mt-2 text-gray-400 font-raleway">Create your account</p>
+          <p className="mt-2 text-gray-400 font-cairo">Create your account</p>
         </div>
 
         {/* Form */}
         <div className="bg-dark-light/50 border border-white/10 rounded-2xl p-8">
-          <h1 className="text-2xl font-montserrat font-semibold mb-6">Sign Up</h1>
+          <h1 className="text-2xl font-cairo font-semibold mb-6">Sign Up</h1>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-gray-400 mb-2 font-raleway">First Name</label>
+                <label className="block text-sm text-gray-400 mb-2 font-cairo">First Name</label>
                 <input
                   type="text"
                   name="firstName"
@@ -70,7 +70,7 @@ const RegisterPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-2 font-raleway">Last Name</label>
+                <label className="block text-sm text-gray-400 mb-2 font-cairo">Last Name</label>
                 <input
                   type="text"
                   name="lastName"
@@ -84,7 +84,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2 font-raleway">Email</label>
+              <label className="block text-sm text-gray-400 mb-2 font-cairo">Email</label>
               <input
                 type="email"
                 name="email"
@@ -97,7 +97,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2 font-raleway">Phone</label>
+              <label className="block text-sm text-gray-400 mb-2 font-cairo">Phone</label>
               <input
                 type="tel"
                 name="phone"
@@ -109,7 +109,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2 font-raleway">Password</label>
+              <label className="block text-sm text-gray-400 mb-2 font-cairo">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -140,7 +140,7 @@ const RegisterPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2 font-raleway">Confirm Password</label>
+              <label className="block text-sm text-gray-400 mb-2 font-cairo">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -212,7 +212,7 @@ const RegisterPage = () => {
         </div>
 
         {/* Login Link */}
-        <p className="mt-6 text-center text-gray-400 font-raleway">
+        <p className="mt-6 text-center text-gray-400 font-cairo">
           Already have an account?{" "}
           <Link to="/login" className="text-accent hover:text-accent-light transition-colors">
             Sign In

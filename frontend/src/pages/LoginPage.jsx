@@ -27,19 +27,19 @@ const LoginPage = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-12">
-          <Link to="/" className="text-3xl font-bold font-montserrat tracking-tight">
+          <Link to="/" className="text-3xl font-bold font-cairo tracking-tight">
             Fleet<span className="text-accent">ly</span>
           </Link>
-          <p className="mt-2 text-gray-400 font-raleway">Welcome back</p>
+          <p className="mt-2 text-gray-400 font-cairo">Welcome back</p>
         </div>
 
         {/* Form */}
         <div className="bg-dark-light/50 border border-white/10 rounded-2xl p-8">
-          <h1 className="text-2xl font-montserrat font-semibold mb-6">Sign In</h1>
+          <h1 className="text-2xl font-cairo font-semibold mb-6">Sign In</h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm text-gray-400 mb-2 font-raleway">Email</label>
+              <label className="block text-sm text-gray-400 mb-2 font-cairo">Email</label>
               <input
                 type="email"
                 value={email}
@@ -51,7 +51,7 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2 font-raleway">Password</label>
+              <label className="block text-sm text-gray-400 mb-2 font-cairo">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -130,7 +130,7 @@ const LoginPage = () => {
         </div>
 
         {/* Register Link */}
-        <p className="mt-6 text-center text-gray-400 font-raleway">
+        <p className="mt-6 text-center text-gray-400 font-cairo">
           Don't have an account?{" "}
           <Link to="/register" className="text-accent hover:text-accent-light transition-colors">
             Sign Up
