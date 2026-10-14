@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 
 class ErrorBoundary extends Component {
@@ -30,12 +29,14 @@ class ErrorBoundary extends Component {
               {t("error.message")}
             </p>
             <div className="flex gap-4 justify-center">
-              <Link
-                to="/"
+              {/* This boundary is mounted above <BrowserRouter>, so it must not
+                  use react-router components (no Router context available). */}
+              <a
+                href="/"
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 {t("error.goHome")}
-              </Link>
+              </a>
               <button
                 onClick={() => window.location.reload()}
                 className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
