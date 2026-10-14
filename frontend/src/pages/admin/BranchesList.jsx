@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { branchesAPI } from "../../api/endpoints";
 import toast from "react-hot-toast";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const BranchesList = () => {
+  const { t } = useTranslation();
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, pages: 0 });
@@ -21,21 +23,21 @@ const BranchesList = () => {
         setBranches(res.data.data);
         setPagination(res.data.pagination);
       }
-    } catch (err) {
-      toast.error("Erreur");
+    } catch {
+      toast.error(t("admin.common.error"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Supprimer cette agence ?")) return;
+    if (!confirm(t("admin.branches.deleteConfirm"))) return;
     try {
       await branchesAPI.delete(id);
-      toast.success("Agence supprimée");
+      toast.success(t("admin.branches.deleted"));
       fetchBranches();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Erreur");
+      toast.error(err.response?.data?.message || t("admin.common.error"));
     }
   };
 
@@ -47,22 +49,22 @@ const BranchesList = () => {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-cairo font-bold mb-2">Agences</h1>
-          <p className="text-gray-400">Gérer les agences</p>
+          <h1 className="text-3xl font-cairo font-bold mb-2">{t("admin.branches.title")}</h1>
+          <p className="text-gray-400">{t("admin.branches.subtitle")}</p>
         </div>
         <Link to="/admin/branches/new" className="flex items-center gap-2 px-4 py-2 bg-accent text-dark rounded-lg hover:bg-accent-light">
-          <FaPlus /> Ajouter
+          <FaPlus /> {t("admin.actions.add")}
         </Link>
       </div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/10">
-              <th className="text-left text-xs text-gray-400 p-4">Nom</th>
-              <th className="text-left text-xs text-gray-400 p-4">Code</th>
-              <th className="text-left text-xs text-gray-400 p-4">Ville</th>
-              <th className="text-left text-xs text-gray-400 p-4">Statut</th>
-              <th className="text-right text-xs text-gray-400 p-4">Actions</th>
+              <th className="text-left text-xs text-gray-400 p-4">{t("admin.branches.name")}</th>
+              <th className="text-left text-xs text-gray-400 p-4">{t("admin.branches.code")}</th>
+              <th className="text-left text-xs text-gray-400 p-4">{t("admin.branches.city")}</th>
+              <th className="text-left text-xs text-gray-400 p-4">{t("admin.common.status")}</th>
+              <th className="text-right text-xs text-gray-400 p-4">{t("admin.actions.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -71,7 +73,11 @@ const BranchesList = () => {
                 <td className="p-4">{b.name}</td>
                 <td className="p-4 text-sm">{b.code}</td>
                 <td className="p-4 text-sm">{b.address?.city}</td>
-                <td className="p-4"><span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">{b.isActive ? "Actif" : "Inactif"}</span></td>
+                <td className="p-4">
+                  <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                    {b.isActive ? t("admin.common.active") : t("admin.common.inactive")}
+                  </span>
+                </td>
                 <td className="p-4 text-right">
                   <div className="flex justify-end gap-2">
                     <Link to={`/admin/branches/${b._id}/edit`} className="p-2 text-gray-400 hover:text-white"><FaEdit /></Link>

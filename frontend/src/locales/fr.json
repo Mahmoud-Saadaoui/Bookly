@@ -216,5 +216,156 @@
     "title": "Page non trouvée",
     "message": "La page que vous recherchez n'existe pas ou a été déplacée.",
     "goHome": "Retour à l'accueil"
+  },
+  "admin": {
+    "title": "Administration",
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "vehicles": "Véhicules",
+      "branches": "Agences",
+      "bookings": "Réservations",
+      "users": "Utilisateurs",
+      "calendar": "Calendrier",
+      "analytics": "Analytique"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "fleet_manager": "Gestionnaire de flotte",
+      "agent": "Agent",
+      "finance_manager": "Responsable financier",
+      "support": "Support",
+      "customer": "Client"
+    },
+    "actions": {
+      "add": "Ajouter",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "cancel": "Annuler",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "actions": "Actions",
+      "select": "Sélectionner",
+      "close": "Fermer",
+      "change": "Changer"
+    },
+    "common": {
+      "error": "Erreur",
+      "name": "Nom",
+      "code": "Code",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "client": "Client",
+      "vehicle": "Véhicule",
+      "dates": "Dates",
+      "amount": "Montant",
+      "email": "Email",
+      "role": "Rôle",
+      "city": "Ville"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "welcome": "Bienvenue, {{name}}",
+      "revenue30": "Chiffre d'affaires (30j)",
+      "bookings30": "Réservations (30j)",
+      "vehicles": "Véhicules",
+      "branches": "Agences",
+      "recentBookings": "Réservations récentes",
+      "noRecentBookings": "Aucune réservation récente"
+    },
+    "vehicles": {
+      "title": "Véhicules",
+      "subtitle": "Gérer la flotte",
+      "loadingError": "Erreur lors du chargement",
+      "deleteConfirm": "Supprimer ce véhicule ?",
+      "deleted": "Véhicule supprimé",
+      "addTitle": "Ajouter un véhicule",
+      "editTitle": "Modifier un véhicule",
+      "brand": "Marque",
+      "model": "Modèle",
+      "registration": "Immatriculation",
+      "vin": "VIN",
+      "category": "Catégorie",
+      "branch": "Agence",
+      "dailyRate": "Tarif journalier (cents)",
+      "seats": "Places",
+      "transmission": "Transmission",
+      "fuel": "Carburant",
+      "status": "Statut",
+      "mileage": "Kilométrage",
+      "created": "Véhicule créé",
+      "updated": "Véhicule modifié",
+      "ratePerDay": "Tarif/jour"
+    },
+    "branches": {
+      "title": "Agences",
+      "subtitle": "Gérer les agences",
+      "deleteConfirm": "Supprimer cette agence ?",
+      "deleted": "Agence supprimée",
+      "addTitle": "Ajouter une agence",
+      "editTitle": "Modifier une agence",
+      "name": "Nom",
+      "code": "Code",
+      "city": "Ville",
+      "postalCode": "Code postal",
+      "street": "Adresse",
+      "phone": "Téléphone",
+      "email": "Email",
+      "created": "Agence créée",
+      "updated": "Agence modifiée"
+    },
+    "bookings": {
+      "title": "Réservations",
+      "subtitle": "Gérer les réservations",
+      "statusUpdated": "Statut mis à jour"
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "subtitle": "Gérer les utilisateurs"
+    },
+    "calendar": {
+      "title": "Calendrier des réservations",
+      "subtitle": "Réservations confirmées et en cours",
+      "details": "Détails réservation",
+      "start": "Début",
+      "end": "Fin"
+    },
+    "analytics": {
+      "title": "Analytique",
+      "subtitle": "Aperçu sur 90 jours",
+      "revenue": "Chiffre d'affaires",
+      "bookings": "Réservations",
+      "occupancy": "Taux d'occupation",
+      "fleetTotal": "Flotte totale",
+      "maintenance": "En maintenance",
+      "rentedDays": "Jours loués"
+    },
+    "categories": {
+      "Premium": "Premium",
+      "Sport": "Sport",
+      "Business": "Business",
+      "Électrique": "Électrique",
+      "SUV": "SUV",
+      "Citadine": "Citadine"
+    },
+    "transmissions": {
+      "Automatique": "Automatique",
+      "Manuelle": "Manuelle"
+    },
+    "fuelTypes": {
+      "Essence": "Essence",
+      "Diesel": "Diesel",
+      "Hybride": "Hybride",
+      "Électrique": "Électrique"
+    },
+    "statuses": {
+      "available": "Disponible",
+      "reserved": "Réservé",
+      "rented": "Loué",
+      "maintenance": "Maintenance",
+      "retired": "Retiré"
+    }
   }
 }

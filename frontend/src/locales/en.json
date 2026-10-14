@@ -216,5 +216,156 @@
     "title": "Page not found",
     "message": "The page you are looking for does not exist or has been moved.",
     "goHome": "Return to home"
+  },
+  "admin": {
+    "title": "Administration",
+    "nav": {
+      "dashboard": "Dashboard",
+      "vehicles": "Vehicles",
+      "branches": "Agencies",
+      "bookings": "Bookings",
+      "users": "Users",
+      "calendar": "Calendar",
+      "analytics": "Analytics"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "fleet_manager": "Fleet manager",
+      "agent": "Agent",
+      "finance_manager": "Finance manager",
+      "support": "Support",
+      "customer": "Customer"
+    },
+    "actions": {
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "previous": "Previous",
+      "next": "Next",
+      "actions": "Actions",
+      "select": "Select",
+      "close": "Close",
+      "change": "Change"
+    },
+    "common": {
+      "error": "Error",
+      "name": "Name",
+      "code": "Code",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "client": "Customer",
+      "vehicle": "Vehicle",
+      "dates": "Dates",
+      "amount": "Amount",
+      "email": "Email",
+      "role": "Role",
+      "city": "City"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome, {{name}}",
+      "revenue30": "Revenue (30d)",
+      "bookings30": "Bookings (30d)",
+      "vehicles": "Vehicles",
+      "branches": "Agencies",
+      "recentBookings": "Recent bookings",
+      "noRecentBookings": "No recent bookings"
+    },
+    "vehicles": {
+      "title": "Vehicles",
+      "subtitle": "Manage the fleet",
+      "loadingError": "Error while loading",
+      "deleteConfirm": "Delete this vehicle?",
+      "deleted": "Vehicle deleted",
+      "addTitle": "Add a vehicle",
+      "editTitle": "Edit a vehicle",
+      "brand": "Make",
+      "model": "Model",
+      "registration": "Registration",
+      "vin": "VIN",
+      "category": "Category",
+      "branch": "Agency",
+      "dailyRate": "Daily rate (cents)",
+      "seats": "Seats",
+      "transmission": "Transmission",
+      "fuel": "Fuel",
+      "status": "Status",
+      "mileage": "Mileage",
+      "created": "Vehicle created",
+      "updated": "Vehicle updated",
+      "ratePerDay": "Rate/day"
+    },
+    "branches": {
+      "title": "Agencies",
+      "subtitle": "Manage agencies",
+      "deleteConfirm": "Delete this agency?",
+      "deleted": "Agency deleted",
+      "addTitle": "Add an agency",
+      "editTitle": "Edit an agency",
+      "name": "Name",
+      "code": "Code",
+      "city": "City",
+      "postalCode": "Postal code",
+      "street": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "created": "Agency created",
+      "updated": "Agency updated"
+    },
+    "bookings": {
+      "title": "Bookings",
+      "subtitle": "Manage bookings",
+      "statusUpdated": "Status updated"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage users"
+    },
+    "calendar": {
+      "title": "Bookings calendar",
+      "subtitle": "Confirmed and ongoing bookings",
+      "details": "Booking details",
+      "start": "Start",
+      "end": "End"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "90-day overview",
+      "revenue": "Revenue",
+      "bookings": "Bookings",
+      "occupancy": "Occupancy rate",
+      "fleetTotal": "Total fleet",
+      "maintenance": "In maintenance",
+      "rentedDays": "Rented days"
+    },
+    "categories": {
+      "Premium": "Premium",
+      "Sport": "Sport",
+      "Business": "Business",
+      "Électrique": "Electric",
+      "SUV": "SUV",
+      "Citadine": "Compact"
+    },
+    "transmissions": {
+      "Automatique": "Automatic",
+      "Manuelle": "Manual"
+    },
+    "fuelTypes": {
+      "Essence": "Petrol",
+      "Diesel": "Diesel",
+      "Hybride": "Hybrid",
+      "Électrique": "Electric"
+    },
+    "statuses": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "rented": "Rented",
+      "maintenance": "Maintenance",
+      "retired": "Retired"
+    }
   }
 }

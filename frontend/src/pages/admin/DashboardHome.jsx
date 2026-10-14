@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { analyticsAPI, agentBookingsAPI, vehiclesAPI, branchesAPI } from "../../api/endpoints";
 import { useAuth } from "../../hooks/useAuth";
 import { formatCurrency } from "../../utils/format";
 import { FaCar, FaClipboardList, FaBuilding, FaEuroSign } from "react-icons/fa";
 
 const DashboardHome = () => {
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
@@ -45,10 +47,10 @@ const DashboardHome = () => {
   };
 
   const statsCards = [
-    { title: "Chiffre d'affaires (30j)", value: formatCurrency(stats?.revenueCents), icon: FaEuroSign, color: "text-green-400" },
-    { title: "Réservations (30j)", value: stats?.bookings || 0, icon: FaClipboardList, color: "text-blue-400" },
-    { title: "Véhicules", value: stats?.totalVehicles || 0, icon: FaCar, color: "text-accent" },
-    { title: "Agences", value: stats?.totalBranches || 0, icon: FaBuilding, color: "text-purple-400" },
+    { title: t("admin.dashboard.revenue30"), value: formatCurrency(stats?.revenueCents), icon: FaEuroSign, color: "text-green-400" },
+    { title: t("admin.dashboard.bookings30"), value: stats?.bookings || 0, icon: FaClipboardList, color: "text-blue-400" },
+    { title: t("admin.dashboard.vehicles"), value: stats?.totalVehicles || 0, icon: FaCar, color: "text-accent" },
+    { title: t("admin.dashboard.branches"), value: stats?.totalBranches || 0, icon: FaBuilding, color: "text-purple-400" },
   ];
 
   if (loading) {
@@ -62,8 +64,8 @@ const DashboardHome = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-cairo font-bold mb-2">Tableau de bord</h1>
-        <p className="text-gray-400">Bienvenue, {user?.name}</p>
+        <h1 className="text-3xl font-cairo font-bold mb-2">{t("admin.dashboard.title")}</h1>
+        <p className="text-gray-400">{t("admin.dashboard.welcome", { name: user?.name })}</p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -82,18 +84,18 @@ const DashboardHome = () => {
       </div>
 
       <div className="bg-dark-light/50 border border-white/10 rounded-xl p-6">
-        <h2 className="text-xl font-cairo font-semibold mb-6">Réservations récentes</h2>
+        <h2 className="text-xl font-cairo font-semibold mb-6">{t("admin.dashboard.recentBookings")}</h2>
         {recentBookings.length === 0 ? (
-          <p className="text-gray-400 text-sm">Aucune réservation récente</p>
+          <p className="text-gray-400 text-sm">{t("admin.dashboard.noRecentBookings")}</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left text-xs text-gray-400 font-normal pb-3">Client</th>
-                  <th className="text-left text-xs text-gray-400 font-normal pb-3">Véhicule</th>
-                  <th className="text-left text-xs text-gray-400 font-normal pb-3">Dates</th>
-                  <th className="text-left text-xs text-gray-400 font-normal pb-3">Statut</th>
+                  <th className="text-left text-xs text-gray-400 font-normal pb-3">{t("admin.common.client")}</th>
+                  <th className="text-left text-xs text-gray-400 font-normal pb-3">{t("admin.common.vehicle")}</th>
+                  <th className="text-left text-xs text-gray-400 font-normal pb-3">{t("admin.common.dates")}</th>
+                  <th className="text-left text-xs text-gray-400 font-normal pb-3">{t("admin.common.status")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -101,9 +103,11 @@ const DashboardHome = () => {
                   <tr key={booking._id} className="border-b border-white/5">
                     <td className="py-3 text-sm">{booking.customer?.name || "-"}</td>
                     <td className="py-3 text-sm">{booking.vehicle?.make} {booking.vehicle?.model}</td>
-                    <td className="py-3 text-sm text-gray-400">{new Date(booking.startAt).toLocaleDateString('fr-FR')}</td>
+                    <td className="py-3 text-sm text-gray-400">{new Date(booking.startAt).toLocaleDateString(i18n.language)}</td>
                     <td className="py-3">
-                      <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">{booking.status}</span>
+                      <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                        {t(`bookings.status.${booking.status}`, booking.status)}
+                      </span>
                     </td>
                   </tr>
                 ))}

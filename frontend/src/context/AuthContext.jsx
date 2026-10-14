@@ -76,6 +76,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithToken = async (accessToken) => {
+    try {
+      // Persist first so the axios interceptor attaches it to the /me request.
+      localStorage.setItem('fleetly_token', accessToken);
+      const response = await authAPI.me();
+      if (response.data.success) {
+        const userData = response.data.data;
+        setToken(accessToken);
+        setUser(userData);
+        localStorage.setItem('fleetly_user', JSON.stringify(userData));
+        toast.success('Connexion réussie');
+        return { success: true, user: userData };
+      }
+      localStorage.removeItem('fleetly_token');
+      return { success: false, message: response.data.message };
+    } catch (error) {
+      localStorage.removeItem('fleetly_token');
+      localStorage.removeItem('fleetly_user');
+      setToken(null);
+      setUser(null);
+      const message = error.response?.data?.message || 'Erreur de connexion';
+      toast.error(message);
+      return { success: false, message };
+    }
+  };
+
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -97,6 +123,7 @@ export const AuthProvider = ({ children }) => {
         token,
         loading,
         login,
+        loginWithToken,
         register,
         logout,
         isAuthenticated: !!token && !!user,

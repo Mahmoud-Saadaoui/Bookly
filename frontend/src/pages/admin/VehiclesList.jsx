@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { vehiclesAPI } from "../../api/endpoints";
 import { formatCurrency } from "../../utils/format";
 import toast from "react-hot-toast";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const VehiclesList = () => {
+  const { t } = useTranslation();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, pages: 0 });
@@ -22,21 +24,21 @@ const VehiclesList = () => {
         setVehicles(res.data.data);
         setPagination(res.data.pagination);
       }
-    } catch (err) {
-      toast.error("Erreur lors du chargement");
+    } catch {
+      toast.error(t("admin.vehicles.loadingError"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Supprimer ce véhicule ?")) return;
+    if (!confirm(t("admin.vehicles.deleteConfirm"))) return;
     try {
       await vehiclesAPI.delete(id);
-      toast.success("Véhicule supprimé");
+      toast.success(t("admin.vehicles.deleted"));
       fetchVehicles();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Erreur");
+      toast.error(err.response?.data?.message || t("admin.common.error"));
     }
   };
 
@@ -52,14 +54,14 @@ const VehiclesList = () => {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-cairo font-bold mb-2">Véhicules</h1>
-          <p className="text-gray-400">Gérer la flotte</p>
+          <h1 className="text-3xl font-cairo font-bold mb-2">{t("admin.vehicles.title")}</h1>
+          <p className="text-gray-400">{t("admin.vehicles.subtitle")}</p>
         </div>
         <Link
           to="/admin/vehicles/new"
           className="flex items-center gap-2 px-4 py-2 bg-accent text-dark rounded-lg hover:bg-accent-light"
         >
-          <FaPlus /> Ajouter
+          <FaPlus /> {t("admin.actions.add")}
         </Link>
       </div>
 
@@ -68,12 +70,12 @@ const VehiclesList = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="text-left text-xs text-gray-400 font-normal p-4">Véhicule</th>
-                <th className="text-left text-xs text-gray-400 font-normal p-4">Immatriculation</th>
-                <th className="text-left text-xs text-gray-400 font-normal p-4">Catégorie</th>
-                <th className="text-left text-xs text-gray-400 font-normal p-4">Tarif/jour</th>
-                <th className="text-left text-xs text-gray-400 font-normal p-4">Statut</th>
-                <th className="text-right text-xs text-gray-400 font-normal p-4">Actions</th>
+                <th className="text-left text-xs text-gray-400 font-normal p-4">{t("admin.common.vehicle")}</th>
+                <th className="text-left text-xs text-gray-400 font-normal p-4">{t("admin.vehicles.registration")}</th>
+                <th className="text-left text-xs text-gray-400 font-normal p-4">{t("admin.vehicles.category")}</th>
+                <th className="text-left text-xs text-gray-400 font-normal p-4">{t("admin.vehicles.ratePerDay")}</th>
+                <th className="text-left text-xs text-gray-400 font-normal p-4">{t("admin.common.status")}</th>
+                <th className="text-right text-xs text-gray-400 font-normal p-4">{t("admin.actions.actions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -81,13 +83,17 @@ const VehiclesList = () => {
                 <tr key={v._id} className="border-b border-white/5 hover:bg-white/5">
                   <td className="p-4">
                     <div className="font-medium">{v.make} {v.model}</div>
-                    <div className="text-xs text-gray-400">{v.transmission} • {v.fuelType}</div>
+                    <div className="text-xs text-gray-400">
+                      {t(`admin.transmissions.${v.transmission}`, v.transmission)} • {t(`admin.fuelTypes.${v.fuelType}`, v.fuelType)}
+                    </div>
                   </td>
                   <td className="p-4 text-sm">{v.registrationNumber}</td>
-                  <td className="p-4 text-sm">{v.category}</td>
+                  <td className="p-4 text-sm">{t(`admin.categories.${v.category}`, v.category)}</td>
                   <td className="p-4 text-sm">{formatCurrency(v.dailyRateCents)}</td>
                   <td className="p-4">
-                    <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">{v.status}</span>
+                    <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                      {t(`admin.statuses.${v.status}`, v.status)}
+                    </span>
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex justify-end gap-2">
@@ -113,7 +119,7 @@ const VehiclesList = () => {
             disabled={pagination.page === 1}
             className="px-4 py-2 border border-white/20 rounded-lg disabled:opacity-50"
           >
-            Précédent
+            {t("admin.actions.previous")}
           </button>
           <span className="px-4 py-2 text-gray-400">{pagination.page}/{pagination.pages}</span>
           <button
@@ -121,7 +127,7 @@ const VehiclesList = () => {
             disabled={pagination.page === pagination.pages}
             className="px-4 py-2 border border-white/20 rounded-lg disabled:opacity-50"
           >
-            Suivant
+            {t("admin.actions.next")}
           </button>
         </div>
       )}

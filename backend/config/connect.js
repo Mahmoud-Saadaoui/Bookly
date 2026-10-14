@@ -1,7 +1,10 @@
 const mongoose = require("mongoose")
 const logger = require('../utils/logger');
 
-mongoose.set('sanitizeFilter', true);
+// Note: mongoose's global `sanitizeFilter` option is intentionally NOT enabled.
+// It wraps every filter value in `$eq` (including server-built ones), which
+// breaks legitimate operator queries ($in, $ne, $lt, ...). NoSQL operator
+// injection from user input is handled by `middlewares/sanitizeRequest.js`.
 
 const dbConnect = async () => {
     await mongoose.connect(process.env.MONGO_URI, {

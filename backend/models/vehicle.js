@@ -10,7 +10,7 @@ const VehicleSchema = new mongoose.Schema({
     index: true
   },
   registrationNumber: { type: String, required: true, trim: true, uppercase: true },
-  vin: { type: String, trim: true, uppercase: true, sparse: true },
+  vin: { type: String, trim: true, uppercase: true },
   branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch', index: true },
   location: { type: String, trim: true, maxlength: 120 },
   dailyRateCents: { type: Number, required: true, min: 0 },

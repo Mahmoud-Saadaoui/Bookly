@@ -44,3 +44,15 @@ html {
   background: var(--color-accent);
   color: var(--color-dark);
 }
+
+/* Native <select> dropdown readability on the dark theme.
+   Without this, <option> keeps white text on a white popup background,
+   which makes the options invisible (looks like the select is stuck). */
+select {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: var(--color-dark-light);
+  color: #f1f1f1;
+}

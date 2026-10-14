@@ -1,29 +1,62 @@
+const crypto = require('crypto');
 const User = require('../models/user');
 const jwtHelpers = require('../utils/jwtHelpers');
 const { asyncHandler } = require('../middlewares/asyncHandler');
-const { successResponse, badRequestResponse } = require('../utils/apiResponse');
 const { getGoogleAuthUrl, getGoogleProfile } = require('../services/googleAuth');
 const { getFacebookAuthUrl, getFacebookProfile } = require('../services/facebookAuth');
 
 /**
+ * Resolves the frontend base URL used to redirect the browser back after OAuth.
+ * Falls back to the development domain and finally to localhost.
+ */
+const resolveClientUrl = () => {
+  const candidate = [
+    process.env.CLIENT_URL,
+    process.env.CLIENT_DEVELOPMENT_DOMAIN,
+    process.env.CLIENT_PRODUCTION_DOMAIN
+  ].find((value) => value && value.trim());
+
+  return (candidate || 'http://localhost:5173').trim().replace(/\/+$/, '');
+};
+
+/**
+ * Redirects the browser back to the frontend `/auth/callback` page.
+ * Query params carry either `token` (success) or `error` (failure).
+ */
+const redirectToClient = (res, params = {}) => {
+  const url = new URL(`${resolveClientUrl()}/auth/callback`);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      url.searchParams.set(key, value);
+    }
+  });
+  return res.redirect(url.toString());
+};
+
+/**
  * Handles OAuth2 callback for a given provider (Google or Facebook)
- * 
+ *
  * Flow:
  * 1. Get authorization code from query
  * 2. Exchange code for social profile
  * 3. Find or create user
  * 4. Generate JWT
- * 5. Return token + user
- * 
+ * 5. Redirect the browser back to the frontend with the token
+ *
  * @param {string} provider - 'google' or 'facebook'
  * @returns {Function} Express handler
  */
 const handleSocialCallback = (provider) => asyncHandler(async (req, res) => {
-  const { code } = req.query;
+  const { code, error } = req.query;
+
+  // The provider can redirect back with an explicit error (e.g. user denied access)
+  if (error) {
+    return redirectToClient(res, { error });
+  }
 
   // Check code presence
   if (!code) {
-    return badRequestResponse(res, 'Authorization code missing');
+    return redirectToClient(res, { error: 'Authorization code missing' });
   }
 
   try {
@@ -32,45 +65,38 @@ const handleSocialCallback = (provider) => asyncHandler(async (req, res) => {
       ? await getGoogleProfile(code)
       : await getFacebookProfile(code);
 
+    const socialIdField = provider === 'google' ? 'googleId' : 'facebookId';
+    const socialId = profile.sub || profile.id;
+
     // Step 2: Find existing user by email
     let user = await User.findOne({ email: profile.email });
 
     // Step 3: Create user if not exists
     if (!user) {
-      const socialIdField = provider === 'google' ? 'googleId' : 'facebookId';
       user = await User.create({
         name: profile.name,
         email: profile.email,
-        password: require('crypto').randomBytes(32).toString('hex'), // Random password (never used)
+        password: crypto.randomBytes(32).toString('hex'), // Random password (never used)
         role: 'customer',
-        [socialIdField]: profile.sub || profile.id
+        [socialIdField]: socialId
       });
-    } else {
-      // User exists: update social ID if missing
-      const socialIdField = provider === 'google' ? 'googleId' : 'facebookId';
-      if (!user[socialIdField]) {
-        user[socialIdField] = profile.sub || profile.id;
-        await user.save();
-      }
+    } else if (!user[socialIdField]) {
+      // User exists: link the social ID if missing
+      user[socialIdField] = socialId;
+      await user.save();
     }
 
     // Step 4: Generate JWT
     const token = jwtHelpers.sign({ sub: user._id });
 
-    // Step 5: Return response
-    return successResponse(res, {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      accessToken: token
-    }, 'Login successful');
-  } catch (error) {
-    // Handle specific errors
-    if (error.message.includes('verified') || error.message.includes('accessible')) {
-      return badRequestResponse(res, error.message);
-    }
-    throw error; // Other errors handled by global errorHandler
+    // Step 5: Redirect back to the frontend with the access token
+    return redirectToClient(res, { token });
+  } catch (err) {
+    // Handle specific, user-facing errors; hide internal details otherwise
+    const isExpected = /verified|accessible/i.test(err.message);
+    return redirectToClient(res, {
+      error: isExpected ? err.message : 'Social authentication failed'
+    });
   }
 });
 

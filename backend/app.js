@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const { httpLogger } = require('./middlewares/httpLogger');
 const { requestId } = require('./middlewares/requestId');
 const { apiLimiter } = require('./middlewares/rateLimiter');
+const { sanitizeRequest } = require('./middlewares/sanitizeRequest');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(helmet());
 app.use(requestId);
 app.use(httpLogger);
 app.use(express.json({ limit: '100kb' }));
+app.use(sanitizeRequest);
 app.use(cors({
   origin: (origin, callback) => {
     callback(null, !origin || allowedOrigins.includes(normalizeOrigin(origin)));

@@ -1,5 +1,5 @@
 const { body } = require('express-validator');
-const { validate } = require('./validate');
+const { validate } = require('../middlewares/validate');
 
 /**
  * Validation rules for user registration

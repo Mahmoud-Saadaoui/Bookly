@@ -19,23 +19,23 @@ const branchRules = {
       .trim()
       .isLength({ max: 100 }).withMessage('City cannot exceed 100 characters'),
     body('address.street')
-      .optional()
+      .optional({ values: 'falsy' })
       .trim()
       .isLength({ max: 200 }).withMessage('Street cannot exceed 200 characters'),
     body('address.postalCode')
-      .optional()
+      .optional({ values: 'falsy' })
       .trim()
       .isLength({ max: 20 }).withMessage('Postal code cannot exceed 20 characters'),
     body('address.country')
-      .optional()
+      .optional({ values: 'falsy' })
       .trim()
       .isLength({ min: 2, max: 2 }).withMessage('Country must be a 2-letter ISO code'),
     body('phone')
-      .optional()
+      .optional({ values: 'falsy' })
       .trim()
       .isLength({ max: 30 }).withMessage('Phone cannot exceed 30 characters'),
     body('email')
-      .optional()
+      .optional({ values: 'falsy' })
       .trim()
       .isEmail().withMessage('Email must be valid')
       .normalizeEmail()

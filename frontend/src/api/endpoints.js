@@ -1,4 +1,4 @@
-import api from './axios';
+import api, { API_URL } from './axios';
 
 // Auth
 export const authAPI = {
@@ -55,7 +55,12 @@ export const analyticsAPI = {
 };
 
 // Social auth
+// The Google flow is a full-page browser redirect (not an XHR), so we expose
+// the backend URL and let the caller navigate to it.
 export const socialAuthAPI = {
-  google: () => api.get('/auth/google'),
-  facebook: () => api.get('/auth/facebook'),
+  google: () => `${API_URL}/auth/google`,
+  facebook: () => `${API_URL}/auth/facebook`,
+  loginWithGoogle: () => {
+    window.location.href = `${API_URL}/auth/google`;
+  },
 };

@@ -58,7 +58,14 @@ const createVehicle = asyncHandler(async (req, res) => {
   if (req.currentUser.role !== 'admin' && (!req.body.branch || !branchIds.some((id) => String(id) === String(req.body.branch)))) {
     return badRequestResponse(res, 'Vehicle branch is outside your scope');
   }
-  const vehicle = await Vehicle.create({ ...req.body, createdBy: req.userId });
+  // Drop empty optional fields: sending branch: '' makes Mongoose fail to cast
+  // it to an ObjectId, and an empty vin would collide on the unique index.
+  const payload = { ...req.body };
+  ['branch', 'vin', 'location'].forEach((field) => {
+    if (payload[field] === '' || payload[field] === null) delete payload[field];
+  });
+
+  const vehicle = await Vehicle.create({ ...payload, createdBy: req.userId });
   return createdResponse(res, vehicle, 'Vehicle created successfully');
 });
 

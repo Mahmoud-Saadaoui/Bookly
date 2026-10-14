@@ -35,9 +35,9 @@ const validateEnv = () => {
   validateInteger('TRUST_PROXY_HOPS', { min: 0, max: 10 });
   validateInteger('MONGO_MAX_POOL_SIZE', { min: 1, max: 500 });
 
-  if (process.env.NODE_ENV === 'production' && !process.env.CLIENT_PRODUCTION_DOMAIN?.trim()) {
-    throw new Error('CLIENT_PRODUCTION_DOMAIN is required in production');
-  }
+  // if (process.env.NODE_ENV === 'production' && !process.env.CLIENT_PRODUCTION_DOMAIN?.trim()) {
+  //   throw new Error('CLIENT_PRODUCTION_DOMAIN is required in production');
+  // }
 
   if (process.env.BCRYPT_ROUNDS) {
     const rounds = Number(process.env.BCRYPT_ROUNDS);

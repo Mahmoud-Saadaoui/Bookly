@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import frLocale from "@fullcalendar/core/locales/fr";
+import arLocale from "@fullcalendar/core/locales/ar";
+import enGbLocale from "@fullcalendar/core/locales/en-gb";
 import { agentBookingsAPI } from "../../api/endpoints";
 import { formatDateTime, formatCurrency } from "../../utils/format";
 import toast from "react-hot-toast";
 
+const CALENDAR_LOCALES = { fr: frLocale, ar: arLocale, en: enGbLocale };
+
 const CalendarPage = () => {
+  const { t, i18n } = useTranslation();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -34,8 +41,8 @@ const CalendarPage = () => {
           }));
         setEvents(evts);
       }
-    } catch (err) {
-      toast.error("Erreur");
+    } catch {
+      toast.error(t("admin.common.error"));
     } finally {
       setLoading(false);
     }
@@ -51,13 +58,14 @@ const CalendarPage = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-cairo font-bold mb-2">Calendrier des réservations</h1>
-        <p className="text-gray-400">Réservations confirmées et en cours</p>
+        <h1 className="text-3xl font-cairo font-bold mb-2">{t("admin.calendar.title")}</h1>
+        <p className="text-gray-400">{t("admin.calendar.subtitle")}</p>
       </div>
       <div className="bg-dark-light/50 border border-white/10 rounded-xl p-6">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
+          locale={CALENDAR_LOCALES[(i18n.language || "fr").split("-")[0]] || frLocale}
           headerToolbar={{
             left: "prev,next today",
             center: "title",
@@ -73,16 +81,16 @@ const CalendarPage = () => {
       {showModal && selectedEvent && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
           <div className="bg-dark-light border border-white/10 rounded-xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
-            <h2 className="text-xl font-semibold mb-4">Détails réservation</h2>
+            <h2 className="text-xl font-semibold mb-4">{t("admin.calendar.details")}</h2>
             <div className="space-y-3 text-sm">
-              <div><span className="text-gray-400">Client:</span> {selectedEvent.customer?.name}</div>
-              <div><span className="text-gray-400">Véhicule:</span> {selectedEvent.vehicle?.make} {selectedEvent.vehicle?.model}</div>
-              <div><span className="text-gray-400">Début:</span> {formatDateTime(selectedEvent.startAt)}</div>
-              <div><span className="text-gray-400">Fin:</span> {formatDateTime(selectedEvent.endAt)}</div>
-              <div><span className="text-gray-400">Montant:</span> {formatCurrency(selectedEvent.pricing?.totalCents)}</div>
-              <div><span className="text-gray-400">Statut:</span> {selectedEvent.status}</div>
+              <div><span className="text-gray-400">{t("admin.common.client")}:</span> {selectedEvent.customer?.name}</div>
+              <div><span className="text-gray-400">{t("admin.common.vehicle")}:</span> {selectedEvent.vehicle?.make} {selectedEvent.vehicle?.model}</div>
+              <div><span className="text-gray-400">{t("admin.calendar.start")}:</span> {formatDateTime(selectedEvent.startAt)}</div>
+              <div><span className="text-gray-400">{t("admin.calendar.end")}:</span> {formatDateTime(selectedEvent.endAt)}</div>
+              <div><span className="text-gray-400">{t("admin.common.amount")}:</span> {formatCurrency(selectedEvent.pricing?.totalCents)}</div>
+              <div><span className="text-gray-400">{t("admin.common.status")}:</span> {t(`bookings.status.${selectedEvent.status}`, selectedEvent.status)}</div>
             </div>
-            <button onClick={() => setShowModal(false)} className="mt-6 w-full py-2 border border-white/20 rounded-lg">Fermer</button>
+            <button onClick={() => setShowModal(false)} className="mt-6 w-full py-2 border border-white/20 rounded-lg">{t("admin.actions.close")}</button>
           </div>
         </div>
       )}

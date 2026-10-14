@@ -216,5 +216,156 @@
     "title": "الصفحة غير موجودة",
     "message": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
     "goHome": "العودة للرئيسية"
+  },
+  "admin": {
+    "title": "الإدارة",
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "vehicles": "السيارات",
+      "branches": "الفروع",
+      "bookings": "الحجوزات",
+      "users": "المستخدمون",
+      "calendar": "التقويم",
+      "analytics": "التحليلات"
+    },
+    "roles": {
+      "admin": "مسؤول",
+      "fleet_manager": "مدير الأسطول",
+      "agent": "وكيل",
+      "finance_manager": "المدير المالي",
+      "support": "الدعم",
+      "customer": "عميل"
+    },
+    "actions": {
+      "add": "إضافة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "save": "حفظ",
+      "saving": "جارٍ الحفظ...",
+      "cancel": "إلغاء",
+      "previous": "السابق",
+      "next": "التالي",
+      "actions": "إجراءات",
+      "select": "اختر",
+      "close": "إغلاق",
+      "change": "تغيير"
+    },
+    "common": {
+      "error": "خطأ",
+      "name": "الاسم",
+      "code": "الرمز",
+      "status": "الحالة",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "client": "العميل",
+      "vehicle": "السيارة",
+      "dates": "التواريخ",
+      "amount": "المبلغ",
+      "email": "البريد الإلكتروني",
+      "role": "الدور",
+      "city": "المدينة"
+    },
+    "dashboard": {
+      "title": "لوحة التحكم",
+      "welcome": "مرحبًا، {{name}}",
+      "revenue30": "الإيرادات (30 يومًا)",
+      "bookings30": "الحجوزات (30 يومًا)",
+      "vehicles": "السيارات",
+      "branches": "الفروع",
+      "recentBookings": "أحدث الحجوزات",
+      "noRecentBookings": "لا توجد حجوزات حديثة"
+    },
+    "vehicles": {
+      "title": "السيارات",
+      "subtitle": "إدارة الأسطول",
+      "loadingError": "خطأ أثناء التحميل",
+      "deleteConfirm": "حذف هذه السيارة؟",
+      "deleted": "تم حذف السيارة",
+      "addTitle": "إضافة سيارة",
+      "editTitle": "تعديل سيارة",
+      "brand": "الماركة",
+      "model": "الطراز",
+      "registration": "رقم التسجيل",
+      "vin": "رقم الهيكل (VIN)",
+      "category": "الفئة",
+      "branch": "الفرع",
+      "dailyRate": "السعر اليومي (سنت)",
+      "seats": "المقاعد",
+      "transmission": "ناقل الحركة",
+      "fuel": "الوقود",
+      "status": "الحالة",
+      "mileage": "عدد الكيلومترات",
+      "created": "تم إنشاء السيارة",
+      "updated": "تم تحديث السيارة",
+      "ratePerDay": "السعر/اليوم"
+    },
+    "branches": {
+      "title": "الفروع",
+      "subtitle": "إدارة الفروع",
+      "deleteConfirm": "حذف هذا الفرع؟",
+      "deleted": "تم حذف الفرع",
+      "addTitle": "إضافة فرع",
+      "editTitle": "تعديل فرع",
+      "name": "الاسم",
+      "code": "الرمز",
+      "city": "المدينة",
+      "postalCode": "الرمز البريدي",
+      "street": "العنوان",
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "created": "تم إنشاء الفرع",
+      "updated": "تم تحديث الفرع"
+    },
+    "bookings": {
+      "title": "الحجوزات",
+      "subtitle": "إدارة الحجوزات",
+      "statusUpdated": "تم تحديث الحالة"
+    },
+    "users": {
+      "title": "المستخدمون",
+      "subtitle": "إدارة المستخدمين"
+    },
+    "calendar": {
+      "title": "تقويم الحجوزات",
+      "subtitle": "الحجوزات المؤكدة والجارية",
+      "details": "تفاصيل الحجز",
+      "start": "البداية",
+      "end": "النهاية"
+    },
+    "analytics": {
+      "title": "التحليلات",
+      "subtitle": "نظرة عامة على 90 يومًا",
+      "revenue": "الإيرادات",
+      "bookings": "الحجوزات",
+      "occupancy": "نسبة الإشغال",
+      "fleetTotal": "إجمالي الأسطول",
+      "maintenance": "قيد الصيانة",
+      "rentedDays": "أيام الاستئجار"
+    },
+    "categories": {
+      "Premium": "بريميوم",
+      "Sport": "رياضية",
+      "Business": "أعمال",
+      "Électrique": "كهربائية",
+      "SUV": "دفع رباعي",
+      "Citadine": "مدينية"
+    },
+    "transmissions": {
+      "Automatique": "أوتوماتيكي",
+      "Manuelle": "يدوي"
+    },
+    "fuelTypes": {
+      "Essence": "بنزين",
+      "Diesel": "ديزل",
+      "Hybride": "هجين",
+      "Électrique": "كهربائي"
+    },
+    "statuses": {
+      "available": "متاحة",
+      "reserved": "محجوزة",
+      "rented": "مؤجرة",
+      "maintenance": "صيانة",
+      "retired": "مسحوبة"
+    }
   }
 }
