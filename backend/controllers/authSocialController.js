@@ -86,6 +86,11 @@ const handleSocialCallback = (provider) => asyncHandler(async (req, res) => {
       await user.save();
     }
 
+    // Block disabled accounts
+    if (user.isActive === false) {
+      return redirectToClient(res, { error: 'Account is disabled' });
+    }
+
     // Step 4: Generate JWT
     const token = jwtHelpers.sign({ sub: user._id });
 

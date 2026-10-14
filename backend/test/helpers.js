@@ -55,7 +55,6 @@ function makeBranch(overrides = {}) {
     name: 'Paris Branch',
     code: 'PAR',
     address: { city: 'Paris', country: 'FR' },
-    isActive: true,
     ...overrides
   };
 }

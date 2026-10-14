@@ -44,6 +44,10 @@ const loginUser = asyncHandler(async (req, res) => {
     return unauthorizedResponse(res, 'Invalid email or password');
   }
 
+  if (user.isActive === false) {
+    return unauthorizedResponse(res, 'Account is disabled');
+  }
+
   return successResponse(res, {
     id: user.id,
     name: user.name,

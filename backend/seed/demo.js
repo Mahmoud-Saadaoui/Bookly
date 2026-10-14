@@ -27,7 +27,6 @@ const seed = async () => {
         address: { street: '15 Avenue des Champs-Élysées', city: 'Paris', postalCode: '75008', country: 'FR' },
         phone: '+33 1 23 45 67 89',
         email: 'paris@fleetly.fr',
-        isActive: true,
       },
       {
         name: 'Fleetly Lyon',
@@ -35,7 +34,6 @@ const seed = async () => {
         address: { street: '25 Place Bellecour', city: 'Lyon', postalCode: '69002', country: 'FR' },
         phone: '+33 4 56 78 90 12',
         email: 'lyon@fleetly.fr',
-        isActive: true,
       },
       {
         name: 'Fleetly Marseille',
@@ -43,7 +41,6 @@ const seed = async () => {
         address: { street: '10 Vieux-Port', city: 'Marseille', postalCode: '13002', country: 'FR' },
         phone: '+33 4 91 23 45 67',
         email: 'marseille@fleetly.fr',
-        isActive: true,
       },
     ]);
     console.log('Branches created:', branches.length);

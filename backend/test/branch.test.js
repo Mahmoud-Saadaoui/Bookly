@@ -17,7 +17,6 @@ test('makeBranch - valid fixture with default values', () => {
   assert.equal(branch.code, 'PAR');
   assert.equal(branch.address.city, 'Paris');
   assert.equal(branch.address.country, 'FR');
-  assert.equal(branch.isActive, true);
   assert.ok(branch._id);
 });
 
@@ -54,12 +53,10 @@ test('makeBranch - full address', () => {
   assert.equal(branch.address.postalCode, '75001');
 });
 
-test('makeBranch - soft delete', () => {
+test('makeBranch - no soft-delete flag', () => {
   const branch = makeBranch();
-  // Simulate soft delete
-  branch.isActive = false;
-  assert.equal(branch.isActive, false);
-  // Document is preserved
+  // Branch model no longer carries an isActive flag
+  assert.equal(branch.isActive, undefined);
   assert.ok(branch._id);
 });
 

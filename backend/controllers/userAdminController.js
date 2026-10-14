@@ -82,9 +82,9 @@ const updateUser = asyncHandler(async (req, res) => {
 
   // Validate branchIds if provided
   if (branchIds) {
-    const validBranches = await Branch.find({ _id: { $in: branchIds }, isActive: true }).select('_id');
+    const validBranches = await Branch.find({ _id: { $in: branchIds } }).select('_id');
     if (validBranches.length !== branchIds.length) {
-      return badRequestResponse(res, 'One or more branches are invalid or inactive');
+      return badRequestResponse(res, 'One or more branches are invalid');
     }
     user.branchIds = branchIds;
   }
@@ -134,9 +134,9 @@ const inviteUser = asyncHandler(async (req, res) => {
 
   // Validate branchIds
   if (branchIds.length > 0) {
-    const validBranches = await Branch.find({ _id: { $in: branchIds }, isActive: true }).select('_id');
+    const validBranches = await Branch.find({ _id: { $in: branchIds } }).select('_id');
     if (validBranches.length !== branchIds.length) {
-      return badRequestResponse(res, 'One or more branches are invalid or inactive');
+      return badRequestResponse(res, 'One or more branches are invalid');
     }
   }
 

@@ -61,9 +61,9 @@ const updateVehicle = asyncHandler(async (req, res) => {
     if (!mongoose.isValidObjectId(branch)) {
       return badRequestResponse(res, 'Invalid branch ID');
     }
-    const branchExists = await Branch.findOne({ _id: branch, isActive: true });
+    const branchExists = await Branch.findById(branch);
     if (!branchExists) {
-      return badRequestResponse(res, 'Invalid or inactive branch');
+      return badRequestResponse(res, 'Invalid branch');
     }
     vehicle.branch = branch;
   }

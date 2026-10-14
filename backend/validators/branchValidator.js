@@ -77,10 +77,7 @@ const branchRules = {
       .optional({ nullable: true, checkFalsy: true })
       .trim()
       .isEmail().withMessage('Email must be valid')
-      .normalizeEmail(),
-    body('isActive')
-      .optional()
-      .isBoolean().withMessage('isActive must be a boolean')
+      .normalizeEmail()
   ]
 };
 

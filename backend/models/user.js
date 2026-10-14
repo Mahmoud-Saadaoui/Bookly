@@ -30,6 +30,11 @@ const UserSchema = new mongoose.Schema({
     default: 'customer',
     index: true
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+    index: true
+  },
   branchIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Branch' }],
   googleId: { type: String, sparse: true, unique: true },
   facebookId: { type: String, sparse: true, unique: true }

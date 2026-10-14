@@ -63,7 +63,6 @@ const BranchesList = () => {
               <th className="text-left text-xs text-gray-400 p-4">{t("admin.branches.name")}</th>
               <th className="text-left text-xs text-gray-400 p-4">{t("admin.branches.code")}</th>
               <th className="text-left text-xs text-gray-400 p-4">{t("admin.branches.city")}</th>
-              <th className="text-left text-xs text-gray-400 p-4">{t("admin.common.status")}</th>
               <th className="text-right text-xs text-gray-400 p-4">{t("admin.actions.actions")}</th>
             </tr>
           </thead>
@@ -73,11 +72,6 @@ const BranchesList = () => {
                 <td className="p-4">{b.name}</td>
                 <td className="p-4 text-sm">{b.code}</td>
                 <td className="p-4 text-sm">{b.address?.city}</td>
-                <td className="p-4">
-                  <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">
-                    {b.isActive ? t("admin.common.active") : t("admin.common.inactive")}
-                  </span>
-                </td>
                 <td className="p-4 text-right">
                   <div className="flex justify-end gap-2">
                     <Link to={`/admin/branches/${b._id}/edit`} className="p-2 text-gray-400 hover:text-white"><FaEdit /></Link>

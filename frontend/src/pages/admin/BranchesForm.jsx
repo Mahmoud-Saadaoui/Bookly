@@ -12,7 +12,7 @@ const BranchesForm = () => {
   const [loading, setLoading] = useState(isEdit);
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: "", code: "", address: { street: "", city: "", postalCode: "", country: "FR" }, phone: "", email: "", isActive: true
+    name: "", code: "", address: { street: "", city: "", postalCode: "", country: "FR" }, phone: "", email: ""
   });
 
   useEffect(() => {

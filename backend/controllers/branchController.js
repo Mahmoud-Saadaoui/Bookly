@@ -1,10 +1,14 @@
 const Branch = require('../models/branch');
+const Vehicle = require('../models/vehicle');
+const Booking = require('../models/booking');
+const User = require('../models/user');
 const { asyncHandler } = require('../middlewares/asyncHandler');
 const {
   successResponse,
   createdResponse,
   notFoundResponse,
   badRequestResponse,
+  conflictResponse,
   paginatedResponse
 } = require('../utils/apiResponse');
 const { parsePagination, getPaginationMeta } = require('../utils/pagination');
@@ -40,10 +44,9 @@ const createBranch = asyncHandler(async (req, res) => {
 const getBranches = asyncHandler(async (req, res) => {
   const { page, limit, skip } = parsePagination(req.query);
 
-  // Optional filter by city or active status
+  // Optional filter by city
   const filter = {};
   if (req.query.city) filter['address.city'] = new RegExp(req.query.city, 'i');
-  if (req.query.isActive !== undefined) filter.isActive = req.query.isActive === 'true';
 
   const [branches, total] = await Promise.all([
     Branch.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
@@ -70,7 +73,7 @@ const getBranchById = asyncHandler(async (req, res) => {
  * PATCH /api/branches/:id
  */
 const updateBranch = asyncHandler(async (req, res) => {
-  const { name, code, address, phone, email, isActive } = req.body;
+  const { name, code, address, phone, email } = req.body;
 
   const branch = await Branch.findById(req.params.id);
   if (!branch) {
@@ -91,15 +94,18 @@ const updateBranch = asyncHandler(async (req, res) => {
   if (address !== undefined) branch.address = { ...branch.address, ...address };
   if (phone !== undefined) branch.phone = phone;
   if (email !== undefined) branch.email = email;
-  if (isActive !== undefined) branch.isActive = isActive;
 
   await branch.save();
   return successResponse(res, branch, 'Branch updated successfully');
 });
 
 /**
- * Delete a branch (soft delete)
+ * Delete a branch
  * DELETE /api/branches/:id
+ *
+ * Deletion is blocked while the branch is still referenced by vehicles or
+ * bookings, to avoid dangling references. Users referencing the branch are
+ * detached automatically.
  */
 const deleteBranch = asyncHandler(async (req, res) => {
   const branch = await Branch.findById(req.params.id);
@@ -107,9 +113,25 @@ const deleteBranch = asyncHandler(async (req, res) => {
     return notFoundResponse(res, 'Branch');
   }
 
-  // Soft delete: deactivate instead of removing
-  branch.isActive = false;
-  await branch.save();
+  // Block deletion while the branch is still referenced
+  const [vehicleCount, bookingCount] = await Promise.all([
+    Vehicle.countDocuments({ branch: branch._id, isDeleted: false }),
+    Booking.countDocuments({
+      $or: [{ pickupBranch: branch._id }, { returnBranch: branch._id }]
+    })
+  ]);
+
+  if (vehicleCount > 0 || bookingCount > 0) {
+    return conflictResponse(
+      res,
+      'Cannot delete: branch is still referenced by vehicles or bookings'
+    );
+  }
+
+  // Detach the branch from any users
+  await User.updateMany({ branchIds: branch._id }, { $pull: { branchIds: branch._id } });
+
+  await Branch.findByIdAndDelete(branch._id);
 
   return successResponse(res, null, 'Branch deleted successfully');
 });
