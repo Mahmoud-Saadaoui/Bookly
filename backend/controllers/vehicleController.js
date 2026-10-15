@@ -13,8 +13,12 @@ const parseWindow = (from, to) => {
   return { startAt, endAt };
 };
 
+// Free-text search on make/model. The user input is escaped so it can neither
+// inject regex syntax nor trigger catastrophic backtracking.
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const getVehicles = asyncHandler(async (req, res) => {
-  const { category, branch, from, to, status } = req.query;
+  const { category, branch, from, to, status, search } = req.query;
   const window = parseWindow(from, to);
   if ((from || to) && !window) return badRequestResponse(res, 'Invalid availability window');
 
@@ -26,6 +30,14 @@ const getVehicles = asyncHandler(async (req, res) => {
   if (branch && mongoose.isValidObjectId(branch)) filter.branch = branch;
   if (status) filter.status = status;
   else filter.status = { $ne: 'retired' };
+
+  if (typeof search === 'string') {
+    const term = search.trim().slice(0, 60);
+    if (term) {
+      const regex = new RegExp(escapeRegex(term), 'i');
+      filter.$or = [{ make: regex }, { model: regex }];
+    }
+  }
 
   // Fetch paginated vehicles + total in parallel
   const [vehicles, total] = await Promise.all([

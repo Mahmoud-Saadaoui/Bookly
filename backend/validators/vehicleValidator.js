@@ -56,6 +56,11 @@ const vehicleRules = {
     body('images')
       .optional()
       .isArray().withMessage('Images must be an array'),
+    body('images.*')
+      .optional()
+      .isString().withMessage('Each image must be a URL string')
+      .trim()
+      .isLength({ max: 2048 }).withMessage('Image URL cannot exceed 2048 characters'),
     body('status')
       .optional()
       .isIn(['available', 'reserved', 'rented', 'maintenance', 'retired'])

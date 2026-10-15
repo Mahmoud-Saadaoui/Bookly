@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { agentBookingsAPI, bookingsAPI } from "../../api/endpoints";
 import { formatCurrency, formatDateTime } from "../../utils/format";
+import { getApiErrorMessage } from "../../utils/apiError";
 import toast from "react-hot-toast";
 
 const STATUSES = ["pending_payment", "confirmed", "active", "completed", "cancelled", "no_show"];
@@ -37,7 +38,7 @@ const BookingsList = () => {
       toast.success(t("admin.bookings.statusUpdated"));
       fetchBookings();
     } catch (err) {
-      toast.error(err.response?.data?.message || t("admin.common.error"));
+      toast.error(getApiErrorMessage(err, t("admin.common.error")));
     }
   };
 

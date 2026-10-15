@@ -23,12 +23,16 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor - handle auth errors
+// Response interceptor - handle auth errors.
+// A 401 only means "expired session" when we actually sent a token: public
+// pages (catalogue, vehicle details) must never be redirected to /login just
+// because one of their requests was unauthenticated. Protected pages are
+// already guarded by ProtectedRoute.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Clear auth and redirect to login
+    const hadToken = Boolean(localStorage.getItem('fleetly_token'));
+    if (error.response?.status === 401 && hadToken) {
       localStorage.removeItem('fleetly_token');
       localStorage.removeItem('fleetly_user');
       window.location.href = '/login';

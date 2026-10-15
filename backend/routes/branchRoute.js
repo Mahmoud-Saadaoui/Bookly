@@ -12,9 +12,10 @@ const {
   deleteBranch
 } = require('../controllers/branchController');
 
-// Public routes (authentication required)
-router.get('/', auth.check, getBranches);
-router.get('/:id', auth.check, getBranchById);
+// Public routes: the vehicle catalogue and detail pages list agencies and let
+// anonymous visitors filter/select them, so no authentication is required here.
+router.get('/', getBranches);
+router.get('/:id', getBranchById);
 
 // Admin/fleet_manager routes
 router.post(

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { branchesAPI } from "../../api/endpoints";
 import toast from "react-hot-toast";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const BranchesForm = () => {
   const { t } = useTranslation();
@@ -67,7 +68,7 @@ const BranchesForm = () => {
       }
       navigate("/admin/branches");
     } catch (err) {
-      toast.error(err.response?.data?.message || t("admin.common.error"));
+      toast.error(getApiErrorMessage(err, t("admin.common.error")));
     } finally {
       setSubmitting(false);
     }

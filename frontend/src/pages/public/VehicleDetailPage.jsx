@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { vehiclesAPI, bookingsAPI, branchesAPI } from "../../api/endpoints";
 import { useAuth } from "../../hooks/useAuth";
 import { formatCurrency } from "../../utils/format";
+import { getApiErrorMessage } from "../../utils/apiError";
 import toast from "react-hot-toast";
 
 const VehicleDetailPage = () => {
@@ -77,7 +78,7 @@ const VehicleDetailPage = () => {
         toast.success(t("vehicleDetail.quoteOk"));
       }
     } catch (err) {
-      const msg = err.response?.data?.message || t("vehicleDetail.quoteError");
+      const msg = getApiErrorMessage(err, t("vehicleDetail.quoteError"));
       toast.error(msg);
     }
   };
@@ -108,7 +109,7 @@ const VehicleDetailPage = () => {
         navigate("/my-bookings");
       }
     } catch (err) {
-      const msg = err.response?.data?.message || t("vehicleDetail.bookingError");
+      const msg = getApiErrorMessage(err, t("vehicleDetail.bookingError"));
       toast.error(msg);
     } finally {
       setSubmitting(false);

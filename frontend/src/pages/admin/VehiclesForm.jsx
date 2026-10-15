@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { vehiclesAPI, branchesAPI } from "../../api/endpoints";
 import toast from "react-hot-toast";
+import { FaPlus, FaTrash, FaImage } from "react-icons/fa";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const CATEGORIES = ["Premium", "Sport", "Business", "Électrique", "SUV", "Citadine"];
 const TRANSMISSIONS = ["Automatique", "Manuelle"];
@@ -32,6 +34,7 @@ const VehiclesForm = () => {
     fuelType: "Essence",
     mileage: "0",
     status: "available",
+    images: [],
   });
 
   useEffect(() => {
@@ -59,6 +62,7 @@ const VehiclesForm = () => {
             dailyRateCents: found.dailyRateCents.toString(),
             seats: found.seats.toString(),
             mileage: found.mileage?.toString() || "0",
+            images: Array.isArray(found.images) ? found.images : [],
           });
         }
       }
@@ -74,12 +78,31 @@ const VehiclesForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (index, value) => {
+    const images = [...(formData.images || [])];
+    images[index] = value;
+    setFormData({ ...formData, images });
+  };
+
+  const addImageRow = () => {
+    setFormData({ ...formData, images: [...(formData.images || []), ""] });
+  };
+
+  const removeImageRow = (index) => {
+    const images = (formData.images || []).filter((_, i) => i !== index);
+    setFormData({ ...formData, images });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      const normalizedImages = (formData.images || [])
+        .map((url) => (typeof url === "string" ? url.trim() : url))
+        .filter((url) => typeof url === "string" && url);
       const payload = {
         ...formData,
+        images: normalizedImages,
         dailyRateCents: parseInt(formData.dailyRateCents),
         seats: parseInt(formData.seats),
         mileage: parseInt(formData.mileage),
@@ -98,7 +121,7 @@ const VehiclesForm = () => {
       }
       navigate("/admin/vehicles");
     } catch (err) {
-      toast.error(err.response?.data?.message || t("admin.common.error"));
+      toast.error(getApiErrorMessage(err, t("admin.common.error")));
     } finally {
       setSubmitting(false);
     }
@@ -182,6 +205,58 @@ const VehiclesForm = () => {
               <input name="mileage" type="number" value={formData.mileage} onChange={handleChange} className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white" />
             </div>
           </div>
+
+          <div>
+            <label className="block text-sm text-gray-400">{t("admin.vehicles.images")}</label>
+            <p className="text-xs text-gray-500 mt-1 mb-3">{t("admin.vehicles.imagesHint")}</p>
+            <div className="space-y-3">
+              {(formData.images || []).map((url, index) => (
+                <div key={index} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+                  <div className="relative h-14 w-14 shrink-0 rounded-lg overflow-hidden border border-white/15 bg-white/5 flex items-center justify-center">
+                    {url ? (
+                      <img
+                        src={url}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.opacity = "0";
+                        }}
+                      />
+                    ) : (
+                      <FaImage className="text-gray-500" />
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    inputMode="url"
+                    autoComplete="off"
+                    value={url}
+                    onChange={(e) => handleImageChange(index, e.target.value)}
+                    placeholder={t("admin.vehicles.imagePlaceholder")}
+                    className="flex-1 px-4 py-2.5 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-accent/60"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImageRow(index)}
+                    className="flex items-center justify-center gap-2 px-3 py-2 border border-white/15 text-gray-400 rounded-lg hover:text-red-400 hover:border-red-400/40 transition-colors sm:self-stretch"
+                    title={t("admin.actions.delete")}
+                  >
+                    <FaTrash className="text-sm" />
+                    <span className="text-xs sm:hidden">{t("admin.actions.delete")}</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addImageRow}
+              className="mt-4 flex items-center gap-2 px-4 py-2 border border-white/20 text-sm text-gray-300 rounded-lg hover:bg-white/5 transition-colors"
+            >
+              <FaPlus /> {t("admin.vehicles.addImage")}
+            </button>
+          </div>
+
           <div className="flex gap-4">
             <button type="submit" disabled={submitting} className="px-6 py-3 bg-accent text-dark rounded-lg disabled:opacity-50">
               {t(submitting ? "admin.actions.saving" : "admin.actions.save")}

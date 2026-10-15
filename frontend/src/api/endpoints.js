@@ -9,7 +9,7 @@ export const authAPI = {
 
 // Vehicles
 export const vehiclesAPI = {
-  getAll: (params) => api.get('/vehicles', { params }),
+  getAll: (params, config) => api.get('/vehicles', { params, ...config }),
   getById: (id) => api.get(`/vehicles/${id}`),
   create: (data) => api.post('/vehicles', data),
   updateStatus: (id, status) => api.patch(`/vehicles/${id}/status`, { status }),

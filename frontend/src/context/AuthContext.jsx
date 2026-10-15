@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { authAPI } from '../api/endpoints';
+import { getApiErrorMessage } from '../utils/apiError';
 import toast from 'react-hot-toast';
 
 export const AuthContext = createContext();
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: response.data.message };
     } catch (error) {
-      const message = error.response?.data?.message || 'Erreur de connexion';
+      const message = getApiErrorMessage(error, 'Erreur de connexion');
       toast.error(message);
       return { success: false, message };
     }
@@ -70,7 +71,7 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, message: response.data.message };
     } catch (error) {
-      const message = error.response?.data?.message || 'Erreur lors de l\'inscription';
+      const message = getApiErrorMessage(error, 'Erreur lors de l\'inscription');
       toast.error(message);
       return { success: false, message };
     }
@@ -96,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('fleetly_user');
       setToken(null);
       setUser(null);
-      const message = error.response?.data?.message || 'Erreur de connexion';
+      const message = getApiErrorMessage(error, 'Erreur de connexion');
       toast.error(message);
       return { success: false, message };
     }

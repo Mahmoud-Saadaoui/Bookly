@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { vehiclesAPI } from "../../api/endpoints";
 import { formatCurrency } from "../../utils/format";
+import { getApiErrorMessage } from "../../utils/apiError";
 import toast from "react-hot-toast";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
@@ -38,7 +39,7 @@ const VehiclesList = () => {
       toast.success(t("admin.vehicles.deleted"));
       fetchVehicles();
     } catch (err) {
-      toast.error(err.response?.data?.message || t("admin.common.error"));
+      toast.error(getApiErrorMessage(err, t("admin.common.error")));
     }
   };
 

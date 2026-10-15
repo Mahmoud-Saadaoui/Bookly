@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { branchesAPI } from "../../api/endpoints";
+import { getApiErrorMessage } from "../../utils/apiError";
 import toast from "react-hot-toast";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
@@ -37,7 +38,7 @@ const BranchesList = () => {
       toast.success(t("admin.branches.deleted"));
       fetchBranches();
     } catch (err) {
-      toast.error(err.response?.data?.message || t("admin.common.error"));
+      toast.error(getApiErrorMessage(err, t("admin.common.error")));
     }
   };
 
