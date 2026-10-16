@@ -14,7 +14,7 @@ export const formatDate = (date) => {
   try {
     const d = typeof date === 'string' ? parseISO(date) : date;
     return format(d, 'dd MMMM yyyy', { locale: fr });
-  } catch (e) {
+  } catch {
     return '';
   }
 };
@@ -24,7 +24,7 @@ export const formatDateTime = (date) => {
   try {
     const d = typeof date === 'string' ? parseISO(date) : date;
     return format(d, 'dd MMM yyyy HH:mm', { locale: fr });
-  } catch (e) {
+  } catch {
     return '';
   }
 };

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { bookingsAPI } from "../../api/endpoints";
 import { formatCurrency, formatDateTime } from "../../utils/format";
-import toast from "react-hot-toast";
 
 const STATUS_COLORS = {
   pending_payment: "bg-yellow-500/20 text-yellow-400",

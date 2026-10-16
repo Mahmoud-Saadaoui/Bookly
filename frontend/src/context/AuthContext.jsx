@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { AuthContext } from './auth';
 import { authAPI } from '../api/endpoints';
 import { getApiErrorMessage } from '../utils/apiError';
 import toast from 'react-hot-toast';
-
-export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
