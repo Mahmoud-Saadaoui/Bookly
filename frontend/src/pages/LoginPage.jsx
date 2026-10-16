@@ -122,7 +122,7 @@ const LoginPage = () => {
         {/* Register Link */}
         <p className="mt-6 text-center text-gray-400 font-cairo">
           {t("auth.noAccount")}{" "}
-          <Link to="/register" className="text-accent hover:text-accent-light transition-colors">
+          <Link to="/register" state={location.state} className="text-accent hover:text-accent-light transition-colors">
             {t("auth.signUp")}
           </Link>
         </p>

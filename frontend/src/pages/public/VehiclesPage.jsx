@@ -8,7 +8,7 @@ import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import toast from "react-hot-toast";
 
 const VEHICLE_CATEGORIES = ["Premium", "Sport", "Business", "Électrique", "SUV", "Citadine"];
-const SEARCH_DEBOUNCE_MS = 350;
+const SEARCH_DEBOUNCE_MS = 500;
 
 const VehiclesPage = () => {
   const { t } = useTranslation();
@@ -209,13 +209,13 @@ const VehiclesPage = () => {
           </div>
         ) : (
           <>
-            {/* Liste véhicules — tableau responsive (pas d'image dans le lot, les cards gaspillaient de la place) */}
+            {/* Liste véhicules — tableau responsive */}
             <div className={`bg-dark-light/50 border border-white/10 rounded-2xl overflow-hidden transition-opacity ${isRefetching ? "opacity-60" : ""}`}>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <caption className="sr-only">{t("vehicles.subtitle")}</caption>
                   <thead>
-                    <tr className="border-b border-white/10 bg-white/[0.02]">
+                    <tr className="border-b border-white/10 bg-white/2">
                       <th scope="col" className="text-start text-xs uppercase tracking-wider text-gray-400 font-medium px-5 py-4">
                         {t("vehicles.vehicle")}
                       </th>
@@ -238,7 +238,7 @@ const VehiclesPage = () => {
                         {t("vehicles.price")}
                       </th>
                       <th scope="col" className="text-end text-xs uppercase tracking-wider text-gray-400 font-medium px-5 py-4">
-                        <span className="sr-only">{t("vehicles.details")}</span>
+                        <span className="sr-only">{t("vehicles.bookNow")}</span>
                       </th>
                     </tr>
                   </thead>
@@ -249,12 +249,12 @@ const VehiclesPage = () => {
                       return (
                         <tr
                           key={vehicle._id}
-                          className="border-b border-white/5 last:border-b-0 hover:bg-white/[0.04] transition-colors"
+                          className="border-b border-white/5 last:border-b-0 hover:bg-white/4 transition-colors"
                         >
                           <td className="px-5 py-4">
                             <div className="flex items-center gap-3 min-w-0">
-                              <div className="relative h-11 w-11 shrink-0 rounded-xl overflow-hidden border border-white/15 bg-gradient-to-br from-dark-light to-dark flex items-center justify-center">
-                                {vehicle.images?.[0] ? (
+                              {vehicle.images?.[0] && (
+                                <div className="relative h-11 w-11 shrink-0 rounded-xl overflow-hidden border border-white/15 bg-dark-light">
                                   <img
                                     src={vehicle.images[0]}
                                     alt=""
@@ -265,14 +265,8 @@ const VehiclesPage = () => {
                                       e.currentTarget.style.opacity = "0";
                                     }}
                                   />
-                                ) : (
-                                  <span className="text-accent/70" aria-hidden="true">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M5 20h14a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                                    </svg>
-                                  </span>
-                                )}
-                              </div>
+                                </div>
+                              )}
                               <div className="min-w-0">
                                 <span className="font-cairo font-semibold truncate block">
                                   {vehicle.make} {vehicle.model}
@@ -309,15 +303,23 @@ const VehiclesPage = () => {
                             <span className="text-xs text-gray-400 ms-1">{t("vehicles.perDay")}</span>
                           </td>
                           <td className="px-5 py-4 text-end">
-                            <Link
-                              to={`/vehicles/${vehicle._id}`}
-                              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium rounded-full border border-white/20 text-white hover:bg-white/10 hover:border-accent/50 transition-colors whitespace-nowrap"
-                            >
-                              {t("vehicles.viewDetails")}
-                              <svg className="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
-                            </Link>
+                            {vehicle.status === "available" ? (
+                              <Link
+                                to={`/vehicles/${vehicle._id}`}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-accent text-dark hover:bg-accent-light transition-colors whitespace-nowrap"
+                              >
+                                {t("vehicles.bookNow")}
+                                <svg className="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </Link>
+                            ) : (
+                              // Not bookable: show the status instead of a CTA
+                              // that would only ever fail at booking time.
+                              <span className="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-full bg-white/10 text-gray-300 whitespace-nowrap">
+                                {t(`admin.statuses.${vehicle.status}`, vehicle.status)}
+                              </span>
+                            )}
                           </td>
                         </tr>
                       );

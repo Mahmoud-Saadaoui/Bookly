@@ -11,6 +11,7 @@ export const authAPI = {
 export const vehiclesAPI = {
   getAll: (params, config) => api.get('/vehicles', { params, ...config }),
   getById: (id) => api.get(`/vehicles/${id}`),
+  getAvailability: (id) => api.get(`/vehicles/${id}/availability`),
   create: (data) => api.post('/vehicles', data),
   updateStatus: (id, status) => api.patch(`/vehicles/${id}/status`, { status }),
   update: (id, data) => api.patch(`/admin/vehicles/${id}`, data),
