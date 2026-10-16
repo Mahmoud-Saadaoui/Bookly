@@ -351,7 +351,16 @@
     },
     "users": {
       "title": "Users",
-      "subtitle": "Manage users"
+      "subtitle": "Manage users",
+      "searchPlaceholder": "Search by name or email...",
+      "editUser": "Edit user",
+      "changeRole": "Change role",
+      "confirmDelete": "Delete this user?",
+      "roleUpdated": "Role updated",
+      "userDeleted": "User deleted",
+      "noUsers": "No users found",
+      "cannotDeleteSelf": "Cannot delete your own account",
+      "cannotChangeOwnRole": "Cannot change your own role"
     },
     "calendar": {
       "title": "Bookings calendar",

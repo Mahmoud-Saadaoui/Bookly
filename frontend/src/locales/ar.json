@@ -351,7 +351,16 @@
     },
     "users": {
       "title": "المستخدمون",
-      "subtitle": "إدارة المستخدمين"
+      "subtitle": "إدارة المستخدمين",
+      "searchPlaceholder": "البحث بالاسم أو البريد الإلكتروني...",
+      "editUser": "تعديل المستخدم",
+      "changeRole": "تغيير الدور",
+      "confirmDelete": "حذف هذا المستخدم؟",
+      "roleUpdated": "تم تحديث الدور",
+      "userDeleted": "تم حذف المستخدم",
+      "noUsers": "لا يوجد مستخدمون",
+      "cannotDeleteSelf": "لا يمكن حذف حسابك الخاص",
+      "cannotChangeOwnRole": "لا يمكن تغيير دورك الخاص"
     },
     "calendar": {
       "title": "تقويم الحجوزات",

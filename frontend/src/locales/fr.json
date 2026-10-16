@@ -351,7 +351,16 @@
     },
     "users": {
       "title": "Utilisateurs",
-      "subtitle": "Gérer les utilisateurs"
+      "subtitle": "Gérer les utilisateurs",
+      "searchPlaceholder": "Rechercher par nom ou e-mail...",
+      "editUser": "Modifier l'utilisateur",
+      "changeRole": "Changer le rôle",
+      "confirmDelete": "Supprimer cet utilisateur ?",
+      "roleUpdated": "Rôle mis à jour",
+      "userDeleted": "Utilisateur supprimé",
+      "noUsers": "Aucun utilisateur trouvé",
+      "cannotDeleteSelf": "Impossible de se supprimer soi-même",
+      "cannotChangeOwnRole": "Impossible de modifier son propre rôle"
     },
     "calendar": {
       "title": "Calendrier des réservations",
