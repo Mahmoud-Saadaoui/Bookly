@@ -7,6 +7,16 @@ const { parsePagination, getPaginationMeta } = require('../utils/pagination');
 
 const TAX_RATE = Number(process.env.RENTAL_TAX_RATE) || 0.2;
 
+// Human-readable status wording, so the API never answers "is currently
+// maintenance". Anything unknown falls back to the raw status string.
+const STATUS_TEXT = {
+  reserved: 'reserved',
+  rented: 'rented',
+  maintenance: 'in maintenance',
+  retired: 'retired'
+};
+const statusText = (status) => STATUS_TEXT[status] || status;
+
 const parseDates = (startAt, endAt) => {
   const start = new Date(startAt);
   const end = new Date(endAt);
@@ -48,7 +58,10 @@ const quoteBooking = asyncHandler(async (req, res) => {
   if (!dates) return badRequestResponse(res, 'Invalid booking dates');
   const vehicle = await Vehicle.findOne({ _id: vehicleId, isDeleted: false, status: { $ne: 'retired' } }).lean();
   if (!vehicle) return notFoundResponse(res, 'Vehicle');
-  if (vehicle.status !== 'available' || await findConflict(vehicleId, dates)) return conflictResponse(res, 'Vehicle is not available for these dates');
+  // Two different problems deserve two different messages: the car itself may be
+  // reserved/rented/in maintenance, or only the requested dates may be taken.
+  if (vehicle.status !== 'available') return conflictResponse(res, `Vehicle is ${statusText(vehicle.status)} and cannot be booked`);
+  if (await findConflict(vehicleId, dates)) return conflictResponse(res, 'Vehicle is already booked for these dates');
   return successResponse(res, { vehicleId, startAt: dates.startAt, endAt: dates.endAt, pricing: buildPricing(vehicle, dates.rentalDays) }, 'Quote created successfully');
 });
 
@@ -62,8 +75,9 @@ const createBooking = asyncHandler(async (req, res) => {
     const existing = await Booking.findOne({ customer: req.userId, idempotencyKey }).populate('vehicle');
     if (existing) return successResponse(res, existing, 'Booking already exists');
   }
-  const vehicle = await Vehicle.findOne({ _id: vehicleId, isDeleted: false, status: 'available' });
-  if (!vehicle) return conflictResponse(res, 'Vehicle is not available');
+  const vehicle = await Vehicle.findOne({ _id: vehicleId, isDeleted: false, status: { $ne: 'retired' } });
+  if (!vehicle) return notFoundResponse(res, 'Vehicle');
+  if (vehicle.status !== 'available') return conflictResponse(res, `Vehicle is ${statusText(vehicle.status)} and cannot be booked`);
   if (await findConflict(vehicleId, dates)) return conflictResponse(res, 'Vehicle is already booked for these dates');
 
   const booking = await Booking.create({

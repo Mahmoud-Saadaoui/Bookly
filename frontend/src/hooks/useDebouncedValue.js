@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
  *
  * Initialised with `value` so the first render is never delayed.
  */
-export const useDebouncedValue = (value, delay = 350) => {
+export const useDebouncedValue = (value, delay = 500) => {
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {
