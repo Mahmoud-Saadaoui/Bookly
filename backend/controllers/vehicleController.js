@@ -65,6 +65,49 @@ const getVehicles = asyncHandler(async (req, res) => {
   return paginatedResponse(res, data, getPaginationMeta(page, limit, total), 'Vehicles retrieved successfully');
 });
 
+/**
+ * Get a single vehicle by ID (public)
+ * GET /api/vehicles/:id
+ */
+const getVehicleById = asyncHandler(async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) return notFoundResponse(res, 'Vehicle');
+
+  const vehicle = await Vehicle.findOne({
+    _id: req.params.id,
+    isDeleted: false,
+    status: { $ne: 'retired' }
+  }).populate('branch').lean();
+
+  if (!vehicle) return notFoundResponse(res, 'Vehicle');
+  return successResponse(res, vehicle, 'Vehicle retrieved successfully');
+});
+
+/**
+ * Get the active booked date ranges of a vehicle (public)
+ * GET /api/vehicles/:id/availability
+ *
+ * Only date ranges are exposed (never customer data) so anonymous visitors can
+ * pick free dates on the public detail page.
+ */
+const getVehicleAvailability = asyncHandler(async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) return badRequestResponse(res, 'Invalid vehicle id');
+
+  const bookedRanges = await Booking.find({
+    vehicle: req.params.id,
+    status: { $in: Booking.activeStatuses },
+    endAt: { $gte: new Date() }
+  })
+    .select('startAt endAt -_id')
+    .sort({ startAt: 1 })
+    .lean();
+
+  return successResponse(
+    res,
+    { vehicleId: req.params.id, bookedRanges },
+    'Vehicle availability retrieved successfully'
+  );
+});
+
 const createVehicle = asyncHandler(async (req, res) => {
   const branchIds = req.currentUser.branchIds || [];
   if (req.currentUser.role !== 'admin' && (!req.body.branch || !branchIds.some((id) => String(id) === String(req.body.branch)))) {
@@ -95,4 +138,4 @@ const updateVehicleStatus = asyncHandler(async (req, res) => {
   return successResponse(res, vehicle, 'Vehicle status updated successfully');
 });
 
-module.exports = { getVehicles, createVehicle, updateVehicleStatus };
+module.exports = { getVehicles, getVehicleById, getVehicleAvailability, createVehicle, updateVehicleStatus };
