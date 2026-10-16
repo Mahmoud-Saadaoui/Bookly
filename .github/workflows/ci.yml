@@ -1,0 +1,69 @@
+name: CI
+
+# Runs on every push (any branch) and every pull request. Tests, lint and build
+# must all pass — this is what stops a new feature from silently breaking one
+# that already worked.
+on: [push, pull_request]
+
+# A newer push on the same branch cancels the previous run: no point testing a
+# commit that has already been superseded.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend — syntax + tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # server.js is never loaded by the test suite, so a syntax error there
+      # would otherwise slip through.
+      - name: Syntax check
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+  frontend:
+    name: Frontend — lint + tests + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
